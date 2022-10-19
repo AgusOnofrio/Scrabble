@@ -1,2 +1,2 @@
-module masterMindGame {
+module Scrabble {
 }
