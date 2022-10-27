@@ -2,7 +2,7 @@ public class Partida {
 
     private Jugador jugadores;
     private Tablero tablero;
-    private BolsaLetras bolsaConLetras;
+    private BolsaFichas bolsaConLetras;
 
     public Partida(int cantidadJugadores){
         //Inicializo jugadores
