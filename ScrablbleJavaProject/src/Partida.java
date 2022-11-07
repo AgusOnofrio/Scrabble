@@ -1,3 +1,7 @@
+import Modelo.BolsaFichas;
+import Modelo.Jugador;
+import Modelo.Tablero;
+
 public class Partida {
 
     private Jugador jugadores;

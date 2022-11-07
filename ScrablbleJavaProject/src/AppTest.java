@@ -3,6 +3,9 @@ import static org.junit.Assert.assertNotEquals;
 
 import org.junit.Test;
 
+import Modelo.BolsaFichas;
+import Modelo.Ficha;
+
 public class AppTest {
     
     @Test
