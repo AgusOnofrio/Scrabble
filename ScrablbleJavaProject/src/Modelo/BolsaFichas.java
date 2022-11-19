@@ -3,17 +3,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class BolsaFichas {
-    private ArrayList<Ficha> fichas;
+    //Hacer que la bolsa de fichas sea un singleton
     
-    public BolsaFichas(){
-        fichas = new ArrayList<Ficha>();
+    private  static ArrayList<Ficha> fichas;
+    
+    public static void inicializar(){
         for (Letra letra : Letra.values()) {
             for (int i = 0; i < letra.quantity; i++) {
                 Ficha fichaPorAgregar= new Ficha(letra.label,letra.value);
-                this.fichas.add(fichaPorAgregar);
+                fichas.add(fichaPorAgregar);
             }
         }
     }
+    
 
     public ArrayList<Ficha> getFichas(){
         return fichas;

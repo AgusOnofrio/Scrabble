@@ -1,3 +1,4 @@
+package pruebaObserverSimple;
 import javax.swing.SwingUtilities;
 
 public class PruebaMVC {
@@ -12,8 +13,8 @@ public class PruebaMVC {
                 PruebaVista vista1 = new PruebaVista(controlador);
                 PruebaVista vista2 = new PruebaVista(controlador);
 
-                modelo.addObservador(vista1);
-                modelo.addObservador(vista2);
+                modelo.agregarObservador(vista1);
+                modelo.agregarObservador(vista2);
             }
         });
         

@@ -1,7 +1,10 @@
+package pruebaObserverSimple;
 import java.awt.event.MouseEvent;
 import java.awt.FlowLayout;
 import java.awt.LayoutManager;
+import java.awt.Panel;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.security.auth.callback.TextInputCallback;
@@ -14,47 +17,67 @@ import javax.swing.text.FlowView.FlowStrategy;
 
 import org.w3c.dom.Text;
 
-public class PruebaVista {
+public class PruebaVista  extends JFrame implements Observer{
     private PruebaControlador controlador;
     private JLabel texto;
     
     private JButton botonSuma,botonResta;
     private JFrame frame;
+    private FlowLayout capa;
+    private JPanel panel;
 
 
 
     public PruebaVista(PruebaControlador controlador){
       
-        iniciarVentana();
-        // this.controlador=controlador;
+        //iniciarVentana();
+        this.controlador=controlador;
 
-        // botonSuma= new JButton();
-        // botonSuma.setText("Suma");
-        // botonSuma.addMouseListener(new MouseInputAdapter() {
+        botonSuma= new JButton();
+        botonSuma.setText("Suma");
+        botonSuma.addMouseListener(new MouseInputAdapter() {
 
-        //         @Override
-        //         public void mouseClicked(MouseEvent e) {
-        //             controlador.sumar();
-        //         }
-        // });
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    controlador.sumar();
+                }
+        });
 
-        // botonResta= new JButton();
-        // botonResta.setText("Resta");
+        botonResta= new JButton();
+        botonResta.setText("Resta");
 
-        // botonResta.addMouseListener(new MouseInputAdapter() {
+        botonResta.addMouseListener(new MouseInputAdapter() {
 
-        //         @Override
-        //         public void mouseClicked(MouseEvent e) {
-        //             controlador.restar();
-        //         }
-        // });
-
-
-        // texto= new JLabel();
-        // texto.setText(Integer.toString(0));
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    controlador.restar();
+                }
+        });
 
 
+        texto= new JLabel();
+        texto.setText(Integer.toString(0));
 
+        capa = new FlowLayout();
+        panel= new JPanel();
+
+        this.setTitle("Ejemplo MVC");
+
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        this.setSize(300,300);
+
+        this.setMinimumSize(new Dimension(100,100));
+        this.setMaximumSize(new Dimension(2000,2000));
+
+
+        panel.setLayout(capa);
+        panel.add(texto);
+        panel.add(botonResta);
+        panel.add(botonSuma);
+
+        this.add(panel);
+        this.setVisible(true);
 
 
 
@@ -116,6 +139,14 @@ public class PruebaVista {
         panelPrincipal.add(panelMenu,BorderLayout.WEST);
 
 
+    }
+
+
+
+    @Override
+    public void update (int valor) {
+        texto.setText(Integer.toString(valor));
+        
     }
 
 

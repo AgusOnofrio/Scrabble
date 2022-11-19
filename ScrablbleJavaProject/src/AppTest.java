@@ -1,10 +1,15 @@
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 import Modelo.BolsaFichas;
+import Modelo.Casillero;
+import Modelo.Diccionario;
 import Modelo.Ficha;
+import Modelo.Jugador;
+import Modelo.Tablero;
 
 public class AppTest {
     
@@ -46,6 +51,49 @@ public class AppTest {
         assertNotEquals(fichanueva, fichaAnterior);
         assertNotEquals(fichanueva,null);
     }
+
+    @Test
+    public void cuandoInicializoTableroNoHayFichas(){
+        Tablero tablero= new Tablero();
+        
+        Casillero[][] casilleros = tablero.getCasilleros();
+
+        for (Casillero[] fila : casilleros){
+                for (Casillero c : fila){
+                assertEquals(false,c.estaOcupado());
+                assertEquals(null,c.getFicha());
+            }
+        }
+    }
+
+    @Test
+    public void unaPalabraQueNoEstaEnElDiccionarioDevuelveFalse(){
+        Diccionario diccionario = new Diccionario();
+
+        String palabra = "jorgelin";
+        
+        assertEquals(true,diccionario.validarPalabra(palabra));
+    }
+
+    @Test
+    public void ponerFichaEnUnCasilleroMeDevuelveEsaFicha(){
+        Casillero casillero =  new Casillero();
+        BolsaFichas bolsaFichas = new BolsaFichas();
+
+        Ficha ficha = bolsaFichas.sacarFicha();
+
+        casillero.ponerFicha(ficha);
+        
+        assertEquals(ficha,casillero.getFicha());
+    }
+
+
+    @Test
+    public void jugadorPuedeFormarLaPalabraSiTieneTodasLasLetrasEnElAtril(){
+
+        assertTrue(false);
+    }
+    
 
 
 

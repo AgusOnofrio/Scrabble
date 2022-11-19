@@ -1,7 +1,7 @@
 package Modelo;
 public class Ficha {
-    private String label;
-    private Integer value;
+    private final String label;
+    private final Integer value;
 
     public Ficha(String label,Integer value){
         this.label=label;
