@@ -5,9 +5,10 @@ import java.util.Collections;
 public class BolsaFichas {
     //Hacer que la bolsa de fichas sea un singleton
     
-    private  static ArrayList<Ficha> fichas;
+    private  ArrayList<Ficha> fichas;
     
-    public static void inicializar(){
+    public BolsaFichas(){
+        fichas= new ArrayList<Ficha>();
         for (Letra letra : Letra.values()) {
             for (int i = 0; i < letra.quantity; i++) {
                 Ficha fichaPorAgregar= new Ficha(letra.label,letra.value);

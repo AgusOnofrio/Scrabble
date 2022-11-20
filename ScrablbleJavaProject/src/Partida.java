@@ -9,6 +9,7 @@ public class Partida {
     private ArrayList<Jugador> jugadores;
     private Tablero tablero;
     private BolsaFichas bolsaConLetras;
+    private boolean continuarPartida;
 
     public Partida(){
         //Inicializo jugadores

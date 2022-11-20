@@ -4,20 +4,34 @@ public class Casillero {
     private final TipoEspecial tipo;
     private Ficha ficha=null;
     private boolean disponible;
+    private final int fila;
+    private final int columna;
 //TODO ver si necesito guardar la fila y la columna
   
 
 
-    public Casillero(){
+    public int getFila() {
+        return fila;
+    }
+
+    public int getColumna() {
+        return columna;
+    }
+
+    public Casillero(int fila,int columna){
         this.tipo=TipoEspecial.SIMPLE;
         this.ficha=null;
         this.disponible=false;
+        this.fila=fila;
+        this.columna=columna;
 
     }
 
-    public Casillero(TipoEspecial tipo){
+    public Casillero(int fila, int columna, TipoEspecial tipo){
         this.tipo=tipo;
         this.ficha=null;
+        this.fila=fila;
+        this.columna=columna;
 
     }
 
@@ -37,6 +51,8 @@ public class Casillero {
     public Ficha getFicha(){
         return this.ficha;
     }
+
+    
 
     public void ponerFicha(Ficha ficha){
         if (this.ficha ==null) this.ficha=ficha;

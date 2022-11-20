@@ -1,24 +1,28 @@
 package Modelo;
 
+import java.awt.Component;
 import java.util.ArrayList;
 
-public class Jugador {
+import Modelo.Interfaces.Ijugador;
+
+public class Jugador implements Ijugador{
     private Atril atril;
     private Integer puntaje;
     private String nombre;
     private static Integer numeroDeJugador=0;
+    private BolsaFichas bolsa;
 
-    public Jugador(String nombre){
+    public Jugador(String nombre,BolsaFichas bolsa){
         this.nombre=nombre;
         numeroDeJugador++;
-        this.atril= new Atril();
+        this.atril= new Atril(bolsa);
         puntaje=0;
     }
 
     public Jugador(){
         this.nombre="Jugador "+numeroDeJugador.toString();
         numeroDeJugador++;
-        this.atril= new Atril();
+        this.atril= new Atril(bolsa);
         puntaje=0;
     }
 
@@ -38,6 +42,10 @@ public class Jugador {
             }
         }
         return valida;
+    }
+
+    public Atril getAtril() {
+        return this.atril;
     }
 
     //Un jugador puede cambiar las fichas de su atril

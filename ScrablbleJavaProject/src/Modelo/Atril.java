@@ -7,8 +7,10 @@ public class Atril {
     private Integer cantidadDeFichas=7;
     private BolsaFichas bolsa;
 
-    public Atril(){
-        fichas = new ArrayList<Ficha>(cantidadDeFichas);
+    public Atril(BolsaFichas bolsa){
+        this.fichas = new ArrayList<Ficha>(cantidadDeFichas);
+        this.bolsa=bolsa;
+        this.llenarAtril();
     }
 
     public void llenarAtril(){
@@ -30,13 +32,14 @@ public class Atril {
     }
 
     
-    // public Ficha sacarFichaDeAtril(int posicion){
-    //     Ficha ficha=null;
-    //     if(posicion>=0 && posicion<fichas.size()) {
-    //         ficha= fichas.get(posicion);
-    //     }
-    //     return ficha;
-    // }
+    public Ficha sacarFichaDeAtril(int posicion){
+        Ficha ficha=null;
+        if(posicion>=0 && posicion<fichas.size()) {
+            ficha= fichas.get(posicion);
+            fichas.remove(posicion);
+        }
+        return ficha;
+    }
     //El atril debe intercambiar sus letras
 
 

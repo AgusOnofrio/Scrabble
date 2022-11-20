@@ -77,7 +77,7 @@ public class AppTest {
 
     @Test
     public void ponerFichaEnUnCasilleroMeDevuelveEsaFicha(){
-        Casillero casillero =  new Casillero();
+        Casillero casillero =  new Casillero(0,0);
         BolsaFichas bolsaFichas = new BolsaFichas();
 
         Ficha ficha = bolsaFichas.sacarFicha();
