@@ -1,5 +1,6 @@
 package Vista;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -205,7 +206,7 @@ public class VistaConsola {
     // -El jugador finaliza el turno 
     // -El jugador se queda sin fichas
     // -El jugador intercambia fichas
-    public void turnoJugador(Tablero tablero, Jugador jugador){
+    public void turnoJugador(Tablero tablero, Jugador jugador) throws IOException{
         Scanner sc = new Scanner(System.in);
         int opcion=1;
         casillerosJugadosEnElTurno.clear();
@@ -236,8 +237,9 @@ public class VistaConsola {
         Casillero casilleroActual= casillero;
         boolean casilleroValido=true;
         while(casilleroValido){
-            if(tablero.getCasillero(casillero.getFila(), casillero.getColumna()-1)!=null){
-                casilleroActual= tablero.getCasillero(casillero.getFila(), casillero.getColumna()-1);
+            System.out.printf("Probando el casillero %d-%d: %s\n",casilleroActual.getFila(),casilleroActual.getColumna(),casilleroActual.getFicha().getLabel());
+            if(tablero.getCasillero(casilleroActual.getFila(), casilleroActual.getColumna()-1).getFicha()!=null){
+                casilleroActual= tablero.getCasillero(casilleroActual.getFila(), casilleroActual.getColumna()-1);
             }else{
                 casilleroValido=false;
             }
@@ -247,7 +249,7 @@ public class VistaConsola {
         
         do {
             palabra.add(casilleroActual);
-            casilleroActual= tablero.getCasillero(casillero.getFila(), casillero.getColumna()-1);
+            casilleroActual= tablero.getCasillero(casilleroActual.getFila(), casilleroActual.getColumna()+1);
         } while (casilleroActual.estaOcupado()); 
 
 
@@ -260,8 +262,8 @@ public class VistaConsola {
         Casillero casilleroActual= casillero;
         boolean casilleroValido=true;
         while(casilleroValido){
-            if(tablero.getCasillero(casillero.getFila()-1, casillero.getColumna())!=null){
-                casilleroActual= tablero.getCasillero(casillero.getFila()-1, casillero.getColumna());
+            if(tablero.getCasillero(casilleroActual.getFila()-1, casilleroActual.getColumna()).getFicha()!=null){
+                casilleroActual= tablero.getCasillero(casilleroActual.getFila()-1, casilleroActual.getColumna());
             }else{
                 casilleroValido=false;
             }
@@ -271,7 +273,7 @@ public class VistaConsola {
         
         do {
             palabra.add(casilleroActual);
-            casilleroActual= tablero.getCasillero(casillero.getFila()+1, casillero.getColumna());
+            casilleroActual= tablero.getCasillero(casilleroActual.getFila()+1, casilleroActual.getColumna());
         } while (casilleroActual.estaOcupado()); 
 
 
@@ -287,7 +289,6 @@ public class VistaConsola {
         ArrayList<Palabra> palabras = new ArrayList<Palabra>();
         palabraHorizontal= new Palabra(palabraHorizontal(tablero, casillero));
         palabraVertical= new Palabra(palabraVertical(tablero, casillero));
-        
         palabras.add(palabraHorizontal);
         palabras.add(palabraVertical);
         
@@ -295,24 +296,40 @@ public class VistaConsola {
     }
 
 
-    public int calcularPuntajeTurno(Tablero tablero){
+    public int calcularPuntajeTurno(Tablero tablero) throws IOException{
         ArrayList<Palabra> palabrasFormadas = new ArrayList<Palabra>(); 
         for (Casillero casillero : casillerosJugadosEnElTurno) {
             for (Palabra palabra : chequearSiLaFichaFormaPalabra(tablero, casillero)) {
-                if(!palabrasFormadas.contains(palabra)) palabrasFormadas.add(palabra);
+                System.out.println("Validando si ya se encontro palabra: "+palabra.convertirString());
+                if(!estaEnArrayPalabra(palabrasFormadas, palabra)){
+                    palabrasFormadas.add(palabra);
+                } 
             } 
         }
 
         int puntaje=0;
         for (Palabra palabra : palabrasFormadas) {
-            if(palabra.esValida()) puntaje+=palabra.obtenerPuntaje();
+            System.out.printf("Validando %s ...\n",palabra.convertirString());
+            if(palabra.esValida(tablero.diccionario)){
+                System.out.printf("La palabra %s es valida: %d\n",palabra.convertirString(),palabra.obtenerPuntaje());
+                puntaje+=palabra.obtenerPuntaje();
+            }else{
+                System.out.printf("La palabra %s no es valida\n",palabra.convertirString());
+
+            }
         }
 
         return puntaje;
     }
 
 
-
+    public boolean estaEnArrayPalabra(ArrayList<Palabra> array, Palabra palabra){
+        boolean esta=false;
+        for (Palabra p : array) {
+            if(p.equals(palabra)) esta=true;
+        }
+        return esta;
+    }
 
 
 }

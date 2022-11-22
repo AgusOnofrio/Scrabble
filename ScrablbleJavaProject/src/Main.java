@@ -1,3 +1,8 @@
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
 import Modelo.BolsaFichas;
 import Modelo.Casillero;
 import Modelo.Diccionario;
@@ -7,16 +12,18 @@ import Modelo.Tablero;
 import Vista.VistaConsola;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         //inicializo
         Tablero tablero= new Tablero();
         VistaConsola vistaConsola = new VistaConsola();
         BolsaFichas bolsa=new BolsaFichas();
         Jugador jugador1 = new Jugador("Agustin",bolsa);
         Jugador jugador2 = new Jugador("Luna",bolsa);
+        
 
-
-
+        Diccionario dic = new Diccionario();
+        
+        
         // //Muestro tablero por primera vez
         // vistaConsola.mostrarTablero(tablero);
         // vistaConsola.mostrarCasillerosDisponibles(tablero);
@@ -41,8 +48,22 @@ public class Main {
         // vistaConsola.mostrarTablero(tablero);
         // vistaConsola.mostrarCasillerosDisponibles(tablero);
         // vistaConsola.mostrarAtrilJugador(jugador1);
-        vistaConsola.turnoJugador(tablero, jugador1);
 
+
+
+        // Pruebo el diccionario
+        // String palabra= "saldREmos";
+        // System.out.println(dic.validarPalabra(palabra));
+
+        // palabra= "e";
+        // System.out.println(dic.validarPalabra(palabra));
+        
+
+
+
+        //Probar jugar  dos turnos
+
+        vistaConsola.turnoJugador(tablero, jugador1);
         vistaConsola.turnoJugador(tablero, jugador2);
 
 

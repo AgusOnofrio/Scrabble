@@ -1,4 +1,5 @@
 package Modelo;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import Modelo.Interfaces.Itablero;
@@ -21,8 +22,11 @@ public class Tablero implements Itablero{
 
     private final Casillero[][] casilleros;
 
+
+    public Diccionario diccionario;
+
     //private boolean isFirstMove;
-    public Tablero() {
+    public Tablero() throws IOException {
         casilleros = new Casillero[TAMANIO][TAMANIO];
   
         //setFirstMove(true);
@@ -54,6 +58,10 @@ public class Tablero implements Itablero{
                 }
             }
         }
+
+        this.diccionario= new Diccionario();
+
+
     }
 
 

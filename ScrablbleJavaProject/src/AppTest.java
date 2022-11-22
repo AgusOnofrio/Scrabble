@@ -2,6 +2,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+
 import org.junit.Test;
 
 import Modelo.BolsaFichas;
@@ -53,7 +55,7 @@ public class AppTest {
     }
 
     @Test
-    public void cuandoInicializoTableroNoHayFichas(){
+    public void cuandoInicializoTableroNoHayFichas() throws IOException{
         Tablero tablero= new Tablero();
         
         Casillero[][] casilleros = tablero.getCasilleros();
@@ -67,7 +69,7 @@ public class AppTest {
     }
 
     @Test
-    public void unaPalabraQueNoEstaEnElDiccionarioDevuelveFalse(){
+    public void unaPalabraQueNoEstaEnElDiccionarioDevuelveFalse() throws IOException{
         Diccionario diccionario = new Diccionario();
 
         String palabra = "jorgelin";

@@ -1,5 +1,6 @@
 package Modelo;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Palabra {
@@ -9,6 +10,7 @@ public class Palabra {
 
     public Palabra(ArrayList<Casillero> casilleros){  //¿Deberia poder inicializar una palabra sin saber que sea valida primero?
         this.posiciones= casilleros;
+        this.letras= new ArrayList<Ficha>();
         //Agrego las letras que estan cada casillero
         for (Casillero casillero : casilleros) {
             this.letras.add(casillero.getFicha());
@@ -19,13 +21,14 @@ public class Palabra {
         
     }
 
-    private String convertirString(){
+    public String convertirString(){
         String palabra="";
         for (Ficha ficha : letras) {
             palabra+=ficha.getLabel();
         }
         return palabra;
     }
+
 
     public int obtenerPuntaje(){
         int puntaje=0;
@@ -70,10 +73,15 @@ public class Palabra {
 
     }
 
-    public boolean esValida(){
-        return Diccionario.validarPalabra(this.palabra);
+    public boolean esValida(Diccionario dic) throws IOException{
+        return dic.validarPalabra(this.palabra);
     }
 
+    public boolean equals(Palabra palabra){
+        String p = palabra.convertirString();
+
+        return p.equals(this.convertirString());
+    }
 
 
 

@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 
 import Modelo.BolsaFichas;
@@ -11,7 +12,7 @@ public class Partida {
     private BolsaFichas bolsaConLetras;
     private boolean continuarPartida;
 
-    public Partida(){
+    public Partida() throws IOException{
         //Inicializo jugadores
         jugadores=new ArrayList<Jugador>();
         //inicializo Tablero
