@@ -2,13 +2,16 @@ package Modelo;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class BolsaFichas {
+import Modelo.Interfaces.IBolsaFichas;
+import Modelo.Interfaces.IFicha;
+
+public class BolsaFichas implements IBolsaFichas{
     //Hacer que la bolsa de fichas sea un singleton
     
-    private  ArrayList<Ficha> fichas;
+    private  ArrayList<IFicha> fichas;
     
     public BolsaFichas(){
-        fichas= new ArrayList<Ficha>();
+        fichas= new ArrayList<IFicha>();
         for (Letra letra : Letra.values()) {
             for (int i = 0; i < letra.quantity; i++) {
                 Ficha fichaPorAgregar= new Ficha(letra.label,letra.value);
@@ -18,12 +21,12 @@ public class BolsaFichas {
     }
     
 
-    public ArrayList<Ficha> getFichas(){
+    public ArrayList<IFicha> getFichas(){
         return fichas;
     }
 
-    public Ficha sacarFicha(){
-        Ficha ficha;
+    public IFicha sacarFicha(){
+        IFicha ficha;
 
         if(fichas.isEmpty()) return null;
 
@@ -35,10 +38,10 @@ public class BolsaFichas {
         return ficha;
     }
 
-    public Ficha cambiarFicha(Ficha fichaAnterior) {
+    public IFicha cambiarFicha(IFicha fichaAnterior) {
 
         fichas.add(fichaAnterior);
-        Ficha fichaNueva = this.sacarFicha();
+        IFicha fichaNueva = this.sacarFicha();
 
         return fichaNueva;
     }

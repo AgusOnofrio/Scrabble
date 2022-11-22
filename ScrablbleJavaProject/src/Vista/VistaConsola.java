@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import Controlador.Partida;
 import Modelo.Casillero;
 import Modelo.Diccionario;
 import Modelo.Ficha;
@@ -11,12 +12,19 @@ import Modelo.Jugador;
 import Modelo.Palabra;
 import Modelo.Tablero;
 import Modelo.TipoEspecial;
-
+import Modelo.Interfaces.ICasillero;
+import Modelo.Interfaces.IFicha;
+import Modelo.Interfaces.Ijugador;
+import Modelo.Interfaces.Itablero;
 public class VistaConsola {
     
 
 
-    private ArrayList<Casillero> casillerosJugadosEnElTurno=new ArrayList<Casillero>();
+    private Partida partida;
+
+    public VistaConsola(Partida partida){
+        this.partida=partida;
+    }
 
 
 
@@ -49,8 +57,8 @@ public class VistaConsola {
     }
 
 
-    public void mostrarCasillero(Casillero casillero){
-        Ficha ficha = casillero.getFicha();
+    public void mostrarCasillero(ICasillero casillero){
+        IFicha ficha = casillero.getFicha();
         if(ficha!=null){
             System.out.printf("%3s",ficha.getLabel());
         }else{
@@ -93,7 +101,7 @@ public class VistaConsola {
         }
     }
 
-    public Casillero elegirCasilleroDisponible(Tablero tablero){
+    public Casillero elegirCasilleroDisponible(Itablero tablero){ // TODO Desacoplar vista de controlador
         Scanner sc = new Scanner(System.in);
         int opcion;
         System.out.println("Estos son los casilleros donde podes ubicar una ficha");
@@ -122,7 +130,7 @@ public class VistaConsola {
     }
 
 
-    public void mostrarCasillerosDisponibles(Tablero tablero){
+    public void mostrarCasillerosDisponibles(Tablero tablero){ 
 
         System.out.println("Estos son los casilleros donde podes ubicar una ficha");
         ArrayList<Casillero> casillerosDisponibles = tablero.casillerosDisponibles();
@@ -143,15 +151,15 @@ public class VistaConsola {
 
 
 
-    public Ficha elegirfichaJugador(Jugador jugador){
+    public IFicha elegirfichaJugador(Ijugador jugador){   // TODO Desacoplar vista de controlador
         Scanner sc = new Scanner(System.in);
         int opcion;
-        ArrayList<Ficha> fichas = jugador.getAtril().getFichasAtril();
+        ArrayList<IFicha> fichas = jugador.getAtril().getFichasAtril();
         do {
             String indices = "";
             Integer i =0;
             System.out.println("Estas son tu fichas: ");
-            for (Ficha ficha : fichas) {
+            for (IFicha ficha : fichas) {
                 System.out.printf("%s | ",ficha.getLabel());
                 indices+= i.toString()+" | ";
                 i++;
@@ -164,19 +172,19 @@ public class VistaConsola {
             
         } while (opcion<0 || opcion> fichas.size());
 
-        Ficha ficha = jugador.getAtril().sacarFichaDeAtril(opcion);
+        IFicha ficha = jugador.getAtril().sacarFichaDeAtril(opcion);
 
         return ficha;
     }
 
 
-    public void mostrarAtrilJugador(Jugador jugador){
+    public void mostrarAtrilJugador(Ijugador jugador){
 
-        ArrayList<Ficha> fichas = jugador.getAtril().getFichasAtril();
+        ArrayList<IFicha> fichas = jugador.getAtril().getFichasAtril();
         String indices = "";
         Integer i =0;
         System.out.println("Estas son tu fichas: ");
-        for (Ficha ficha : fichas) {
+        for (IFicha ficha : fichas) {
             System.out.printf("%s | ",ficha.getLabel());
             indices+= i.toString()+" | ";
             i++;
@@ -188,16 +196,16 @@ public class VistaConsola {
 
 
 
-    public void elegirFichaYCasillero(Tablero tablero, Jugador jugador) {
-        Casillero casillero;
-        Ficha ficha;
+    public void elegirFichaYCasillero(Itablero tablero, Ijugador jugador) { // TODO Desacoplar vista de controlador
+        ICasillero casillero;
+        IFicha ficha;
 
         
         casillero = this.elegirCasilleroDisponible(tablero);
         ficha= this.elegirfichaJugador(jugador);
 
         casillero.ponerFicha(ficha);
-        casillerosJugadosEnElTurno.add(casillero);
+        partida.agregarCasilleroJugado(casillero);
     }
 
 
@@ -206,129 +214,31 @@ public class VistaConsola {
     // -El jugador finaliza el turno 
     // -El jugador se queda sin fichas
     // -El jugador intercambia fichas
-    public void turnoJugador(Tablero tablero, Jugador jugador) throws IOException{
+    public void turnoJugador() throws IOException{ // TODO Desacoplar vista de controlador
         Scanner sc = new Scanner(System.in);
         int opcion=1;
-        casillerosJugadosEnElTurno.clear();
-        mostrarTablero(tablero);
-        mostrarCasillerosDisponibles(tablero);
-        mostrarAtrilJugador(jugador);
+        partida.clearCasillerosJugadosEnElTurno();
+        System.out.println("Turno "+partida.getJugador().getNombre());
+        mostrarTablero(this.partida.getTablero());
+        mostrarCasillerosDisponibles(this.partida.getTablero());
+        mostrarAtrilJugador(this.partida.getJugador());
         System.out.println("Elegir: 1-jugar 0-Finalizar turno");
         opcion = sc.nextInt();
 
-        while (jugador.getAtril().getFichasAtril().size()>0 && opcion!=0){
-            mostrarTablero(tablero);
-            mostrarCasillerosDisponibles(tablero);
-            mostrarAtrilJugador(jugador);
-            elegirFichaYCasillero(tablero, jugador);
+        while (this.partida.getJugador().getAtril().getFichasAtril().size()>0 && opcion!=0){
+            mostrarTablero(this.partida.getTablero());
+            mostrarCasillerosDisponibles(this.partida.getTablero());
+            mostrarAtrilJugador(this.partida.getJugador());
+            elegirFichaYCasillero(this.partida.getTablero(), this.partida.getJugador());
             System.out.println("Elegir: 1-jugar 0-Finalizar turno");
             opcion = sc.nextInt();
         }
 
         //chequear las palabras formadas
-       int puntajeTurno= calcularPuntajeTurno(tablero);
+       int puntajeTurno= partida.calcularPuntajeTurno();
 
        System.out.println("El puntaje del turno fue: "+puntajeTurno);
 
-    }
-
-    public ArrayList<Casillero> palabraHorizontal(Tablero tablero,Casillero casillero){
-        //miro hacia la izquierda
-        Casillero casilleroActual= casillero;
-        boolean casilleroValido=true;
-        while(casilleroValido){
-            System.out.printf("Probando el casillero %d-%d: %s\n",casilleroActual.getFila(),casilleroActual.getColumna(),casilleroActual.getFicha().getLabel());
-            if(tablero.getCasillero(casilleroActual.getFila(), casilleroActual.getColumna()-1).getFicha()!=null){
-                casilleroActual= tablero.getCasillero(casilleroActual.getFila(), casilleroActual.getColumna()-1);
-            }else{
-                casilleroValido=false;
-            }
-        }
-    
-        ArrayList<Casillero> palabra= new ArrayList<Casillero>();
-        
-        do {
-            palabra.add(casilleroActual);
-            casilleroActual= tablero.getCasillero(casilleroActual.getFila(), casilleroActual.getColumna()+1);
-        } while (casilleroActual.estaOcupado()); 
-
-
-        return palabra;
-    }
-
-
-    public ArrayList<Casillero> palabraVertical(Tablero tablero,Casillero casillero){
-        //miro hacia la izquierda
-        Casillero casilleroActual= casillero;
-        boolean casilleroValido=true;
-        while(casilleroValido){
-            if(tablero.getCasillero(casilleroActual.getFila()-1, casilleroActual.getColumna()).getFicha()!=null){
-                casilleroActual= tablero.getCasillero(casilleroActual.getFila()-1, casilleroActual.getColumna());
-            }else{
-                casilleroValido=false;
-            }
-        }
-    
-        ArrayList<Casillero> palabra= new ArrayList<Casillero>();
-        
-        do {
-            palabra.add(casilleroActual);
-            casilleroActual= tablero.getCasillero(casilleroActual.getFila()+1, casilleroActual.getColumna());
-        } while (casilleroActual.estaOcupado()); 
-
-
-        return palabra;
-    }
-
-
-
-    public ArrayList<Palabra> chequearSiLaFichaFormaPalabra(Tablero tablero,Casillero casillero){
-        
-        Palabra palabraHorizontal;
-        Palabra palabraVertical;
-        ArrayList<Palabra> palabras = new ArrayList<Palabra>();
-        palabraHorizontal= new Palabra(palabraHorizontal(tablero, casillero));
-        palabraVertical= new Palabra(palabraVertical(tablero, casillero));
-        palabras.add(palabraHorizontal);
-        palabras.add(palabraVertical);
-        
-        return palabras;
-    }
-
-
-    public int calcularPuntajeTurno(Tablero tablero) throws IOException{
-        ArrayList<Palabra> palabrasFormadas = new ArrayList<Palabra>(); 
-        for (Casillero casillero : casillerosJugadosEnElTurno) {
-            for (Palabra palabra : chequearSiLaFichaFormaPalabra(tablero, casillero)) {
-                System.out.println("Validando si ya se encontro palabra: "+palabra.convertirString());
-                if(!estaEnArrayPalabra(palabrasFormadas, palabra)){
-                    palabrasFormadas.add(palabra);
-                } 
-            } 
-        }
-
-        int puntaje=0;
-        for (Palabra palabra : palabrasFormadas) {
-            System.out.printf("Validando %s ...\n",palabra.convertirString());
-            if(palabra.esValida(tablero.diccionario)){
-                System.out.printf("La palabra %s es valida: %d\n",palabra.convertirString(),palabra.obtenerPuntaje());
-                puntaje+=palabra.obtenerPuntaje();
-            }else{
-                System.out.printf("La palabra %s no es valida\n",palabra.convertirString());
-
-            }
-        }
-
-        return puntaje;
-    }
-
-
-    public boolean estaEnArrayPalabra(ArrayList<Palabra> array, Palabra palabra){
-        boolean esta=false;
-        for (Palabra p : array) {
-            if(p.equals(palabra)) esta=true;
-        }
-        return esta;
     }
 
 

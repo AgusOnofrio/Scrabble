@@ -12,6 +12,7 @@ import Modelo.Diccionario;
 import Modelo.Ficha;
 import Modelo.Jugador;
 import Modelo.Tablero;
+import Modelo.Interfaces.IFicha;
 
 public class AppTest {
     
@@ -46,9 +47,9 @@ public class AppTest {
     @Test
     public void CambiarFichaMeDevuelveOtraFicha(){
         BolsaFichas bolsa = new BolsaFichas();
-        Ficha fichaAnterior = bolsa.sacarFicha() ;
+        IFicha fichaAnterior = bolsa.sacarFicha() ;
 
-        Ficha fichanueva= bolsa.cambiarFicha(fichaAnterior);
+        IFicha fichanueva= bolsa.cambiarFicha(fichaAnterior);
 
         assertNotEquals(fichanueva, fichaAnterior);
         assertNotEquals(fichanueva,null);
@@ -82,7 +83,7 @@ public class AppTest {
         Casillero casillero =  new Casillero(0,0);
         BolsaFichas bolsaFichas = new BolsaFichas();
 
-        Ficha ficha = bolsaFichas.sacarFicha();
+        IFicha ficha = bolsaFichas.sacarFicha();
 
         casillero.ponerFicha(ficha);
         

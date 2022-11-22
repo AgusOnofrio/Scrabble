@@ -1,5 +1,8 @@
 package Modelo;
-public class Ficha {
+
+import Modelo.Interfaces.IFicha;
+
+public class Ficha implements IFicha {
     private final String label;
     private final Integer value;
 

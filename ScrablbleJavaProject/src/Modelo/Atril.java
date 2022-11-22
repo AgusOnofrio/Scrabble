@@ -1,14 +1,17 @@
 package Modelo;
 import java.util.ArrayList;
 
-public class Atril {
+import Modelo.Interfaces.IAtril;
+import Modelo.Interfaces.IFicha;
+
+public class Atril implements IAtril {
     //Un atril puede solo contener 7 fichas
-    private ArrayList<Ficha> fichas;
+    private ArrayList<IFicha> fichas;
     private Integer cantidadDeFichas=7;
     private BolsaFichas bolsa;
 
     public Atril(BolsaFichas bolsa){
-        this.fichas = new ArrayList<Ficha>(cantidadDeFichas);
+        this.fichas = new ArrayList<IFicha>(cantidadDeFichas);
         this.bolsa=bolsa;
         this.llenarAtril();
     }
@@ -19,28 +22,36 @@ public class Atril {
         }
     }
 
-    public ArrayList<Ficha> getFichasAtril(){
+    public ArrayList<IFicha> getFichasAtril(){
         return this.fichas;
     }
 
     public String getFichasAtrilString(){
         StringBuilder stringAtril= new StringBuilder();
-        for (Ficha ficha : fichas) {
+        for (IFicha ficha : fichas) {
             stringAtril.append(ficha.getLabel().toString()+",");
         }
         return stringAtril.toString();
     }
 
     
-    public Ficha sacarFichaDeAtril(int posicion){
-        Ficha ficha=null;
+    public IFicha sacarFichaDeAtril(int posicion){
+        IFicha ficha=null;
         if(posicion>=0 && posicion<fichas.size()) {
             ficha= fichas.get(posicion);
             fichas.remove(posicion);
         }
         return ficha;
     }
-    //El atril debe intercambiar sus letras
+
+
+
+    //El atril debe intercambiar sus fichas
+    @Override
+    public void intercambiarFichas() {
+        // TODO Auto-generated method stub
+        
+    }
 
 
 }

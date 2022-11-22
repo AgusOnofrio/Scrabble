@@ -9,24 +9,31 @@ public class Jugador implements Ijugador{
     private Atril atril;
     private Integer puntaje;
     private String nombre;
+    
     private static Integer numeroDeJugador=0;
     private BolsaFichas bolsa;
-
+    
     public Jugador(String nombre,BolsaFichas bolsa){
         this.nombre=nombre;
         numeroDeJugador++;
         this.atril= new Atril(bolsa);
         puntaje=0;
     }
-
+    
     public Jugador(){
         this.nombre="Jugador "+numeroDeJugador.toString();
         numeroDeJugador++;
         this.atril= new Atril(bolsa);
         puntaje=0;
     }
-
-
+    
+    public String getNombre() {
+        return nombre;
+    }
+    
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
     //Sabers si la palabra esta en s atril
     public boolean palabraEstaEnAtril(String palabra){

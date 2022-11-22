@@ -1,8 +1,11 @@
 package Modelo;
 
-public class Casillero {
+import Modelo.Interfaces.ICasillero;
+import Modelo.Interfaces.IFicha;
+
+public class Casillero implements ICasillero{
     private final TipoEspecial tipo;
-    private Ficha ficha=null;
+    private IFicha ficha=null;
     private boolean disponible;
     private final int fila;
     private final int columna;
@@ -48,13 +51,13 @@ public class Casillero {
         return this.ficha != null;
     }
     
-    public Ficha getFicha(){
+    public IFicha getFicha(){
         return this.ficha;
     }
 
     
 
-    public void ponerFicha(Ficha ficha){
+    public void ponerFicha(IFicha ficha){
         if (this.ficha ==null) this.ficha=ficha;
     }
 

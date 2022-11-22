@@ -14,6 +14,8 @@ import Modelo.Ficha;
 import Modelo.Jugador;
 import Modelo.Tablero;
 import Modelo.TipoEspecial;
+import Modelo.Interfaces.IFicha;
+import Modelo.Interfaces.Ijugador;
 
 /**
  *
@@ -570,7 +572,7 @@ public class BoardWindow extends javax.swing.JFrame {
 
     ////END ACTION LISTENERS/////////////////////////////////////
     //Update Views//////////////////////////////////////////////////////////////////
-    public void updateRack(Jugador player) throws IndexOutOfBoundsException {
+    public void updateRack(Ijugador player) throws IndexOutOfBoundsException {
         //make all rack buttons invisible
         for (JButton currentButton : buttonRack) {
             currentButton.setVisible(false);
@@ -579,7 +581,7 @@ public class BoardWindow extends javax.swing.JFrame {
         //for each tile in rack
         for (int i = 0; i < player.getAtril().getFichasAtril().size(); i++) {
 
-            Ficha assignedTile = player.getAtril().getFichasAtril().get(i);
+            IFicha assignedTile = player.getAtril().getFichasAtril().get(i);
 
             if (assignedTile.getValue() == 0) {
                 // assignedTile.setLetter('?');

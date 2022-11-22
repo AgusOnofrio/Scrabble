@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import Controlador.Partida;
 import Modelo.BolsaFichas;
 import Modelo.Casillero;
 import Modelo.Diccionario;
@@ -14,14 +15,15 @@ import Vista.VistaConsola;
 public class Main {
     public static void main(String[] args) throws IOException {
         //inicializo
-        Tablero tablero= new Tablero();
-        VistaConsola vistaConsola = new VistaConsola();
-        BolsaFichas bolsa=new BolsaFichas();
-        Jugador jugador1 = new Jugador("Agustin",bolsa);
-        Jugador jugador2 = new Jugador("Luna",bolsa);
+        
+        Partida nuevaPartida = new Partida();
+        VistaConsola vistaConsola = new VistaConsola(nuevaPartida);
+        
+        nuevaPartida.agregarJugador("Agustin");
+        nuevaPartida.agregarJugador("Luna");
         
 
-        Diccionario dic = new Diccionario();
+        
         
         
         // //Muestro tablero por primera vez
@@ -63,8 +65,8 @@ public class Main {
 
         //Probar jugar  dos turnos
 
-        vistaConsola.turnoJugador(tablero, jugador1);
-        vistaConsola.turnoJugador(tablero, jugador2);
+        vistaConsola.turnoJugador();
+        vistaConsola.turnoJugador();
 
 
 

@@ -3,16 +3,20 @@ package Modelo;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Palabra {
-    private  ArrayList<Casillero> posiciones;
-    private  ArrayList<Ficha> letras;
+import Modelo.Interfaces.ICasillero;
+import Modelo.Interfaces.IFicha;
+import Modelo.Interfaces.IPalabra;
+
+public class Palabra implements IPalabra{
+    private  ArrayList<ICasillero> posiciones;
+    private  ArrayList<IFicha> letras;
     private final String palabra;
 
-    public Palabra(ArrayList<Casillero> casilleros){  //¿Deberia poder inicializar una palabra sin saber que sea valida primero?
+    public Palabra(ArrayList<ICasillero> casilleros){  //¿Deberia poder inicializar una palabra sin saber que sea valida primero?
         this.posiciones= casilleros;
-        this.letras= new ArrayList<Ficha>();
+        this.letras= new ArrayList<IFicha>();
         //Agrego las letras que estan cada casillero
-        for (Casillero casillero : casilleros) {
+        for (ICasillero casillero : casilleros) {
             this.letras.add(casillero.getFicha());
         }
         
@@ -23,7 +27,7 @@ public class Palabra {
 
     public String convertirString(){
         String palabra="";
-        for (Ficha ficha : letras) {
+        for (IFicha ficha : letras) {
             palabra+=ficha.getLabel();
         }
         return palabra;
@@ -73,11 +77,17 @@ public class Palabra {
 
     }
 
-    public boolean esValida(Diccionario dic) throws IOException{
-        return dic.validarPalabra(this.palabra);
+    public boolean esValida(){
+        boolean valida=false;
+        try {
+            if(Diccionario.validarPalabra(this.palabra)) valida=true;;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return valida;
     }
 
-    public boolean equals(Palabra palabra){
+    public boolean equals(IPalabra palabra){
         String p = palabra.convertirString();
 
         return p.equals(this.convertirString());
