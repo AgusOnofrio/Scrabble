@@ -20,7 +20,7 @@ public class Diccionario {
 
         boolean valida=false;
         palabra=palabra.toLowerCase();
-        String path="C:/Users/onofr/Desktop/Scrabble/ScrablbleJavaProject/src/diccionario/";
+        String path="src/diccionario";
          
         char inicial= palabra.toLowerCase().toCharArray()[0];
         if(palabra.length()>9){
