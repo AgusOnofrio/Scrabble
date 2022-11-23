@@ -13,4 +13,8 @@ public interface Ijugador {
 
     public IAtril getAtril() ;
 
+    public void sumarPuntos(int puntaje);
+
+    public int getPuntaje();
+
 }

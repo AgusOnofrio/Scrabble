@@ -57,6 +57,17 @@ public class Jugador implements Ijugador{
         return this.atril;
     }
 
+    @Override
+    public void sumarPuntos(int puntaje) {
+        this.puntaje+=puntaje;
+        
+    }
+
+    @Override
+    public int getPuntaje() {
+        return this.puntaje;        
+    }
+
     //Un jugador puede cambiar las fichas de su atril
 
 

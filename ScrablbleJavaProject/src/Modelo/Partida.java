@@ -13,7 +13,7 @@ import Modelo.Interfaces.Itablero;
 
 public class Partida extends Observable{
 
-    private Ijugador jugador;
+    private ArrayList<Ijugador> jugadores;
     private Itablero tablero;
     private IBolsaFichas bolsaConLetras;
     private boolean continuarPartida;
@@ -26,7 +26,7 @@ public class Partida extends Observable{
         //inicializo bolsa de letras
         this.bolsaConLetras= new BolsaFichas();
         //Inicializo jugadores
-        this.jugador= new Jugador(nombre,bolsaConLetras);
+        this.jugadores= new ArrayList<Ijugador>();
         //inicializo Tablero
         this.tablero = new Tablero();
         //inicializo diccionario
@@ -34,10 +34,10 @@ public class Partida extends Observable{
 
     }
 
-    // public void agregarJugador(String nombre){
-    //     Jugador jugador= new Jugador(nombre, bolsaConLetras); // TODO ¿Hace falta la bolas de fichas?¿No se podria manejar todo desde las variables del controlador?
-    //     jugadores.add(jugador);
-    // }
+    public void agregarJugador(String nombre){
+        Jugador jugador= new Jugador(nombre, bolsaConLetras); // TODO ¿Hace falta la bolas de fichas?¿No se podria manejar todo desde las variables del controlador?
+        jugadores.add(jugador);
+    }
 
     public void clearCasillerosJugadosEnElTurno(){
         this.casillerosJugadosEnElTurno.clear();
@@ -134,7 +134,8 @@ public class Partida extends Observable{
 
             }
         }
-
+        this.notificar(Eventos.POSICIONO_FICHA);
+        this.getJugador().sumarPuntos(puntaje);
         return puntaje;
     }
 
@@ -152,12 +153,12 @@ public class Partida extends Observable{
     }
 
     public Ijugador getJugador() {
-        return this.jugador;
+        return this.jugadores.get(turno);
     }
 
     public IFicha elegirfichaJugador(int indice){   // TODO Desacoplar vista de controlador
 
-        IFicha ficha = this.jugador.getAtril().sacarFichaDeAtril(indice);
+        IFicha ficha = this.jugadores.get(turno).getAtril().sacarFichaDeAtril(indice);
 
         return ficha;
     }
@@ -169,7 +170,13 @@ public class Partida extends Observable{
 	}
 
 
+    public void siguienteTurno(){
+        turno=(turno+1)%this.jugadores.size();
+    }
 
+    public int getPuntaje() {
+        return this.getJugador().getPuntaje();
+    }
 
 
 

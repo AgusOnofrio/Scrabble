@@ -18,10 +18,15 @@ public class Main {
         //inicializo
         BolsaFichas bolsa = new BolsaFichas();
         Partida nuevaPartida = new Partida("Agustin");
-        ScrabbleController controlador= new ScrabbleController(nuevaPartida);
-        VistaConsola vistaConsola = new VistaConsola(controlador);
+        ScrabbleController controlador1= new ScrabbleController(nuevaPartida);
+        ScrabbleController controlador2= new ScrabbleController(nuevaPartida);
+        VistaConsola vistaConsola1 = new VistaConsola(controlador1);
+        VistaConsola vistaConsola2 = new VistaConsola(controlador2);
+        controlador1.agregarJugador("Agustin");
+        controlador2.agregarJugador("Luna");
         
-       vistaConsola.iniciar();
+       vistaConsola1.iniciar();
+       vistaConsola2.iniciar();
         
 
         

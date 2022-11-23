@@ -17,7 +17,8 @@ import Modelo.Interfaces.ICasillero;
 import Modelo.Interfaces.IFicha;
 import Modelo.Interfaces.Ijugador;
 import Modelo.Interfaces.Itablero;
-public class VistaConsola implements IVista {
+import pruebaObserverSimple.Observer;
+public class VistaConsola implements IVista,Observer {
     
 
 
@@ -27,12 +28,12 @@ public class VistaConsola implements IVista {
         this.controlador=controlador;
     }
 
-    public void iniciar(){
-        this.mostrarTablero(controlador.getTablero());
-        this.mostrarCasillerosDisponibles(controlador.getTablero());
-        this.mostrarAtrilJugador(controlador.getJugador());
-        this. elegirCasilleroDisponible(controlador.getTablero());
-
+    public void iniciar() throws IOException{
+        // this.mostrarTablero(controlador.getTablero());
+        // this.mostrarCasillerosDisponibles(controlador.getTablero());
+        // this.mostrarAtrilJugador(controlador.getJugador());
+        // this.elegirFichaYCasillero(controlador);
+        this.turnoJugador();
     }
 
 
@@ -204,13 +205,13 @@ public class VistaConsola implements IVista {
 
 
 
-    public void elegirFichaYCasillero(Itablero tablero, Ijugador jugador) { // TODO Desacoplar vista de controlador
+    public void elegirFichaYCasillero(ScrabbleController controlador) { // TODO Desacoplar vista de controlador
         ICasillero casillero;
         IFicha ficha;
 
         
-        casillero = this.elegirCasilleroDisponible(tablero);
-        ficha= this.elegirfichaJugador(jugador);
+        casillero = this.elegirCasilleroDisponible(controlador.getTablero());
+        ficha= this.elegirfichaJugador(controlador.getJugador());
 
         casillero.ponerFicha(ficha);
         controlador.agregarCasilleroJugado(casillero);
@@ -237,7 +238,7 @@ public class VistaConsola implements IVista {
             mostrarTablero(this.controlador.getTablero());
             mostrarCasillerosDisponibles(this.controlador.getTablero());
             mostrarAtrilJugador(this.controlador.getJugador());
-            elegirFichaYCasillero(this.controlador.getTablero(), this.controlador.getJugador());
+            elegirFichaYCasillero(this.controlador);
             System.out.println("Elegir: 1-jugar 0-Finalizar turno");
             opcion = sc.nextInt();
         }
@@ -246,7 +247,25 @@ public class VistaConsola implements IVista {
        int puntajeTurno= controlador.calcularPuntajeTurno();
 
        System.out.println("El puntaje del turno fue: "+puntajeTurno);
+       this.mostrarPuntos();
+       this.controlador.siguienteTurno();
 
+    }
+
+
+    public void mostrarPuntos(){
+       System.out.println("Jugador "+this.controlador.getJugador().getNombre()+" : "+this.controlador.mostraPuntaje()+" puntos");
+    }
+
+
+
+
+
+
+    @Override
+    public void update(int valor) {
+        // TODO Auto-generated method stub
+        
     }
 
 

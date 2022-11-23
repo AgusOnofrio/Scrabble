@@ -45,8 +45,8 @@ public class ScrabbleController implements Observer{
 				this.vista.mostrarTablero(this.modelo.getTablero());
 				break;
             case POSICIONO_FICHA:
-                this.vista.mostrarAtrilJugador(this.modelo.getJugador());
                 this.vista.mostrarTablero(this.modelo.getTablero());
+                this.vista.mostrarAtrilJugador(this.modelo.getJugador());
 		    	break;
 			default:
 				break;
@@ -71,6 +71,18 @@ public class ScrabbleController implements Observer{
     public int calcularPuntajeTurno() throws IOException {
 
         return this.modelo.calcularPuntajeTurno();
+    }
+
+    public void agregarJugador(String nombre) {
+        this.modelo.agregarJugador(nombre);
+    }
+
+    public void siguienteTurno() {
+        this.modelo.siguienteTurno();
+    }
+
+    public int mostraPuntaje() {
+        return this.modelo.getPuntaje();
     }
 
 
