@@ -4,28 +4,36 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import Controlador.Partida;
+import Controlador.ScrabbleController;
 import Modelo.Casillero;
 import Modelo.Diccionario;
 import Modelo.Ficha;
 import Modelo.Jugador;
 import Modelo.Palabra;
+import Modelo.Partida;
 import Modelo.Tablero;
 import Modelo.TipoEspecial;
 import Modelo.Interfaces.ICasillero;
 import Modelo.Interfaces.IFicha;
 import Modelo.Interfaces.Ijugador;
 import Modelo.Interfaces.Itablero;
-public class VistaConsola {
+public class VistaConsola implements IVista {
     
 
 
-    private Partida partida;
+    private ScrabbleController controlador;
 
-    public VistaConsola(Partida partida){
-        this.partida=partida;
+    public VistaConsola(ScrabbleController controlador){
+        this.controlador=controlador;
     }
 
+    public void iniciar(){
+        this.mostrarTablero(controlador.getTablero());
+        this.mostrarCasillerosDisponibles(controlador.getTablero());
+        this.mostrarAtrilJugador(controlador.getJugador());
+        this. elegirCasilleroDisponible(controlador.getTablero());
+
+    }
 
 
     public int menuPrincipal(){
@@ -87,7 +95,7 @@ public class VistaConsola {
         System.out.printf("");
     }
 
-    public void mostrarTablero(Tablero tablero){
+    public void mostrarTablero(Itablero tablero){
         Casillero[][] casilleros = tablero.getCasilleros();
         System.out.printf("      0   1   2   3   4   5   6   7   8   9  10  11  12  13  14");
         System.out.println();
@@ -130,10 +138,10 @@ public class VistaConsola {
     }
 
 
-    public void mostrarCasillerosDisponibles(Tablero tablero){ 
+    public void mostrarCasillerosDisponibles(Itablero itablero){ 
 
         System.out.println("Estos son los casilleros donde podes ubicar una ficha");
-        ArrayList<Casillero> casillerosDisponibles = tablero.casillerosDisponibles();
+        ArrayList<Casillero> casillerosDisponibles = itablero.casillerosDisponibles();
 
           
         String indices = " ";
@@ -205,7 +213,7 @@ public class VistaConsola {
         ficha= this.elegirfichaJugador(jugador);
 
         casillero.ponerFicha(ficha);
-        partida.agregarCasilleroJugado(casillero);
+        controlador.agregarCasilleroJugado(casillero);
     }
 
 
@@ -217,25 +225,25 @@ public class VistaConsola {
     public void turnoJugador() throws IOException{ // TODO Desacoplar vista de controlador
         Scanner sc = new Scanner(System.in);
         int opcion=1;
-        partida.clearCasillerosJugadosEnElTurno();
-        System.out.println("Turno "+partida.getJugador().getNombre());
-        mostrarTablero(this.partida.getTablero());
-        mostrarCasillerosDisponibles(this.partida.getTablero());
-        mostrarAtrilJugador(this.partida.getJugador());
+        controlador.clearCasillerosJugadosEnElTurno();
+        System.out.println("Turno "+controlador.getJugador().getNombre());
+        mostrarTablero(this.controlador.getTablero());
+        mostrarCasillerosDisponibles(this.controlador.getTablero());
+        mostrarAtrilJugador(this.controlador.getJugador());
         System.out.println("Elegir: 1-jugar 0-Finalizar turno");
         opcion = sc.nextInt();
 
-        while (this.partida.getJugador().getAtril().getFichasAtril().size()>0 && opcion!=0){
-            mostrarTablero(this.partida.getTablero());
-            mostrarCasillerosDisponibles(this.partida.getTablero());
-            mostrarAtrilJugador(this.partida.getJugador());
-            elegirFichaYCasillero(this.partida.getTablero(), this.partida.getJugador());
+        while (this.controlador.getJugador().getAtril().getFichasAtril().size()>0 && opcion!=0){
+            mostrarTablero(this.controlador.getTablero());
+            mostrarCasillerosDisponibles(this.controlador.getTablero());
+            mostrarAtrilJugador(this.controlador.getJugador());
+            elegirFichaYCasillero(this.controlador.getTablero(), this.controlador.getJugador());
             System.out.println("Elegir: 1-jugar 0-Finalizar turno");
             opcion = sc.nextInt();
         }
 
         //chequear las palabras formadas
-       int puntajeTurno= partida.calcularPuntajeTurno();
+       int puntajeTurno= controlador.calcularPuntajeTurno();
 
        System.out.println("El puntaje del turno fue: "+puntajeTurno);
 

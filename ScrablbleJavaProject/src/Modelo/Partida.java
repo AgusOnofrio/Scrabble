@@ -1,47 +1,43 @@
-package Controlador;
+package Modelo;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Observable;
 
-import Modelo.BolsaFichas;
-import Modelo.Jugador;
-import Modelo.Tablero;
-import Modelo.Casillero;
-import Modelo.Diccionario;
-import Modelo.Ficha;
-import Modelo.Jugador;
-import Modelo.Palabra;
-import Modelo.Tablero;
-import Modelo.TipoEspecial;
+import Controlador.Eventos;
+import Modelo.Interfaces.IBolsaFichas;
 import Modelo.Interfaces.ICasillero;
+import Modelo.Interfaces.IFicha;
 import Modelo.Interfaces.IPalabra;
+import Modelo.Interfaces.Ijugador;
+import Modelo.Interfaces.Itablero;
 
-public class Partida {
+public class Partida extends Observable{
 
-    private ArrayList<Jugador> jugadores;
-    private Tablero tablero;
-    private BolsaFichas bolsaConLetras;
+    private Ijugador jugador;
+    private Itablero tablero;
+    private IBolsaFichas bolsaConLetras;
     private boolean continuarPartida;
     private ArrayList<ICasillero> casillerosJugadosEnElTurno=new ArrayList<ICasillero>();
     private Diccionario diccionario;
     private static Integer turno=0;
 
 
-    public Partida() throws IOException{
-        //Inicializo jugadores
-        this.jugadores=new ArrayList<Jugador>();
-        //inicializo Tablero
-        this.tablero = new Tablero();
+    public Partida(String nombre) throws IOException{
         //inicializo bolsa de letras
         this.bolsaConLetras= new BolsaFichas();
+        //Inicializo jugadores
+        this.jugador= new Jugador(nombre,bolsaConLetras);
+        //inicializo Tablero
+        this.tablero = new Tablero();
         //inicializo diccionario
         this.diccionario = new Diccionario();
 
     }
 
-    public void agregarJugador(String nombre){
-        Jugador jugador= new Jugador(nombre, bolsaConLetras); // TODO ¿Hace falta la bolas de fichas?¿No se podria manejar todo desde las variables del controlador?
-        jugadores.add(jugador);
-    }
+    // public void agregarJugador(String nombre){
+    //     Jugador jugador= new Jugador(nombre, bolsaConLetras); // TODO ¿Hace falta la bolas de fichas?¿No se podria manejar todo desde las variables del controlador?
+    //     jugadores.add(jugador);
+    // }
 
     public void clearCasillerosJugadosEnElTurno(){
         this.casillerosJugadosEnElTurno.clear();
@@ -151,18 +147,26 @@ public class Partida {
         return esta;
     }
 
-    public Tablero getTablero() {
+    public Itablero getTablero() {
         return this.tablero;
     }
 
-    public Jugador getJugador() {
-        return this.jugadores.get(turno);
+    public Ijugador getJugador() {
+        return this.jugador;
+    }
+
+    public IFicha elegirfichaJugador(int indice){   // TODO Desacoplar vista de controlador
+
+        IFicha ficha = this.jugador.getAtril().sacarFichaDeAtril(indice);
+
+        return ficha;
     }
 
 
-
-
-
+    private void notificar(Eventos evento) {
+		this.setChanged();
+		this.notifyObservers(evento);
+	}
 
 
 

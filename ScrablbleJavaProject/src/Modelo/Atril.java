@@ -2,17 +2,18 @@ package Modelo;
 import java.util.ArrayList;
 
 import Modelo.Interfaces.IAtril;
+import Modelo.Interfaces.IBolsaFichas;
 import Modelo.Interfaces.IFicha;
 
 public class Atril implements IAtril {
     //Un atril puede solo contener 7 fichas
     private ArrayList<IFicha> fichas;
     private Integer cantidadDeFichas=7;
-    private BolsaFichas bolsa;
+    private IBolsaFichas bolsa;
 
-    public Atril(BolsaFichas bolsa){
+    public Atril(IBolsaFichas bolsaConLetras){
         this.fichas = new ArrayList<IFicha>(cantidadDeFichas);
-        this.bolsa=bolsa;
+        this.bolsa=bolsaConLetras;
         this.llenarAtril();
     }
 

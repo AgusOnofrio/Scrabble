@@ -3,20 +3,22 @@ package Modelo;
 import java.awt.Component;
 import java.util.ArrayList;
 
+import Modelo.Interfaces.IAtril;
+import Modelo.Interfaces.IBolsaFichas;
 import Modelo.Interfaces.Ijugador;
 
 public class Jugador implements Ijugador{
-    private Atril atril;
+    private IAtril atril;
     private Integer puntaje;
     private String nombre;
     
     private static Integer numeroDeJugador=0;
     private BolsaFichas bolsa;
     
-    public Jugador(String nombre,BolsaFichas bolsa){
+    public Jugador(String nombre,IBolsaFichas bolsaConLetras){
         this.nombre=nombre;
         numeroDeJugador++;
-        this.atril= new Atril(bolsa);
+        this.atril= new Atril(bolsaConLetras);
         puntaje=0;
     }
     
@@ -51,7 +53,7 @@ public class Jugador implements Ijugador{
         return valida;
     }
 
-    public Atril getAtril() {
+    public IAtril getAtril() {
         return this.atril;
     }
 
