@@ -33,9 +33,26 @@ public class VistaConsola implements IVista,Observer {
         // this.mostrarCasillerosDisponibles(controlador.getTablero());
         // this.mostrarAtrilJugador(controlador.getJugador());
         // this.elegirFichaYCasillero(controlador);
-        this.turnoJugador();
+        int opcion=menuPrincipal();
+        if(opcion ==1){ 
+            opcion=menuJugadores();
+            if(opcion!=0){
+                this.inicializarJugadores(opcion);
+                this.turnoJugador();
+            }
+        }
     }
 
+
+    private void inicializarJugadores(int cantidad) {
+        Scanner sc = new Scanner(System.in);
+        String nombre;
+        for (int i = 0; i < cantidad; i++) {
+            System.out.printf("Nombre del jugador %d: ",i+1);
+            nombre = sc.nextLine();
+            this.controlador.agregarJugador(nombre);
+        }
+    }
 
     public int menuPrincipal(){
         int opcion;
@@ -54,14 +71,14 @@ public class VistaConsola implements IVista,Observer {
     public int menuJugadores(){
         int opcion;
         do {
-            System.out.printf("%20","Elegi el numero de jugadores: ");
-            System.out.println("1- 2 jugadores");
-            System.out.println("2- 3 jugadores");
-            System.out.println("3- 4 jugadores");
+            System.out.println("Elegi el numero de jugadores: ");
+            System.out.println(" 2 jugadores");
+            System.out.println(" 3 jugadores");
+            System.out.println(" 4 jugadores");
             System.out.println("0- Salir");
             Scanner sc = new Scanner(System.in);
             opcion = sc.nextInt();
-        } while (opcion<0 || opcion > 3);
+        } while (opcion<0 || opcion > 4 || opcion==1);
         return opcion;
     }
 
@@ -249,6 +266,7 @@ public class VistaConsola implements IVista,Observer {
        System.out.println("El puntaje del turno fue: "+puntajeTurno);
        this.mostrarPuntos();
        this.controlador.siguienteTurno();
+       this.turnoJugador();
 
     }
 

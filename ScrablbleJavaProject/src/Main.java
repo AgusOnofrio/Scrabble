@@ -22,11 +22,11 @@ public class Main {
         ScrabbleController controlador2= new ScrabbleController(nuevaPartida);
         VistaConsola vistaConsola1 = new VistaConsola(controlador1);
         VistaConsola vistaConsola2 = new VistaConsola(controlador2);
-        controlador1.agregarJugador("Agustin");
-        controlador2.agregarJugador("Luna");
+        // controlador1.agregarJugador("Agustin");
+        // controlador2.agregarJugador("Luna");
         
-       vistaConsola1.iniciar();
-       vistaConsola2.iniciar();
+        vistaConsola1.iniciar();
+        // vistaConsola2.iniciar();
         
 
         
