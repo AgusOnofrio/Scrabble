@@ -22,7 +22,7 @@ public class Partida extends Observable{
     private static Integer turno=0;
 
 
-    public Partida(String nombre) throws IOException{
+    public Partida() throws IOException{
         //inicializo bolsa de letras
         this.bolsaConLetras= new BolsaFichas();
         //Inicializo jugadores
