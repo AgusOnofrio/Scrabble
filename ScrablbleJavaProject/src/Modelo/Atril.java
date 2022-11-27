@@ -48,16 +48,19 @@ public class Atril implements IAtril {
     public IFicha sacarFichaDeAtril(IFicha fichaElegida){
         IFicha ficha=null;
         int posicion=fichas.indexOf(fichaElegida);
-        ficha= fichas.get(posicion);
-        fichas.remove(posicion);
+        if(posicion>-1){
+            ficha= fichas.get(posicion);
+            fichas.remove(posicion);
+        }
         return ficha;
     }
 
     //El atril debe intercambiar sus fichas
     @Override
     public void intercambiarFichas() {
-        // TODO Auto-generated method stub
-        
+        for (int i = 0; i < fichas.size(); i++) {
+            fichas.set(i, bolsa.cambiarFicha(fichas.get(i)));
+        }
     }
 
 

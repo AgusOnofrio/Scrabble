@@ -46,6 +46,7 @@ public enum Letra {
         this.quantity= quantity;
     }
 
+
     // private Integer getValor(String nombreLetra) {
     //     Integer valor;
 

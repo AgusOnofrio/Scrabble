@@ -7,5 +7,6 @@ public interface IBolsaFichas {
     public IFicha sacarFicha();
     public IFicha cambiarFicha(IFicha fichaAnterior);
     public void revolver();
+    public boolean esVacia();
 
 }

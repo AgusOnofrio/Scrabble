@@ -50,5 +50,8 @@ public class BolsaFichas implements IBolsaFichas{
         Collections.shuffle(this.fichas);
     }
 
+    public boolean esVacia(){
+        return fichas.isEmpty();
+    }
 
 }

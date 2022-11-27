@@ -1,5 +1,6 @@
 package Modelo;
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -11,22 +12,27 @@ import Modelo.Interfaces.IFicha;
 import Modelo.Interfaces.IPalabra;
 import Modelo.Interfaces.Ijugador;
 import Modelo.Interfaces.Itablero;
+import ar.edu.unlu.rmimvc.observer.IObservadorRemoto;
+import ar.edu.unlu.rmimvc.observer.ObservableRemoto;
 import pruebaObserverSimple.Observado;
 
-public class Partida implements Observado{
-    private ArrayList<pruebaObserverSimple.Observer> observadores= new ArrayList<pruebaObserverSimple.Observer>();;
+public class Partida extends ObservableRemoto implements Observado, IPartida{
+    private ArrayList<pruebaObserverSimple.Observer> observadores= new ArrayList<pruebaObserverSimple.Observer>();
+    private ArrayList<IObservadorRemoto> observadoresRemotos= new ArrayList<IObservadorRemoto>();
     private ArrayList<Ijugador> jugadores;
     private Itablero tablero;
     private IBolsaFichas bolsaConLetras;
-    private boolean continuarPartida;
     private ArrayList<ICasillero> casillerosJugadosEnElTurno=new ArrayList<ICasillero>();
+    private ArrayList<IPalabra> palabrasFormadasEnElTurno;
     private Diccionario diccionario;
     private static Integer turno=0;
     private ICasillero casilleroElegido=null;
     private IFicha fichaElegida=null;
+    private Integer paso=0;
 
 
-    public Partida()  throws IOException{
+
+    public Partida()  throws IOException,RemoteException{
         //inicializo bolsa de letras
         this.bolsaConLetras= new BolsaFichas();
         //Inicializo jugadores
@@ -38,21 +44,25 @@ public class Partida implements Observado{
 
     }
 
-    public void agregarJugador(String nombre){
+    @Override
+	public void agregarJugador(String nombre)throws RemoteException{
         Jugador jugador= new Jugador(nombre, bolsaConLetras); // TODO ¿Hace falta la bolas de fichas?¿No se podria manejar todo desde las variables del controlador?
         jugadores.add(jugador);
     }
 
-    public void clearCasillerosJugadosEnElTurno(){
+    @Override
+	public void clearCasillerosJugadosEnElTurno()throws RemoteException{
         this.casillerosJugadosEnElTurno.clear();
     }
 
-    public void agregarCasilleroJugado(ICasillero casillero){ 
+    @Override
+	public void agregarCasilleroJugado(ICasillero casillero)throws RemoteException{ 
         this.casillerosJugadosEnElTurno.add(casillero);
     }
 
 
-    public ArrayList<ICasillero> palabraHorizontal(ICasillero casillero){ //TODO ¿Son necesario los parametros?¿Se podria hacer con this?
+    
+	public ArrayList<ICasillero> palabraHorizontal(ICasillero casillero){ //TODO ¿Son necesario los parametros?¿Se podria hacer con this?
         //miro hacia la izquierda
         ICasillero casilleroActual= casillero;
         boolean casilleroValido=true;
@@ -77,7 +87,8 @@ public class Partida implements Observado{
     }
 
 
-    public ArrayList<ICasillero> palabraVertical(ICasillero casillero){ //TODO ¿Son necesario los parametros?¿Se podria hacer con this?
+    
+	public ArrayList<ICasillero> palabraVertical(ICasillero casillero){ //TODO ¿Son necesario los parametros?¿Se podria hacer con this?
         //miro hacia la izquierda
         ICasillero casilleroActual= casillero;
         boolean casilleroValido=true;
@@ -102,7 +113,8 @@ public class Partida implements Observado{
 
 
 
-    public ArrayList<IPalabra> chequearSiLaFichaFormaPalabra(ICasillero casillero){ //TODO controlador
+   
+	public ArrayList<IPalabra> chequearSiLaFichaFormaPalabra(ICasillero casillero){ //TODO controlador
         
         Palabra palabraHorizontal;
         Palabra palabraVertical;
@@ -116,19 +128,20 @@ public class Partida implements Observado{
     }
 
 
-    public int calcularPuntajeTurno() throws IOException{ //TODO controlador
-        ArrayList<IPalabra> palabrasFormadas = new ArrayList<IPalabra>();  
+    @Override
+	public int calcularPuntajeTurno() throws IOException, RemoteException{ //TODO controlador
+        this.palabrasFormadasEnElTurno = new ArrayList<IPalabra>();  
         for (ICasillero casillero : casillerosJugadosEnElTurno) {
             for (IPalabra palabra : chequearSiLaFichaFormaPalabra(casillero)) {
                 System.out.println("Validando si ya se encontro palabra: "+palabra.convertirString());
-                if(!estaEnArrayPalabra(palabrasFormadas, palabra)){
-                    palabrasFormadas.add(palabra);
+                if(!estaEnArrayPalabra(palabrasFormadasEnElTurno, palabra) && (palabra.convertirString().length()>1)){
+                    palabrasFormadasEnElTurno.add(palabra);
                 } 
             } 
         }
 
         int puntaje=0;
-        for (IPalabra palabra : palabrasFormadas) {
+        for (IPalabra palabra : palabrasFormadasEnElTurno) {
             System.out.printf("Validando %s ...\n",palabra.convertirString());
             if(palabra.esValida()){
                 System.out.printf("La palabra %s es valida: %d\n",palabra.convertirString(),palabra.obtenerPuntaje());
@@ -138,13 +151,46 @@ public class Partida implements Observado{
 
             }
         }
-        this.notificarObservers(this,Eventos.POSICIONO_FICHA);
-        this.getJugador().sumarPuntos(puntaje);
+        
+        
         return puntaje;
     }
 
 
-    public boolean estaEnArrayPalabra(ArrayList<IPalabra> array, IPalabra palabra){ //TODO controlador
+    @Override
+	public void finalizarTurno() throws IOException, RemoteException{
+        int puntosTurno=this.calcularPuntajeTurno();
+        this.getJugador().getAtril().llenarAtril();
+        this.getJugador().sumarPuntos(puntosTurno);
+        this.notificarObservers(this,Eventos.FINALIZO_TURNO);
+
+        if(this.casillerosJugadosEnElTurno.size() <1)paso++;
+        if(paso>(this.jugadores.size()*2) || bolsaConLetras.esVacia()){
+            this.notificarObservers(this,Eventos.FINALIZAR_PARTIDA);
+        }else{
+            this.casillerosJugadosEnElTurno= new ArrayList<ICasillero>() ;
+            siguienteTurno();
+            this.notificarObservadores(this,Eventos.COMIENZA_TURNO);
+        }
+
+
+    }
+
+
+    @Override
+	public void cambiarFichas()throws RemoteException{
+        this.getJugador().getAtril().intercambiarFichas();
+        try {
+            this.finalizarTurno();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    @Override
+	public boolean estaEnArrayPalabra(ArrayList<IPalabra> array, IPalabra palabra)throws RemoteException{ //TODO controlador
         boolean esta=false;
         for (IPalabra p : array) {
             if(p.equals(palabra)) esta=true;
@@ -152,15 +198,18 @@ public class Partida implements Observado{
         return esta;
     }
 
-    public Itablero getTablero() {
+    @Override
+	public Itablero getTablero()throws RemoteException {
         return this.tablero;
     }
 
-    public Ijugador getJugador() {
+    @Override
+	public Ijugador getJugador()throws RemoteException {
         return this.jugadores.get(turno);
     }
 
-    public IFicha elegirfichaJugador(int indice){   // TODO Desacoplar vista de controlador
+    @Override
+	public IFicha elegirfichaJugador(int indice)throws RemoteException{   // TODO Desacoplar vista de controlador
 
         IFicha ficha = this.jugadores.get(turno).getAtril().sacarFichaDeAtril(indice);
 
@@ -168,39 +217,52 @@ public class Partida implements Observado{
     }
 
 
-    public void siguienteTurno(){
+    @Override
+	public void siguienteTurno()throws RemoteException{
         turno=(turno+1)%this.jugadores.size();
     }
 
-    public int getPuntaje() {
+    @Override
+	public int getPuntaje()throws RemoteException {
         return this.getJugador().getPuntaje();
     }
 
-    public void elegirCasillero(ICasillero casillero){
+    @Override
+	public void elegirCasillero(ICasillero casillero) throws RemoteException{
         this.casilleroElegido=casillero;
         if(this.casilleroElegido !=null && this.fichaElegida!=null)
         {
             this.casilleroElegido.ponerFicha(fichaElegida);
+            this.agregarCasilleroJugado(casilleroElegido);
             this.casilleroElegido=null;
             this.getJugador().getAtril().sacarFichaDeAtril(fichaElegida);
             this.fichaElegida=null;
-            this.notificarObservers(this, null);
+            this.notificarObservadores(this, Eventos.POSICIONO_FICHA);
         }
     }
 
-    public void elegirFichaAtril(IFicha ficha){
+    @Override
+	public void elegirFichaAtril(IFicha ficha)throws RemoteException{
         this.fichaElegida=ficha;
         if(this.casilleroElegido !=null && this.fichaElegida!=null)
         {
             this.casilleroElegido.ponerFicha(fichaElegida);
+            this.agregarCasilleroJugado(casilleroElegido);
             this.casilleroElegido=null;
             this.getJugador().getAtril().sacarFichaDeAtril(fichaElegida);
             this.fichaElegida=null;
-            this.notificarObservers(this, null);
+            this.notificarObservadores(this, Eventos.POSICIONO_FICHA);
         }
     }
 
-
+    @Override
+	public ArrayList<String> getPalabrasValidasDelTurno()throws RemoteException {
+        ArrayList<String> palabras = new ArrayList<String>();
+        for (IPalabra palabra : this.palabrasFormadasEnElTurno) {
+            palabras.add(palabra.convertirString());
+        }
+        return palabras;
+    }
 
 
 
@@ -222,9 +284,38 @@ public class Partida implements Observado{
 
     @Override
     public void quitarObservador(Object t) {
-        // TODO Auto-generated method stub
+        this.observadores.remove(t);
         
     }
+
+
+// Observable Remoto
+    @Override
+    public void notificarObservadores(Object obj ) throws RemoteException {
+        for (IObservadorRemoto o: this.observadoresRemotos) {
+            o.actualizar(this, obj);
+            /*new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        o.actualizar(obj);
+                    } catch (RemoteException e) {
+                        System.out.println("ERROR: notificando al observador.");
+                        e.printStackTrace();
+                    }
+                }
+            }).start();*/
+        }
+    }
+
+
+
+
+
+
+
+
+    
 
 
 

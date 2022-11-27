@@ -11,4 +11,6 @@ public interface IVista {
 
     public void mostrarAtrilJugador(Ijugador jugador);
 
+    public void iniciar();
+
 }

@@ -3,28 +3,34 @@ package Controlador;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import Modelo.IPartida;
 import Modelo.Jugador;
-import Modelo.Partida;
 import Modelo.Interfaces.ICasillero;
 import Modelo.Interfaces.IFicha;
 import Modelo.Interfaces.Ijugador;
 import Modelo.Interfaces.Itablero;
 import Vista.IVista;
+import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
 
-public class ScrabbleController implements ActionListener{
+public class ScrabbleController implements  ActionListener{
     
     private Ijugador jugador;
-    private Partida modelo;
+    private IPartida modelo;
     private IVista vista;
 
-    public ScrabbleController(Partida modelo){
+    public ScrabbleController(IPartida modelo){
         this.modelo=modelo;
     }
 
-    public void setModelo(Partida modelo) {
+    public ScrabbleController() {
+    }
+
+    public void setModelo(IPartida modelo) {
         this.modelo = modelo;
     }
 
@@ -34,7 +40,14 @@ public class ScrabbleController implements ActionListener{
 
 
     public Itablero getTablero() {
-        return this.modelo.getTablero();
+        Itablero tablero=null;
+        try {
+            tablero= this.modelo.getTablero();
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return tablero;
     }
 
     // @Override
@@ -60,32 +73,69 @@ public class ScrabbleController implements ActionListener{
     // }
 
     public void agregarCasilleroJugado(ICasillero casillero) {
-        this.modelo.agregarCasilleroJugado(casillero);
+        try {
+            this.modelo.agregarCasilleroJugado(casillero);
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     public void clearCasillerosJugadosEnElTurno() {
-        this.modelo.clearCasillerosJugadosEnElTurno();
+        try {
+            this.modelo.clearCasillerosJugadosEnElTurno();
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     public Ijugador getJugador() {
-        return this.modelo.getJugador();
+        Ijugador jugador=null;
+        try {
+            jugador= this.modelo.getJugador();
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return jugador;
     }
 
-    public int calcularPuntajeTurno() throws IOException {
+    public void finalizarTurno() throws IOException {
+        this.modelo.finalizarTurno();
+    }
 
-        return this.modelo.calcularPuntajeTurno();
+    public int calcularPuntajeTurno() throws IOException{
+        return modelo.calcularPuntajeTurno();
     }
 
     public void agregarJugador(String nombre) {
-        this.modelo.agregarJugador(nombre);
+        try {
+            this.modelo.agregarJugador(nombre);
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     public void siguienteTurno() {
-        this.modelo.siguienteTurno();
+        try {
+            this.modelo.siguienteTurno();
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     public int mostraPuntaje() {
-        return this.modelo.getPuntaje();
+        int puntaje=0;
+        try {
+            puntaje= this.modelo.getPuntaje();
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return puntaje;
     }
 
     @Override
@@ -95,16 +145,46 @@ public class ScrabbleController implements ActionListener{
     }
 
     public void elegirCasillero(ICasillero casillero){
-        modelo.elegirCasillero(casillero);
+        try {
+            modelo.elegirCasillero(casillero);
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     public void elegirFichaAtril(IFicha ficha){
-        modelo.elegirFichaAtril(ficha);
+        try {
+            modelo.elegirFichaAtril(ficha);
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         
     }
 
+    public ArrayList<String> getPalabrasValidasDelTurno() {
+        ArrayList<String> palabras=null;
+        try {
+            palabras= modelo.getPalabrasValidasDelTurno();
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return palabras;
+    }
+
+    public void cambiarFichas() {
+        try {
+            modelo.cambiarFichas();
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
 
+    
 
 
 }

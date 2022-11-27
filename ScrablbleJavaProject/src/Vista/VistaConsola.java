@@ -29,7 +29,7 @@ public class VistaConsola implements IVista,Observer {
         this.controlador=controlador;
     }
 
-    public void iniciar() throws IOException{
+    public void iniciar(){
         // this.mostrarTablero(controlador.getTablero());
         // this.mostrarCasillerosDisponibles(controlador.getTablero());
         // this.mostrarAtrilJugador(controlador.getJugador());
@@ -39,7 +39,12 @@ public class VistaConsola implements IVista,Observer {
             opcion=menuJugadores();
             if(opcion!=0){
                 this.inicializarJugadores(opcion);
-                this.turnoJugador();
+                try {
+                    this.turnoJugador();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
         }
     }
