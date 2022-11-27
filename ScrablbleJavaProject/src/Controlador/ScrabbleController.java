@@ -1,5 +1,7 @@
 package Controlador;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
@@ -7,11 +9,12 @@ import java.util.Observer;
 import Modelo.Jugador;
 import Modelo.Partida;
 import Modelo.Interfaces.ICasillero;
+import Modelo.Interfaces.IFicha;
 import Modelo.Interfaces.Ijugador;
 import Modelo.Interfaces.Itablero;
 import Vista.IVista;
 
-public class ScrabbleController implements Observer{
+public class ScrabbleController implements ActionListener{
     
     private Ijugador jugador;
     private Partida modelo;
@@ -34,27 +37,27 @@ public class ScrabbleController implements Observer{
         return this.modelo.getTablero();
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
-        	if (arg instanceof Eventos) {
-			switch ((Eventos) arg) {
-			case ELEGIR_FICHA_ATRIL:
-				this.vista.mostrarAtrilJugador(this.modelo.getJugador());
-				break;
-			case ELEGIR_CASILLERO:
-				this.vista.mostrarTablero(this.modelo.getTablero());
-				break;
-            case POSICIONO_FICHA:
-                this.vista.mostrarTablero(this.modelo.getTablero());
-                this.vista.mostrarAtrilJugador(this.modelo.getJugador());
-		    	break;
-			default:
-				break;
+    // @Override
+    // public void update(Observable o, Object arg) {
+    //     	if (arg instanceof Eventos) {
+	// 		switch ((Eventos) arg) {
+	// 		case ELEGIR_FICHA_ATRIL:
+	// 			this.vista.mostrarAtrilJugador(this.modelo.getJugador());
+	// 			break;
+	// 		case ELEGIR_CASILLERO:
+	// 			this.vista.mostrarTablero(this.modelo.getTablero());
+	// 			break;
+    //         case POSICIONO_FICHA:
+    //             this.vista.mostrarTablero(this.modelo.getTablero());
+    //             this.vista.mostrarAtrilJugador(this.modelo.getJugador());
+	// 	    	break;
+	// 		default:
+	// 			break;
 			
-			}
-		}
+	// 		}
+	// 	}
         
-    }
+    // }
 
     public void agregarCasilleroJugado(ICasillero casillero) {
         this.modelo.agregarCasilleroJugado(casillero);
@@ -85,6 +88,20 @@ public class ScrabbleController implements Observer{
         return this.modelo.getPuntaje();
     }
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void elegirCasillero(ICasillero casillero){
+        modelo.elegirCasillero(casillero);
+    }
+
+    public void elegirFichaAtril(IFicha ficha){
+        modelo.elegirFichaAtril(ficha);
+        
+    }
 
 
 

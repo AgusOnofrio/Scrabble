@@ -28,6 +28,7 @@ public class Main {
         // controlador2.agregarJugador("Luna");
 
         vistaGrafica vista =  new vistaGrafica(controlador1);
+        nuevaPartida.agregarObservador(vista);
         vista.iniciarVistaGrafica();
         // vista.mostrarTablero(controlador1.getTablero());
         // vista.mostrarAtrilJugador(controlador1.getJugador());
@@ -35,8 +36,7 @@ public class Main {
         // vistaConsola2.iniciar();
         
 
-        
-        
+      
         
         // //Muestro tablero por primera vez
         // vistaConsola.mostrarTablero(tablero);
@@ -44,9 +44,13 @@ public class Main {
         // vistaConsola.mostrarAtrilJugador(jugador1);
 
         // //pongo una ficha
-        // Ficha ficha= bolsa.sacarFicha();
+        // Ficha ficha= (Ficha) bolsa.sacarFicha();
         // System.out.println(ficha.getLabel());
-        // tablero.getCasilleros()[0][1].ponerFicha(ficha);
+        // controlador1.getTablero().getCasilleros()[14][1].ponerFicha(ficha);
+        // controlador1.getTablero().getCasilleros()[14][14].ponerFicha(ficha);
+        // controlador1.getTablero().getCasilleros()[13][14].ponerFicha(ficha);
+
+        
 
         // //muestro despues de poner una ficha
         // vistaConsola.mostrarTablero(tablero);

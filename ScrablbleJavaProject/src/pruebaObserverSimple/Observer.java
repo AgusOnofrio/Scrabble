@@ -1,4 +1,7 @@
 package pruebaObserverSimple;
+
+import Controlador.Eventos;
+
 public interface Observer {
-    void update(int valor);
+    void update(Object data,Eventos evento);
 }

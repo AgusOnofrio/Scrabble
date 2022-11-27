@@ -2,6 +2,7 @@ package Modelo;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Observable;
+import java.util.Observer;
 
 import Controlador.Eventos;
 import Modelo.Interfaces.IBolsaFichas;
@@ -10,9 +11,10 @@ import Modelo.Interfaces.IFicha;
 import Modelo.Interfaces.IPalabra;
 import Modelo.Interfaces.Ijugador;
 import Modelo.Interfaces.Itablero;
+import pruebaObserverSimple.Observado;
 
-public class Partida extends Observable{
-
+public class Partida implements Observado{
+    private ArrayList<pruebaObserverSimple.Observer> observadores= new ArrayList<pruebaObserverSimple.Observer>();;
     private ArrayList<Ijugador> jugadores;
     private Itablero tablero;
     private IBolsaFichas bolsaConLetras;
@@ -20,9 +22,11 @@ public class Partida extends Observable{
     private ArrayList<ICasillero> casillerosJugadosEnElTurno=new ArrayList<ICasillero>();
     private Diccionario diccionario;
     private static Integer turno=0;
+    private ICasillero casilleroElegido=null;
+    private IFicha fichaElegida=null;
 
 
-    public Partida() throws IOException{
+    public Partida()  throws IOException{
         //inicializo bolsa de letras
         this.bolsaConLetras= new BolsaFichas();
         //Inicializo jugadores
@@ -43,7 +47,7 @@ public class Partida extends Observable{
         this.casillerosJugadosEnElTurno.clear();
     }
 
-    public void agregarCasilleroJugado(ICasillero casillero){ //TODO si esto lo ejecuta la vista , la vista necesitaria conocer al casillero y eso no es correcto. Cambiar
+    public void agregarCasilleroJugado(ICasillero casillero){ 
         this.casillerosJugadosEnElTurno.add(casillero);
     }
 
@@ -134,7 +138,7 @@ public class Partida extends Observable{
 
             }
         }
-        this.notificar(Eventos.POSICIONO_FICHA);
+        this.notificarObservers(this,Eventos.POSICIONO_FICHA);
         this.getJugador().sumarPuntos(puntaje);
         return puntaje;
     }
@@ -164,18 +168,62 @@ public class Partida extends Observable{
     }
 
 
-    private void notificar(Eventos evento) {
-		this.setChanged();
-		this.notifyObservers(evento);
-	}
-
-
     public void siguienteTurno(){
         turno=(turno+1)%this.jugadores.size();
     }
 
     public int getPuntaje() {
         return this.getJugador().getPuntaje();
+    }
+
+    public void elegirCasillero(ICasillero casillero){
+        this.casilleroElegido=casillero;
+        if(this.casilleroElegido !=null && this.fichaElegida!=null)
+        {
+            this.casilleroElegido.ponerFicha(fichaElegida);
+            this.casilleroElegido=null;
+            this.getJugador().getAtril().sacarFichaDeAtril(fichaElegida);
+            this.fichaElegida=null;
+            this.notificarObservers(this, null);
+        }
+    }
+
+    public void elegirFichaAtril(IFicha ficha){
+        this.fichaElegida=ficha;
+        if(this.casilleroElegido !=null && this.fichaElegida!=null)
+        {
+            this.casilleroElegido.ponerFicha(fichaElegida);
+            this.casilleroElegido=null;
+            this.getJugador().getAtril().sacarFichaDeAtril(fichaElegida);
+            this.fichaElegida=null;
+            this.notificarObservers(this, null);
+        }
+    }
+
+
+
+
+
+    //Observable
+
+    @Override
+    public void notificarObservers(Object data,Eventos evento) {
+        for(pruebaObserverSimple.Observer o : observadores){
+            o.update(data,evento); 
+         }
+        
+    }
+
+    @Override
+    public void agregarObservador(Object t) {
+        this.observadores.add((pruebaObserverSimple.Observer)t);
+        
+    }
+
+    @Override
+    public void quitarObservador(Object t) {
+        // TODO Auto-generated method stub
+        
     }
 
 

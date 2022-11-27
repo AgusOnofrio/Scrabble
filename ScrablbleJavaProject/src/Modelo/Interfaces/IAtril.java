@@ -9,5 +9,6 @@ public interface IAtril {
     public ArrayList<IFicha> getFichasAtril();
     public String getFichasAtrilString();    
     public IFicha sacarFichaDeAtril(int posicion);
+    public IFicha sacarFichaDeAtril(IFicha fichaElegida);
     public void intercambiarFichas();
 }

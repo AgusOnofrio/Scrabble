@@ -3,7 +3,8 @@ package Modelo;
 import Modelo.Interfaces.ICasillero;
 import Modelo.Interfaces.IFicha;
 
-public class Casillero implements ICasillero{
+public class // A class that represents a square in a board game.
+Casillero implements ICasillero{
     private final TipoEspecial tipo;
     private IFicha ficha=null;
     private boolean disponible;
@@ -71,5 +72,8 @@ public class Casillero implements ICasillero{
         this.disponible=condicion;
     }
 
+    public boolean getDisponible(){
+        return this.disponible;
+    }
 
 }

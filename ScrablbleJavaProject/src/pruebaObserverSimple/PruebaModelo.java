@@ -1,6 +1,8 @@
 package pruebaObserverSimple;
 import java.util.ArrayList;
 
+import Controlador.Eventos;
+
 public class PruebaModelo implements Observado<Observer> {
     private ArrayList<Observer> observadores;
     private int valor;
@@ -15,18 +17,18 @@ public class PruebaModelo implements Observado<Observer> {
 
     public void sumar() {
         valor++;
-        notificarObservers(valor);
+        // notificarObservers(valor);
     }
 
     public void restar() {
         valor--;
-        notificarObservers(valor);
+        // notificarObservers(valor);
     }
 
     @Override
-    public void notificarObservers (int valor) {
+    public void notificarObservers (Object data,Eventos evento) {
         for(Observer o : observadores){
-           o.update(valor); 
+        //    o.update(valor); 
         }
 
         
@@ -35,7 +37,7 @@ public class PruebaModelo implements Observado<Observer> {
     @Override
     public void agregarObservador(Observer o) {
         observadores.add(o);
-        notificarObservers(valor);        
+        // notificarObservers(valor);        
     }
 
     @Override

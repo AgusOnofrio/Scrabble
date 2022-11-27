@@ -17,6 +17,8 @@ import javax.swing.text.FlowView.FlowStrategy;
 
 import org.w3c.dom.Text;
 
+import Controlador.Eventos;
+
 public class PruebaVista  extends JFrame implements Observer{
     private PruebaControlador controlador;
     private JLabel texto;
@@ -144,8 +146,8 @@ public class PruebaVista  extends JFrame implements Observer{
 
 
     @Override
-    public void update (int valor) {
-        texto.setText(Integer.toString(valor));
+    public void update (Object data,Eventos evento) {
+        texto.setText(Integer.toString((int)data));
         
     }
 

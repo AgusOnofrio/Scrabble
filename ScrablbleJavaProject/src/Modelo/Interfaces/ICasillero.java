@@ -17,4 +17,6 @@ public interface ICasillero {
 
     //Un casillero esta disponible cuando el casillero central o cuando tiene letras adyacentes
     public void setDisponible(boolean condicion);
+
+    public boolean getDisponible();
 }

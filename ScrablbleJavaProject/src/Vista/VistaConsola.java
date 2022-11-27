@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import Controlador.Eventos;
 import Controlador.ScrabbleController;
 import Modelo.Casillero;
 import Modelo.Diccionario;
@@ -281,8 +282,8 @@ public class VistaConsola implements IVista,Observer {
 
 
     @Override
-    public void update(int valor) {
-        // TODO Auto-generated method stub
+    public void update(Object data,Eventos evento) {
+        
         
     }
 
