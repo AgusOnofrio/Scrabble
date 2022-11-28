@@ -2,57 +2,45 @@ package Vista;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.HeadlessException;
-import java.awt.LayoutManager;
-import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.text.Caret;
-import javax.swing.text.FlowView;
-
-import Controlador.Eventos;
 import Controlador.ScrabbleController;
 import Modelo.Casillero;
-import Modelo.IPartida;
-import Modelo.Jugador;
 import Modelo.Interfaces.ICasillero;
 import Modelo.Interfaces.IFicha;
 import Modelo.Interfaces.Ijugador;
 import Modelo.Interfaces.Itablero;
 import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
-import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
-import pruebaObserverSimple.Observer;
 
-public class vistaGrafica implements IControladorRemoto,IVista,Observer{
+public class vistaGrafica implements IVista{
     private JFrame frame;
     private JPanel tablero;
     private JPanel atril;
     private JPanel panelPrincipal;
-    private JPanel panelLateral;
     private JButton botonCambiarFichas;
     private final Color VERDE = new Color(25,135, 73);
     private final Color NARANJA = new Color(244,184,74,200);
     private final Color ROJO = new Color(233,33,23);
-    private IObservableRemoto modeloRemoto;
-    private ScrabbleController controlador;
     
-    public vistaGrafica(ScrabbleController controlador){
-        this.controlador= controlador;
+    private ScrabbleController controlador;
+
+    public vistaGrafica(){};
+
+    public void setControlador(IControladorRemoto controlador){
+        this.controlador=(ScrabbleController)controlador;
     }
+
 
     public void iniciar(){
         frame = new JFrame("Titulo de la ventana");
@@ -61,6 +49,10 @@ public class vistaGrafica implements IControladorRemoto,IVista,Observer{
         this.mostrarJuego();
         frame.setVisible(true);
     }
+
+    
+
+
 
     private void mostrarJuego(){
         
@@ -86,7 +78,7 @@ public class vistaGrafica implements IControladorRemoto,IVista,Observer{
         
         
         //inicio atril
-        GridLayout glAtril = new GridLayout(1, 7);
+        // GridLayout glAtril = new GridLayout(1, 7);
         this.atril= new JPanel();
         this.atril.setLayout(new FlowLayout());    
         panelPrincipal.add(this.atril, BorderLayout.SOUTH);
@@ -212,86 +204,27 @@ public class vistaGrafica implements IControladorRemoto,IVista,Observer{
         
     }
 
+
+
     @Override
-    public void update(Object data, Eventos evento)  {
-        switch (evento) {
-            case POSICIONO_FICHA:
-                panelPrincipal.removeAll();
-                this.mostrarJuego();
-                this.botonCambiarFichas.setEnabled(false);
-                System.out.println("LLego al update de la vista");   
-                break;
-            case FINALIZO_TURNO:
-                ArrayList<String> palabrasValidasDelTurno = controlador.getPalabrasValidasDelTurno();
-                String mensajePalabras="";
-                for (String palabra : palabrasValidasDelTurno) {
-                    mensajePalabras+= palabra+"\t";
-                }
-                try {
-                    JOptionPane.showMessageDialog(frame, mensajePalabras+"\n"+"Puntos de "+controlador.getJugador().getNombre()+": "+ controlador.calcularPuntajeTurno());
-                } catch (HeadlessException | IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                break;
-            case COMIENZA_TURNO:
-                panelPrincipal.removeAll();
-                this.mostrarJuego();
-                this.botonCambiarFichas.setEnabled(true);
-                break;
-            case FINALIZAR_PARTIDA:
-                this.mostrarJuego();
-                JOptionPane.showMessageDialog(frame, controlador.getJugador().getPuntaje());
-                this.botonCambiarFichas.setEnabled(true);
-                break;
-            default:
-                break;
-        }
+    public void actualizarVista() {
+        panelPrincipal.removeAll();
+        this.mostrarJuego();
         
     }
 
     @Override
-    public void actualizar(IObservableRemoto arg0, Object arg1) throws RemoteException {
-        switch ((Eventos)arg1) {
-            case POSICIONO_FICHA:
-                panelPrincipal.removeAll();
-                this.mostrarJuego();
-                this.botonCambiarFichas.setEnabled(false);
-                System.out.println("LLego al update de la vista");   
-                break;
-            case FINALIZO_TURNO:
-                ArrayList<String> palabrasValidasDelTurno = controlador.getPalabrasValidasDelTurno();
-                String mensajePalabras="";
-                for (String palabra : palabrasValidasDelTurno) {
-                    mensajePalabras+= palabra+"\t";
-                }
-                try {
-                    JOptionPane.showMessageDialog(frame, mensajePalabras+"\n"+"Puntos de "+controlador.getJugador().getNombre()+": "+ controlador.calcularPuntajeTurno());
-                } catch (HeadlessException | IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                break;
-            case COMIENZA_TURNO:
-                panelPrincipal.removeAll();
-                this.mostrarJuego();
-                this.botonCambiarFichas.setEnabled(true);
-                break;
-            case FINALIZAR_PARTIDA:
-                this.mostrarJuego();
-                JOptionPane.showMessageDialog(frame, controlador.getJugador().getPuntaje());
-                this.botonCambiarFichas.setEnabled(true);
-                break;
-            default:
-                break;
-        }
+    public void setCambiarFichas(boolean condicion) {
+        this.botonCambiarFichas.setEnabled(condicion);
+        
     }
 
     @Override
-    public <T extends IObservableRemoto> void setModeloRemoto(T modeloRemoto) throws RemoteException {
-        this.modeloRemoto= (IPartida) modeloRemoto;
+    public void mostrarFinDeturno(String string) {
+        JOptionPane.showMessageDialog(frame,string );
         
     }
+
 
 
 

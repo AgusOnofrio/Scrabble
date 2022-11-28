@@ -1,9 +1,6 @@
 package Modelo.Interfaces;
 
 import java.util.ArrayList;
-
-import Modelo.Ficha;
-
 public interface IAtril {
     public void llenarAtril();
     public ArrayList<IFicha> getFichasAtril();

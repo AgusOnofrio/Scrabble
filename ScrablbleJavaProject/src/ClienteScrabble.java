@@ -35,7 +35,7 @@ public class ClienteScrabble {
 				"Seleccione la IP en la corre el servidor", "IP del servidor", 
 				JOptionPane.QUESTION_MESSAGE, 
 				null,
-				null,
+				ips.toArray(),
 				null
 		);
 		String portServidor = (String) JOptionPane.showInputDialog(
@@ -46,12 +46,15 @@ public class ClienteScrabble {
 				null,
 				8888
 		);
-		ScrabbleController controlador = new ScrabbleController();
-		IVista vista = new vistaGrafica(controlador);
+		IVista vista = new vistaGrafica();
+		ScrabbleController controlador = new ScrabbleController(vista);
+		vista.setControlador(controlador);
 		Cliente c = new Cliente(ip, Integer.parseInt(port), ipServidor, Integer.parseInt(portServidor));
-		vista.iniciar();
 		try {
+			
 			c.iniciar((IControladorRemoto) controlador);
+			controlador.agregarJugador("Agustin");
+			vista.iniciar();
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

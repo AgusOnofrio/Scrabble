@@ -16,19 +16,28 @@ import Modelo.Interfaces.Ijugador;
 import Modelo.Interfaces.Itablero;
 import Vista.IVista;
 import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
+import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 
-public class ScrabbleController implements  ActionListener{
+public class ScrabbleController implements  ActionListener,IControladorRemoto{
     
     private Ijugador jugador;
     private IPartida modelo;
     private IVista vista;
 
-    public ScrabbleController(IPartida modelo){
-        this.modelo=modelo;
-    }
+    public ScrabbleController(IVista vista){
+        this.vista=vista;
+    };
 
-    public ScrabbleController() {
-    }
+    public <T extends IObservableRemoto> ScrabbleController(T modelo) {
+		try {
+			this.setModeloRemoto(modelo);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+
 
     public void setModelo(IPartida modelo) {
         this.modelo = modelo;
@@ -146,7 +155,7 @@ public class ScrabbleController implements  ActionListener{
 
     public void elegirCasillero(ICasillero casillero){
         try {
-            modelo.elegirCasillero(casillero);
+            this.modelo.elegirCasillero(casillero);
         } catch (RemoteException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -176,11 +185,55 @@ public class ScrabbleController implements  ActionListener{
 
     public void cambiarFichas() {
         try {
-            modelo.cambiarFichas();
+            this.modelo.cambiarFichas();
         } catch (RemoteException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+
+    
+    @Override
+    public void actualizar(IObservableRemoto arg0, Object cambio) throws RemoteException {
+        System.out.println("Entra al actualizar del controller");
+        switch ((Eventos)cambio) {
+            case POSICIONO_FICHA:
+                this.vista.actualizarVista();
+                this.vista.setCambiarFichas(false);
+                
+                System.out.println("LLego al update de la vista");   
+                break;
+            case FINALIZO_TURNO:
+                ArrayList<String> palabrasValidasDelTurno = this.getPalabrasValidasDelTurno();
+                String mensajePalabras="";
+                for (String palabra : palabrasValidasDelTurno) {
+                    mensajePalabras+= palabra+"\t";
+                }
+
+                try {
+                    this.vista.mostrarFinDeturno(mensajePalabras+"\n"+"Puntos de "+this.getJugador().getNombre()+": "+ this.calcularPuntajeTurno());
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                break;
+            case COMIENZA_TURNO:
+                this.vista.actualizarVista();
+                this.vista.setCambiarFichas(true);
+                break;
+            case FINALIZAR_PARTIDA:
+                this.vista.actualizarVista();
+                this.vista.mostrarFinDeturno(this.getJugador().getPuntaje().toString());
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public <T extends IObservableRemoto> void setModeloRemoto(T modeloRemoto) throws RemoteException {
+        this.modelo = (IPartida) modeloRemoto;
+        
     }
 
 

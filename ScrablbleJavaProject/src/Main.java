@@ -8,6 +8,7 @@ import Modelo.BolsaFichas;
 import Modelo.Casillero;
 import Modelo.Diccionario;
 import Modelo.Ficha;
+import Modelo.IPartida;
 import Modelo.Jugador;
 import Modelo.Partida;
 import Modelo.Tablero;
@@ -19,26 +20,16 @@ public class Main {
     public static void main(String[] args) throws IOException {
         //inicializo
         
-        Partida nuevaPartida = new Partida();
-        ScrabbleController controlador1= new ScrabbleController(nuevaPartida);
-        ScrabbleController controlador2= new ScrabbleController(nuevaPartida);
-        // VistaConsola vistaConsola1 = new VistaConsola(controlador1);
-        // VistaConsola vistaConsola2 = new VistaConsola(controlador2);
-        // vistaConsola1.iniciar();
+        IPartida modelo = new Partida();
+		ScrabbleController controlador1 = new ScrabbleController(modelo);
         controlador1.agregarJugador("Agustin");
-        controlador2.agregarJugador("Luna");
-
-        IVista vista1 =  new vistaGrafica(controlador1);
-        IVista vista2 =  new vistaGrafica(controlador2);
-        // nuevaPartida.agregarObservador(vista1);
-        // nuevaPartida.agregarObservador(vista2);
-        vista1.iniciar();
-        vista2.iniciar();
-        // vista.mostrarTablero(controlador1.getTablero());
-        // vista.mostrarAtrilJugador(controlador1.getJugador());
-        
-        // vistaConsola2.iniciar();
-        
+		IVista vista1 = new vistaGrafica();
+        vista1.setControlador(controlador1);
+		vista1.iniciar();
+		
+		// Controlador controlador2 = new Controlador(modelo);
+		// IVista vista2 = new VistaGrafica(controlador2);
+		// vista2.iniciar();
 
       
         

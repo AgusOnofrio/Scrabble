@@ -1,11 +1,12 @@
 package Modelo;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import Modelo.Interfaces.IAtril;
 import Modelo.Interfaces.IBolsaFichas;
 import Modelo.Interfaces.IFicha;
 
-public class Atril implements IAtril {
+public class Atril implements IAtril,Serializable {
     //Un atril puede solo contener 7 fichas
     private ArrayList<IFicha> fichas;
     private Integer cantidadDeFichas=7;

@@ -2,10 +2,6 @@ package Modelo;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
-
-import Controlador.Eventos;
 import Modelo.Interfaces.IBolsaFichas;
 import Modelo.Interfaces.ICasillero;
 import Modelo.Interfaces.IFicha;
@@ -14,17 +10,16 @@ import Modelo.Interfaces.Ijugador;
 import Modelo.Interfaces.Itablero;
 import ar.edu.unlu.rmimvc.observer.IObservadorRemoto;
 import ar.edu.unlu.rmimvc.observer.ObservableRemoto;
-import pruebaObserverSimple.Observado;
 
-public class Partida extends ObservableRemoto implements Observado, IPartida{
-    private ArrayList<pruebaObserverSimple.Observer> observadores= new ArrayList<pruebaObserverSimple.Observer>();
+
+public class Partida extends ObservableRemoto implements IPartida{
     private ArrayList<IObservadorRemoto> observadoresRemotos= new ArrayList<IObservadorRemoto>();
     private ArrayList<Ijugador> jugadores;
     private Itablero tablero;
     private IBolsaFichas bolsaConLetras;
     private ArrayList<ICasillero> casillerosJugadosEnElTurno=new ArrayList<ICasillero>();
     private ArrayList<IPalabra> palabrasFormadasEnElTurno;
-    private Diccionario diccionario;
+    
     private static Integer turno=0;
     private ICasillero casilleroElegido=null;
     private IFicha fichaElegida=null;
@@ -39,9 +34,6 @@ public class Partida extends ObservableRemoto implements Observado, IPartida{
         this.jugadores= new ArrayList<Ijugador>();
         //inicializo Tablero
         this.tablero = new Tablero();
-        //inicializo diccionario
-        this.diccionario = new Diccionario();
-
     }
 
     @Override
@@ -162,15 +154,15 @@ public class Partida extends ObservableRemoto implements Observado, IPartida{
         int puntosTurno=this.calcularPuntajeTurno();
         this.getJugador().getAtril().llenarAtril();
         this.getJugador().sumarPuntos(puntosTurno);
-        this.notificarObservers(this,Eventos.FINALIZO_TURNO);
+        this.notificarObservadores(this);
 
         if(this.casillerosJugadosEnElTurno.size() <1)paso++;
         if(paso>(this.jugadores.size()*2) || bolsaConLetras.esVacia()){
-            this.notificarObservers(this,Eventos.FINALIZAR_PARTIDA);
+            this.notificarObservadores(this);
         }else{
             this.casillerosJugadosEnElTurno= new ArrayList<ICasillero>() ;
             siguienteTurno();
-            this.notificarObservadores(this,Eventos.COMIENZA_TURNO);
+            this.notificarObservadores(this);
         }
 
 
@@ -237,7 +229,7 @@ public class Partida extends ObservableRemoto implements Observado, IPartida{
             this.casilleroElegido=null;
             this.getJugador().getAtril().sacarFichaDeAtril(fichaElegida);
             this.fichaElegida=null;
-            this.notificarObservadores(this, Eventos.POSICIONO_FICHA);
+            this.notificarObservadores(this);
         }
     }
 
@@ -251,7 +243,7 @@ public class Partida extends ObservableRemoto implements Observado, IPartida{
             this.casilleroElegido=null;
             this.getJugador().getAtril().sacarFichaDeAtril(fichaElegida);
             this.fichaElegida=null;
-            this.notificarObservadores(this, Eventos.POSICIONO_FICHA);
+            this.notificarObservadores(this);
         }
     }
 
@@ -268,25 +260,25 @@ public class Partida extends ObservableRemoto implements Observado, IPartida{
 
     //Observable
 
-    @Override
-    public void notificarObservers(Object data,Eventos evento) {
-        for(pruebaObserverSimple.Observer o : observadores){
-            o.update(data,evento); 
-         }
+    // @Override
+    // public void notificarObservers(Object data,Eventos evento) {
+    //     for(pruebaObserverSimple.Observer o : observadores){
+    //         o.update(data,evento); 
+    //      }
         
-    }
+    // }
 
-    @Override
-    public void agregarObservador(Object t) {
-        this.observadores.add((pruebaObserverSimple.Observer)t);
+    // @Override
+    // public void agregarObservador(Object t) {
+    //     this.observadores.add((pruebaObserverSimple.Observer)t);
         
-    }
+    // }
 
-    @Override
-    public void quitarObservador(Object t) {
-        this.observadores.remove(t);
+    // @Override
+    // public void quitarObservador(Object t) {
+    //     this.observadores.remove(t);
         
-    }
+    // }
 
 
 // Observable Remoto

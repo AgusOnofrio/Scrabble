@@ -1,17 +1,11 @@
 package Modelo;
-import java.awt.List;
+
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Diccionario {
-
-    private static String[] palabrasDiccionario ={"a","b","c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n",
-                                             "ñ", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
 
     public static boolean validarPalabra(String palabra) throws IOException{
 

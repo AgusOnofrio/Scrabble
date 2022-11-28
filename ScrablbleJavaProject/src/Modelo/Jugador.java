@@ -1,13 +1,12 @@
 package Modelo;
 
-import java.awt.Component;
-import java.util.ArrayList;
+import java.io.Serializable;
 
 import Modelo.Interfaces.IAtril;
 import Modelo.Interfaces.IBolsaFichas;
 import Modelo.Interfaces.Ijugador;
 
-public class Jugador implements Ijugador{
+public class Jugador implements Ijugador,Serializable{
     private IAtril atril;
     private Integer puntaje;
     private String nombre;
@@ -64,7 +63,7 @@ public class Jugador implements Ijugador{
     }
 
     @Override
-    public int getPuntaje() {
+    public Integer getPuntaje() {
         return this.puntaje;        
     }
 

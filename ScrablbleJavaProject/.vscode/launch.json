@@ -6,6 +6,41 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch ServidorScrabble",
+            "request": "launch",
+            "mainClass": "ServidorScrabble",
+            "projectName": "ScrablbleJavaProject_ba5149b7"
+        },
+        {
+            "type": "java",
+            "name": "Launch ServidorScrabble",
+            "request": "launch",
+            "mainClass": "ServidorScrabble",
+            "projectName": "ScrablbleJavaProject"
+        },
+        {
+            "type": "java",
+            "name": "Launch ClienteScrabble",
+            "request": "launch",
+            "mainClass": "ClienteScrabble",
+            "projectName": "ScrablbleJavaProject"
+        },
+        {
+            "type": "java",
+            "name": "Launch Main",
+            "request": "launch",
+            "mainClass": "Main",
+            "projectName": "ScrablbleJavaProject"
+        },
+        {
+            "type": "java",
+            "name": "Launch ClienteScrabble",
+            "request": "launch",
+            "mainClass": "ClienteScrabble",
+            "projectName": "ScrablbleJavaProject_ba5149b7"
+        },
+        {
+            "type": "java",
             "name": "Launch Current File",
             "request": "launch",
             "mainClass": "${file}"

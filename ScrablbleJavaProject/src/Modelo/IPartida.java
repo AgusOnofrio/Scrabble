@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-import Controlador.Eventos;
 import Modelo.Interfaces.ICasillero;
 import Modelo.Interfaces.IFicha;
 import Modelo.Interfaces.IPalabra;
@@ -43,12 +42,6 @@ public interface IPartida extends IObservableRemoto{
 	void elegirFichaAtril(IFicha ficha)throws RemoteException;
 
 	ArrayList<String> getPalabrasValidasDelTurno()throws RemoteException;
-
-	void notificarObservers(Object data, Eventos evento)throws RemoteException;
-
-	void agregarObservador(Object t)throws RemoteException;
-
-	void quitarObservador(Object t)throws RemoteException;
 
 	// Observable Remoto
 	void notificarObservadores(Object obj) throws RemoteException;

@@ -1,7 +1,4 @@
 package Modelo.Interfaces;
-
-import Modelo.Atril;
-
 public interface Ijugador {
     //Sabers si la palabra esta en s atril
     public String getNombre();
@@ -15,6 +12,6 @@ public interface Ijugador {
 
     public void sumarPuntos(int puntaje);
 
-    public int getPuntaje();
+    public Integer getPuntaje();
 
 }

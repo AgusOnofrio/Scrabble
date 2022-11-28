@@ -3,21 +3,15 @@ package Vista;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
-
 import Controlador.Eventos;
 import Controlador.ScrabbleController;
 import Modelo.Casillero;
-import Modelo.Diccionario;
-import Modelo.Ficha;
-import Modelo.Jugador;
-import Modelo.Palabra;
-import Modelo.Partida;
 import Modelo.Tablero;
-import Modelo.TipoEspecial;
 import Modelo.Interfaces.ICasillero;
 import Modelo.Interfaces.IFicha;
 import Modelo.Interfaces.Ijugador;
 import Modelo.Interfaces.Itablero;
+import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
 import pruebaObserverSimple.Observer;
 public class VistaConsola implements IVista,Observer {
     
@@ -58,6 +52,7 @@ public class VistaConsola implements IVista,Observer {
             nombre = sc.nextLine();
             this.controlador.agregarJugador(nombre);
         }
+        sc.close();
     }
 
     public int menuPrincipal(){
@@ -68,7 +63,10 @@ public class VistaConsola implements IVista,Observer {
             System.out.println("0-Salir");
             Scanner sc = new Scanner(System.in);
             opcion = sc.nextInt();
+            sc.close();
         } while (opcion > 1 || opcion <0);
+        
+
         return opcion;
     }
 
@@ -84,6 +82,7 @@ public class VistaConsola implements IVista,Observer {
             System.out.println("0- Salir");
             Scanner sc = new Scanner(System.in);
             opcion = sc.nextInt();
+            sc.close();
         } while (opcion<0 || opcion > 4 || opcion==1);
         return opcion;
     }
@@ -155,7 +154,7 @@ public class VistaConsola implements IVista,Observer {
 
 
         } while (opcion<0 || opcion> tablero.casillerosDisponibles().size());
-
+        sc.close();
         Casillero casillero = casillerosDisponibles.get(opcion);
 
         return casillero;
@@ -203,7 +202,7 @@ public class VistaConsola implements IVista,Observer {
             opcion = sc.nextInt();
             
         } while (opcion<0 || opcion> fichas.size());
-
+        sc.close();
         IFicha ficha = jugador.getAtril().sacarFichaDeAtril(opcion);
 
         return ficha;
@@ -265,10 +264,11 @@ public class VistaConsola implements IVista,Observer {
             System.out.println("Elegir: 1-jugar 0-Finalizar turno");
             opcion = sc.nextInt();
         }
+        sc.close();
 
         //chequear las palabras formadas
        int puntajeTurno= controlador.calcularPuntajeTurno();
-
+        
        System.out.println("El puntaje del turno fue: "+puntajeTurno);
        this.mostrarPuntos();
        this.controlador.siguienteTurno();
@@ -289,6 +289,30 @@ public class VistaConsola implements IVista,Observer {
     @Override
     public void update(Object data,Eventos evento) {
         
+        
+    }
+
+    @Override
+    public void actualizarVista() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void setCambiarFichas(boolean b) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void mostrarFinDeturno(String string) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void setControlador(IControladorRemoto controlador) {
+        // TODO Auto-generated method stub
         
     }
 
