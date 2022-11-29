@@ -1,8 +1,10 @@
 package Modelo;
 
+import java.io.Serializable;
+
 import Modelo.Interfaces.IFicha;
 
-public class Ficha implements IFicha {
+public class Ficha implements IFicha,Serializable {
     private final String label;
     private final Integer value;
 

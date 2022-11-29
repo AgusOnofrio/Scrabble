@@ -1,31 +1,21 @@
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 
+import java.io.IOException;
 import Controlador.ScrabbleController;
-import Modelo.BolsaFichas;
-import Modelo.Casillero;
-import Modelo.Diccionario;
-import Modelo.Ficha;
-import Modelo.IPartida;
-import Modelo.Jugador;
 import Modelo.Partida;
-import Modelo.Tablero;
+import Modelo.Interfaces.IPartida;
 import Vista.IVista;
-import Vista.VistaConsola;
 import Vista.vistaGrafica;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         //inicializo
         
-        IPartida modelo = new Partida();
-		ScrabbleController controlador1 = new ScrabbleController(modelo);
-        controlador1.agregarJugador("Agustin");
-		IVista vista1 = new vistaGrafica();
-        vista1.setControlador(controlador1);
-		vista1.iniciar();
+        // IPartida modelo = new Partida();
+		// // ScrabbleController controlador1 = new ScrabbleController(modelo);
+        // controlador1.agregarJugador("Agustin");
+		// IVista vista1 = new vistaGrafica();
+        // vista1.setControlador(controlador1);
+		// vista1.iniciar();
 		
 		// Controlador controlador2 = new Controlador(modelo);
 		// IVista vista2 = new VistaGrafica(controlador2);

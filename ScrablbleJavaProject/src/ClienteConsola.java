@@ -5,13 +5,14 @@ import javax.swing.JOptionPane;
 
 import Controlador.ScrabbleController;
 import Vista.IVista;
+import Vista.VistaConsola;
 import Vista.vistaGrafica;
 import ar.edu.unlu.rmimvc.RMIMVCException;
 import ar.edu.unlu.rmimvc.Util;
 import ar.edu.unlu.rmimvc.cliente.Cliente;
 import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
 
-public class ClienteScrabble {
+public class ClienteConsola {
     public static void main(String[] args) {
 		ArrayList<String> ips = Util.getIpDisponibles();
 		String ip = (String) JOptionPane.showInputDialog(
@@ -46,7 +47,7 @@ public class ClienteScrabble {
 				null,
 				8888
 		);
-		IVista vista = new vistaGrafica();
+		IVista vista = new VistaConsola();
 		ScrabbleController controlador = new ScrabbleController(vista);
 		vista.setControlador(controlador);
 		Cliente c = new Cliente(ip, Integer.parseInt(port), ipServidor, Integer.parseInt(portServidor));

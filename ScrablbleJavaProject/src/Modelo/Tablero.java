@@ -1,10 +1,13 @@
 package Modelo;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 
+import Modelo.Interfaces.ICasillero;
+import Modelo.Interfaces.IFicha;
 import Modelo.Interfaces.Itablero;
 
-public class Tablero implements Itablero{
+public class Tablero implements Itablero,Serializable{
     public static final Integer TAMANIO = 15;
     
 
@@ -20,7 +23,7 @@ public class Tablero implements Itablero{
     };
 
 
-    private final Casillero[][] casilleros;
+    private final ICasillero[][] casilleros;
 
 
     public Diccionario diccionario;
@@ -65,12 +68,12 @@ public class Tablero implements Itablero{
     }
 
 
-    public Casillero[][] getCasilleros(){
+    public ICasillero[][] getCasilleros(){
         return casilleros;
     }
 
-    public Casillero getCasillero(int fila,int columna){
-        Casillero casillero = null;
+    public ICasillero getCasillero(int fila,int columna){
+        ICasillero casillero = null;
         if(fila>0 && fila<Tablero.TAMANIO && columna>0 && columna<TAMANIO){
             casillero=this.casilleros[fila][columna];
         }
@@ -134,8 +137,8 @@ public class Tablero implements Itablero{
 
 
 
-    public ArrayList<Casillero> casillerosDisponibles(){
-        ArrayList<Casillero> casillerosDisponibles = new ArrayList<Casillero>();
+    public ArrayList<ICasillero> casillerosDisponibles(){
+        ArrayList<ICasillero> casillerosDisponibles = new ArrayList<ICasillero>();
         
         for (int i = 0; i < Tablero.TAMANIO; i++) {
             for (int j = 0; j < Tablero.TAMANIO; j++) {
@@ -144,6 +147,15 @@ public class Tablero implements Itablero{
         }
 
         return casillerosDisponibles;
+    }
+
+
+    @Override
+    public void ponerFicha(int fila, int columna, IFicha fichaElegida) {
+        if(fila<TAMANIO && fila>=0 && columna<TAMANIO && columna>=0){
+            this.casilleros[fila][columna].ponerFicha(fichaElegida);
+        }
+        
     }
 
     

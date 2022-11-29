@@ -1,6 +1,5 @@
 package Vista;
 
-import Controlador.ScrabbleController;
 import Modelo.Interfaces.ICasillero;
 import Modelo.Interfaces.Ijugador;
 import Modelo.Interfaces.Itablero;

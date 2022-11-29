@@ -5,13 +5,10 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
 
-import Modelo.IPartida;
-import Modelo.Jugador;
 import Modelo.Interfaces.ICasillero;
 import Modelo.Interfaces.IFicha;
+import Modelo.Interfaces.IPartida;
 import Modelo.Interfaces.Ijugador;
 import Modelo.Interfaces.Itablero;
 import Vista.IVista;
@@ -19,14 +16,13 @@ import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
 import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 
 public class ScrabbleController implements  ActionListener,IControladorRemoto{
-    
     private Ijugador jugador;
     private IPartida modelo;
     private IVista vista;
 
     public ScrabbleController(IVista vista){
         this.vista=vista;
-    };
+    }
 
     public <T extends IObservableRemoto> ScrabbleController(T modelo) {
 		try {
@@ -58,28 +54,6 @@ public class ScrabbleController implements  ActionListener,IControladorRemoto{
         }
         return tablero;
     }
-
-    // @Override
-    // public void update(Observable o, Object arg) {
-    //     	if (arg instanceof Eventos) {
-	// 		switch ((Eventos) arg) {
-	// 		case ELEGIR_FICHA_ATRIL:
-	// 			this.vista.mostrarAtrilJugador(this.modelo.getJugador());
-	// 			break;
-	// 		case ELEGIR_CASILLERO:
-	// 			this.vista.mostrarTablero(this.modelo.getTablero());
-	// 			break;
-    //         case POSICIONO_FICHA:
-    //             this.vista.mostrarTablero(this.modelo.getTablero());
-    //             this.vista.mostrarAtrilJugador(this.modelo.getJugador());
-	// 	    	break;
-	// 		default:
-	// 			break;
-			
-	// 		}
-	// 	}
-        
-    // }
 
     public void agregarCasilleroJugado(ICasillero casillero) {
         try {
@@ -120,7 +94,8 @@ public class ScrabbleController implements  ActionListener,IControladorRemoto{
 
     public void agregarJugador(String nombre) {
         try {
-            this.modelo.agregarJugador(nombre);
+            
+            this.jugador=this.modelo.agregarJugador(nombre);
         } catch (RemoteException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -193,10 +168,53 @@ public class ScrabbleController implements  ActionListener,IControladorRemoto{
     }
 
     
+    // @Override
+    // public void actualizar(IObservableRemoto arg0, Object cambio) throws RemoteException {
+    //     System.out.println("Entra al actualizar del controller");
+    //     switch ((Eventos)cambio) {
+    //         case POSICIONO_FICHA:
+    //             this.vista.actualizarVista();
+    //             this.vista.setCambiarFichas(false);
+                
+    //             System.out.println("LLego al update de la vista");   
+    //             break;
+    //         case FINALIZO_TURNO:
+    //             ArrayList<String> palabrasValidasDelTurno = this.getPalabrasValidasDelTurno();
+    //             String mensajePalabras="";
+    //             for (String palabra : palabrasValidasDelTurno) {
+    //                 mensajePalabras+= palabra+"\t";
+    //             }
+
+    //             try {
+    //                 this.vista.mostrarFinDeturno(mensajePalabras+"\n"+"Puntos de "+this.getJugador().getNombre()+": "+ this.calcularPuntajeTurno());
+    //             } catch (IOException e) {
+    //                 // TODO Auto-generated catch block
+    //                 e.printStackTrace();
+    //             }
+    //             break;
+    //         case COMIENZA_TURNO:
+    //             this.vista.actualizarVista();
+    //             this.vista.setCambiarFichas(true);
+    //             break;
+    //         case FINALIZAR_PARTIDA:
+    //             this.vista.actualizarVista();
+    //             this.vista.mostrarFinDeturno(this.getJugador().getPuntaje().toString());
+    //             break;
+    //         default:
+    //             break;
+    //     }
+    // }
+
     @Override
-    public void actualizar(IObservableRemoto arg0, Object cambio) throws RemoteException {
+    public <T extends IObservableRemoto> void setModeloRemoto(T arg0) throws RemoteException {
+        this.modelo = (IPartida) arg0;
+        
+    }
+
+    @Override
+    public void actualizar(IObservableRemoto arg0, Object arg1) throws RemoteException {
         System.out.println("Entra al actualizar del controller");
-        switch ((Eventos)cambio) {
+        switch ((Eventos)arg1) {
             case POSICIONO_FICHA:
                 this.vista.actualizarVista();
                 this.vista.setCambiarFichas(false);
@@ -228,11 +246,6 @@ public class ScrabbleController implements  ActionListener,IControladorRemoto{
             default:
                 break;
         }
-    }
-
-    @Override
-    public <T extends IObservableRemoto> void setModeloRemoto(T modeloRemoto) throws RemoteException {
-        this.modelo = (IPartida) modeloRemoto;
         
     }
 

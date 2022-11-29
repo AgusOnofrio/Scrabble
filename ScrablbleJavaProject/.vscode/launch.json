@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch ClienteConsola",
+            "request": "launch",
+            "mainClass": "ClienteConsola",
+            "projectName": "ScrablbleJavaProject"
+        },
+        {
+            "type": "java",
             "name": "Launch ServidorScrabble",
             "request": "launch",
             "mainClass": "ServidorScrabble",

@@ -2,12 +2,16 @@ package Modelo;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+
+import Controlador.Eventos;
 import Modelo.Interfaces.IBolsaFichas;
 import Modelo.Interfaces.ICasillero;
 import Modelo.Interfaces.IFicha;
 import Modelo.Interfaces.IPalabra;
+import Modelo.Interfaces.IPartida;
 import Modelo.Interfaces.Ijugador;
 import Modelo.Interfaces.Itablero;
+import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 import ar.edu.unlu.rmimvc.observer.IObservadorRemoto;
 import ar.edu.unlu.rmimvc.observer.ObservableRemoto;
 
@@ -37,9 +41,10 @@ public class Partida extends ObservableRemoto implements IPartida{
     }
 
     @Override
-	public void agregarJugador(String nombre)throws RemoteException{
-        Jugador jugador= new Jugador(nombre, bolsaConLetras); // TODO ¿Hace falta la bolas de fichas?¿No se podria manejar todo desde las variables del controlador?
+	public Ijugador agregarJugador(String nombre)throws RemoteException{
+        Ijugador jugador= new Jugador(nombre, bolsaConLetras); // TODO ¿Hace falta la bolas de fichas?¿No se podria manejar todo desde las variables del controlador?
         jugadores.add(jugador);
+        return jugador;
     }
 
     @Override
@@ -154,15 +159,15 @@ public class Partida extends ObservableRemoto implements IPartida{
         int puntosTurno=this.calcularPuntajeTurno();
         this.getJugador().getAtril().llenarAtril();
         this.getJugador().sumarPuntos(puntosTurno);
-        this.notificarObservadores(this);
+        this.notificarObservadores(Eventos.FINALIZO_TURNO);
 
         if(this.casillerosJugadosEnElTurno.size() <1)paso++;
         if(paso>(this.jugadores.size()*2) || bolsaConLetras.esVacia()){
-            this.notificarObservadores(this);
+            this.notificarObservadores(Eventos.FINALIZAR_PARTIDA);
         }else{
             this.casillerosJugadosEnElTurno= new ArrayList<ICasillero>() ;
             siguienteTurno();
-            this.notificarObservadores(this);
+            this.notificarObservadores(Eventos.COMIENZA_TURNO);
         }
 
 
@@ -222,14 +227,19 @@ public class Partida extends ObservableRemoto implements IPartida{
     @Override
 	public void elegirCasillero(ICasillero casillero) throws RemoteException{
         this.casilleroElegido=casillero;
+        System.out.println("Entro a elegir casillero del modelo");
         if(this.casilleroElegido !=null && this.fichaElegida!=null)
         {
             this.casilleroElegido.ponerFicha(fichaElegida);
+            this.tablero.getCasilleros()[casilleroElegido.getFila()][casilleroElegido.getColumna()]=casilleroElegido ;
+
             this.agregarCasilleroJugado(casilleroElegido);
             this.casilleroElegido=null;
+            
             this.getJugador().getAtril().sacarFichaDeAtril(fichaElegida);
             this.fichaElegida=null;
-            this.notificarObservadores(this);
+            
+            this.notificarObservadores(Eventos.POSICIONO_FICHA);
         }
     }
 
@@ -239,11 +249,15 @@ public class Partida extends ObservableRemoto implements IPartida{
         if(this.casilleroElegido !=null && this.fichaElegida!=null)
         {
             this.casilleroElegido.ponerFicha(fichaElegida);
+            this.tablero.ponerFicha(casilleroElegido.getFila(),casilleroElegido.getColumna(),fichaElegida);
+
             this.agregarCasilleroJugado(casilleroElegido);
             this.casilleroElegido=null;
+            
             this.getJugador().getAtril().sacarFichaDeAtril(fichaElegida);
             this.fichaElegida=null;
-            this.notificarObservadores(this);
+            
+            this.notificarObservadores(Eventos.POSICIONO_FICHA);
         }
     }
 
@@ -256,49 +270,24 @@ public class Partida extends ObservableRemoto implements IPartida{
         return palabras;
     }
 
-
-
-    //Observable
-
-    // @Override
-    // public void notificarObservers(Object data,Eventos evento) {
-    //     for(pruebaObserverSimple.Observer o : observadores){
-    //         o.update(data,evento); 
-    //      }
-        
-    // }
-
-    // @Override
-    // public void agregarObservador(Object t) {
-    //     this.observadores.add((pruebaObserverSimple.Observer)t);
-        
-    // }
-
-    // @Override
-    // public void quitarObservador(Object t) {
-    //     this.observadores.remove(t);
-        
-    // }
-
-
-// Observable Remoto
-    @Override
-    public void notificarObservadores(Object obj ) throws RemoteException {
-        for (IObservadorRemoto o: this.observadoresRemotos) {
-            o.actualizar(this, obj);
-            /*new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        o.actualizar(obj);
-                    } catch (RemoteException e) {
-                        System.out.println("ERROR: notificando al observador.");
-                        e.printStackTrace();
-                    }
-                }
-            }).start();*/
-        }
-    }
+// // // Observable Remoto
+//     @Override
+//     public void notificarObservadores(Object obj ) throws RemoteException {
+//         for (IObservadorRemoto o: this.observadoresRemotos) {
+//             o.actualizar((IObservableRemoto) this, obj);
+//             // new Thread(new Runnable() {
+//             //     @Override
+//             //     public void run() {
+//             //         try {
+//             //             o.actualizar((IObservableRemoto) this, obj);
+//             //         } catch (RemoteException e) {
+//             //             System.out.println("ERROR: notificando al observador.");
+//             //             e.printStackTrace();
+//             //         }
+//             //     }
+//             // }).start();
+//         }
+//     }
 
 
 

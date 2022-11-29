@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-import Modelo.IPartida;
 import Modelo.Partida;
+import Modelo.Interfaces.IPartida;
 import ar.edu.unlu.rmimvc.RMIMVCException;
 import ar.edu.unlu.rmimvc.Util;
 import ar.edu.unlu.rmimvc.servidor.Servidor;

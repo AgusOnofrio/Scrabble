@@ -1,19 +1,14 @@
-package Modelo;
+package Modelo.Interfaces;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-import Modelo.Interfaces.ICasillero;
-import Modelo.Interfaces.IFicha;
-import Modelo.Interfaces.IPalabra;
-import Modelo.Interfaces.Ijugador;
-import Modelo.Interfaces.Itablero;
 import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 
 public interface IPartida extends IObservableRemoto{
 
-	void agregarJugador(String nombre)throws RemoteException;
+	Ijugador agregarJugador(String nombre)throws RemoteException;
 
 	void clearCasillerosJugadosEnElTurno()throws RemoteException;
 

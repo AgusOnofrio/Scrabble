@@ -17,7 +17,7 @@ public enum Letra {
     LL("LL",8,1),
     M("M",3,2),
     N("N",1,5),
-    Ñ("Ñ",8,1),
+    Ñ ("�",8,1),
     O("O",1,9),
     P("P",3,2),
     Q("Q",5,1),
@@ -33,17 +33,22 @@ public enum Letra {
     Z("Z",10,1),
     ESPECIAL("#",0,2);
 
-
-
-
-    public final  String label;
-    public final  Integer value;
-    public final  Integer quantity;
-
+    private final String label;
+    private final Integer value;
+    private final Integer quantity;
     Letra(String label, Integer value, Integer quantity){
         this.label=label;
         this.value= value;
         this.quantity= quantity;
+    }
+    public String getLabel() {
+        return label;
+    }
+    public Integer getValue() {
+        return value;
+    }
+    public Integer getQuantity() {
+        return quantity;
     }
 
 
@@ -85,7 +90,7 @@ public enum Letra {
     //             break;
     //         case "j":
     //         case "ll":
-    //         case "ñ":
+    //         case "�":
     //         case "rr":
     //         case "x":
     //         case "k":

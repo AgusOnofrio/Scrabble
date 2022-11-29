@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,7 +17,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import Controlador.ScrabbleController;
-import Modelo.Casillero;
 import Modelo.Interfaces.ICasillero;
 import Modelo.Interfaces.IFicha;
 import Modelo.Interfaces.Ijugador;
@@ -35,8 +35,7 @@ public class vistaGrafica implements IVista{
     
     private ScrabbleController controlador;
 
-    public vistaGrafica(){};
-
+    public vistaGrafica(){}
     public void setControlador(IControladorRemoto controlador){
         this.controlador=(ScrabbleController)controlador;
     }
@@ -46,6 +45,8 @@ public class vistaGrafica implements IVista{
         frame = new JFrame("Titulo de la ventana");
         frame.setSize(900,900);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        panelPrincipal= (JPanel) frame.getContentPane();
+        panelPrincipal.setLayout(new BorderLayout());
         this.mostrarJuego();
         frame.setVisible(true);
     }
@@ -56,8 +57,6 @@ public class vistaGrafica implements IVista{
 
     private void mostrarJuego(){
         
-        panelPrincipal= (JPanel) frame.getContentPane();
-        panelPrincipal.setLayout(new BorderLayout());
 
 
         //Muestro panel con valores
@@ -129,10 +128,12 @@ public class vistaGrafica implements IVista{
 
     @Override
     public void mostrarTablero(Itablero tablero) {
-        Casillero[][] casilleros = tablero.getCasilleros();
-        ArrayList<Casillero> casillerosDisponibles =tablero.casillerosDisponibles();
-        for (Casillero[] fila : casilleros) {
-            for (Casillero casillero : fila) {
+        ICasillero[][] casilleros = tablero.getCasilleros();
+        ArrayList<ICasillero> casillerosDisponibles =tablero.casillerosDisponibles();
+        int numeroFila=0;
+        int numeroColumna=0;
+        for (ICasillero[] fila : casilleros) {
+            for (ICasillero casillero : fila) {
                 casillero.setDisponible(casillerosDisponibles.contains(casillero));
                 
                 //muestro casilleros
@@ -169,19 +170,22 @@ public class vistaGrafica implements IVista{
                             break;
                     }
                 }
+                System.out.printf("El casillero %d-%d tiene una ficha: "+casillero.estaOcupado(),casillero.getFila(),casillero.getColumna());
                 botonCasillero.setEnabled(casillero.getDisponible());
+                botonCasillero.putClientProperty("fila", numeroFila);
+                botonCasillero.putClientProperty("columna", numeroColumna);
                 botonCasillero.addActionListener(new ActionListener(){
                     public void actionPerformed(ActionEvent ae){
                         controlador.elegirCasillero(casillero);
-                    }});
+                }});
         
                 this.tablero.add(botonCasillero);
-                
+                numeroColumna++;
             }
+            numeroFila++;
 
-
-            }
         }
+    }
     
 
     @Override
@@ -208,8 +212,11 @@ public class vistaGrafica implements IVista{
 
     @Override
     public void actualizarVista() {
-        panelPrincipal.removeAll();
+
+        this.panelPrincipal.removeAll();
+        System.out.println("Se actualizo la vista");
         this.mostrarJuego();
+        frame.setVisible(true);
         
     }
 

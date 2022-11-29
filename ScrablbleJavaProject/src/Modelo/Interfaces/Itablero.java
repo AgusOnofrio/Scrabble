@@ -2,16 +2,16 @@ package Modelo.Interfaces;
 
 import java.util.ArrayList;
 
-import Modelo.Casillero;
 
 public interface Itablero{
 
     public boolean tableroVacio();
     public boolean existeFichaAdyacente(int fila, int columna);
     public boolean posicionValida();
-    public Casillero[][] getCasilleros();
-    public Casillero getCasillero(int fila, int columna);
-    public ArrayList<Casillero> casillerosDisponibles();
+    public ICasillero[][] getCasilleros();
+    public ICasillero getCasillero(int fila, int columna);
+    public ArrayList<ICasillero> casillerosDisponibles();
+    public void ponerFicha(int fila, int columna, IFicha fichaElegida);
     
     
     //devolder todas las posiciones validas

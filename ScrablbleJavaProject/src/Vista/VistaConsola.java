@@ -3,23 +3,22 @@ package Vista;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import Controlador.Eventos;
 import Controlador.ScrabbleController;
-import Modelo.Casillero;
 import Modelo.Tablero;
 import Modelo.Interfaces.ICasillero;
 import Modelo.Interfaces.IFicha;
 import Modelo.Interfaces.Ijugador;
 import Modelo.Interfaces.Itablero;
 import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
-import pruebaObserverSimple.Observer;
-public class VistaConsola implements IVista,Observer {
+public class VistaConsola implements IVista {
     
 
 
     private ScrabbleController controlador;
 
-    public VistaConsola(ScrabbleController controlador){
+    public VistaConsola(){}
+
+    public void setControlador(ScrabbleController controlador){
         this.controlador=controlador;
     }
 
@@ -52,7 +51,7 @@ public class VistaConsola implements IVista,Observer {
             nombre = sc.nextLine();
             this.controlador.agregarJugador(nombre);
         }
-        sc.close();
+        
     }
 
     public int menuPrincipal(){
@@ -63,7 +62,6 @@ public class VistaConsola implements IVista,Observer {
             System.out.println("0-Salir");
             Scanner sc = new Scanner(System.in);
             opcion = sc.nextInt();
-            sc.close();
         } while (opcion > 1 || opcion <0);
         
 
@@ -82,7 +80,6 @@ public class VistaConsola implements IVista,Observer {
             System.out.println("0- Salir");
             Scanner sc = new Scanner(System.in);
             opcion = sc.nextInt();
-            sc.close();
         } while (opcion<0 || opcion > 4 || opcion==1);
         return opcion;
     }
@@ -119,7 +116,7 @@ public class VistaConsola implements IVista,Observer {
     }
 
     public void mostrarTablero(Itablero tablero){
-        Casillero[][] casilleros = tablero.getCasilleros();
+        ICasillero[][] casilleros = tablero.getCasilleros();
         System.out.printf("      0   1   2   3   4   5   6   7   8   9  10  11  12  13  14");
         System.out.println();
         for (int i = 0; i < Tablero.TAMANIO; i++) {
@@ -132,16 +129,16 @@ public class VistaConsola implements IVista,Observer {
         }
     }
 
-    public Casillero elegirCasilleroDisponible(Itablero tablero){ // TODO Desacoplar vista de controlador
+    public ICasillero elegirCasilleroDisponible(Itablero tablero){ // TODO Desacoplar vista de controlador
         Scanner sc = new Scanner(System.in);
         int opcion;
         System.out.println("Estos son los casilleros donde podes ubicar una ficha");
-        ArrayList<Casillero> casillerosDisponibles = tablero.casillerosDisponibles();
+        ArrayList<ICasillero> casillerosDisponibles = tablero.casillerosDisponibles();
         do {
             
             String indices = " ";
             Integer i =0;
-            for (Casillero c : casillerosDisponibles) {
+            for (ICasillero c : casillerosDisponibles) {
                 System.out.printf("%d-%d | ",c.getFila(),c.getColumna());
                 indices+= ""+i.toString()+"  |  ";
                 i++;
@@ -154,8 +151,8 @@ public class VistaConsola implements IVista,Observer {
 
 
         } while (opcion<0 || opcion> tablero.casillerosDisponibles().size());
-        sc.close();
-        Casillero casillero = casillerosDisponibles.get(opcion);
+        
+        ICasillero casillero = casillerosDisponibles.get(opcion);
 
         return casillero;
     }
@@ -164,12 +161,12 @@ public class VistaConsola implements IVista,Observer {
     public void mostrarCasillerosDisponibles(Itablero itablero){ 
 
         System.out.println("Estos son los casilleros donde podes ubicar una ficha");
-        ArrayList<Casillero> casillerosDisponibles = itablero.casillerosDisponibles();
+        ArrayList<ICasillero> casillerosDisponibles = itablero.casillerosDisponibles();
 
           
         String indices = " ";
         Integer i =0;
-        for (Casillero c : casillerosDisponibles) {
+        for (ICasillero c : casillerosDisponibles) {
             System.out.printf("%d-%d | ",c.getFila(),c.getColumna());
             indices+= ""+i.toString()+"  |  ";
             i++;
@@ -202,7 +199,7 @@ public class VistaConsola implements IVista,Observer {
             opcion = sc.nextInt();
             
         } while (opcion<0 || opcion> fichas.size());
-        sc.close();
+        
         IFicha ficha = jugador.getAtril().sacarFichaDeAtril(opcion);
 
         return ficha;
@@ -264,7 +261,7 @@ public class VistaConsola implements IVista,Observer {
             System.out.println("Elegir: 1-jugar 0-Finalizar turno");
             opcion = sc.nextInt();
         }
-        sc.close();
+        
 
         //chequear las palabras formadas
        int puntajeTurno= controlador.calcularPuntajeTurno();
@@ -279,17 +276,6 @@ public class VistaConsola implements IVista,Observer {
 
     public void mostrarPuntos(){
        System.out.println("Jugador "+this.controlador.getJugador().getNombre()+" : "+this.controlador.mostraPuntaje()+" puntos");
-    }
-
-
-
-
-
-
-    @Override
-    public void update(Object data,Eventos evento) {
-        
-        
     }
 
     @Override
@@ -312,9 +298,12 @@ public class VistaConsola implements IVista,Observer {
 
     @Override
     public void setControlador(IControladorRemoto controlador) {
-        // TODO Auto-generated method stub
+        this.controlador=(ScrabbleController)controlador;
         
     }
+
+
+
 
 
 }

@@ -1,10 +1,12 @@
 package Modelo;
 
+import java.io.Serializable;
+
 import Modelo.Interfaces.ICasillero;
 import Modelo.Interfaces.IFicha;
 
 public class // A class that represents a square in a board game.
-Casillero implements ICasillero{
+Casillero implements ICasillero,Serializable{
     private final TipoEspecial tipo;
     private IFicha ficha=null;
     private boolean disponible;

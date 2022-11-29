@@ -10,8 +10,8 @@ import Modelo.BolsaFichas;
 import Modelo.Casillero;
 import Modelo.Diccionario;
 import Modelo.Ficha;
-import Modelo.Jugador;
 import Modelo.Tablero;
+import Modelo.Interfaces.ICasillero;
 import Modelo.Interfaces.IFicha;
 
 public class AppTest {
@@ -59,10 +59,10 @@ public class AppTest {
     public void cuandoInicializoTableroNoHayFichas() throws IOException{
         Tablero tablero= new Tablero();
         
-        Casillero[][] casilleros = tablero.getCasilleros();
+        ICasillero[][] casilleros = tablero.getCasilleros();
 
-        for (Casillero[] fila : casilleros){
-                for (Casillero c : fila){
+        for (ICasillero[] fila : casilleros){
+                for (ICasillero c : fila){
                 assertEquals(false,c.estaOcupado());
                 assertEquals(null,c.getFicha());
             }
@@ -71,11 +71,11 @@ public class AppTest {
 
     @Test
     public void unaPalabraQueNoEstaEnElDiccionarioDevuelveFalse() throws IOException{
-        Diccionario diccionario = new Diccionario();
+        
 
         String palabra = "jorgelin";
         
-        assertEquals(true,diccionario.validarPalabra(palabra));
+        assertEquals(true,Diccionario.validarPalabra(palabra));
     }
 
     @Test
