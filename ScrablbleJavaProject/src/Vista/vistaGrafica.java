@@ -169,7 +169,7 @@ public class vistaGrafica implements IVista{
         botonCambiarFichas.setEnabled(esLaVistaDelJugador);
         botonFinalizarTurno.setEnabled(esLaVistaDelJugador);
         
-        
+        panelPrincipal.updateUI();
     }
 
 
@@ -229,7 +229,11 @@ public class vistaGrafica implements IVista{
                 botonCasillero.putClientProperty("columna", numeroColumna);
                 botonCasillero.addActionListener(new ActionListener(){
                     public void actionPerformed(ActionEvent ae){
-                        controlador.elegirCasillero(casillero);
+                        if(casillero.getFicha()!=null){
+                            controlador.sacarFichaDeCasillero(casillero);
+                        }else{
+                            controlador.elegirCasillero(casillero);
+                        }
                 }});
         
                 this.tablero.add(botonCasillero);

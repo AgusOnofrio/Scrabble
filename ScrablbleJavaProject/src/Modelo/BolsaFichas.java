@@ -8,10 +8,17 @@ import Modelo.Interfaces.IFicha;
 
 public class BolsaFichas implements IBolsaFichas,Serializable{
     //Hacer que la bolsa de fichas sea un singleton
-    
+    private static BolsaFichas instancia;
     private  ArrayList<IFicha> fichas;
     
-    public BolsaFichas(){
+    public static BolsaFichas getInstance(){
+        if(instancia==null){
+            instancia=new BolsaFichas();
+        }
+        return instancia;
+    }
+
+    private BolsaFichas(){
         fichas= new ArrayList<IFicha>();
         for (Letra letra : Letra.values()) {
             for (int i = 0; i < letra.getQuantity(); i++) {

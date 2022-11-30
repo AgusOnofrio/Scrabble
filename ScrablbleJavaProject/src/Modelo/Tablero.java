@@ -10,8 +10,11 @@ import Modelo.Interfaces.Itablero;
 public class Tablero implements Itablero,Serializable{
     public static final Integer TAMANIO = 15;
     
+    private final ICasillero[][] casilleros;
 
-    public static final String[] diseñoTablero = {
+    private ArrayList<ICasillero> ultimosCasilleroJugados=new ArrayList<ICasillero>();
+
+    private static final String[] diseñoTablero = {
         "TRIPLE_PALABRA,SIMPLE,SIMPLE,DOBLE_LETRA,SIMPLE,SIMPLE,SIMPLE,TRIPLE_PALABRA,SIMPLE,SIMPLE,SIMPLE,DOBLE_LETRA,SIMPLE,SIMPLE,TRIPLE_PALABRA",
         "SIMPLE,DOBLE_PALABRA,SIMPLE,SIMPLE,SIMPLE,TRIPLE_LETRA,SIMPLE,SIMPLE,SIMPLE,TRIPLE_LETRA,SIMPLE,SIMPLE,SIMPLE,DOBLE_PALABRA,SIMPLE",
         "SIMPLE,SIMPLE,DOBLE_PALABRA,SIMPLE,SIMPLE,SIMPLE,DOBLE_LETRA,SIMPLE,DOBLE_LETRA,SIMPLE,SIMPLE,SIMPLE,DOBLE_PALABRA,SIMPLE,SIMPLE",
@@ -22,14 +25,17 @@ public class Tablero implements Itablero,Serializable{
         "TRIPLE_PALABRA,SIMPLE,SIMPLE,DOBLE_LETRA,SIMPLE,SIMPLE,SIMPLE,DOBLE_PALABRA,SIMPLE,SIMPLE,SIMPLE,DOBLE_LETRA,SIMPLE,SIMPLE,TRIPLE_PALABRA",
     };
 
+    private static Tablero instancia;
 
-    private final ICasillero[][] casilleros;
-
-
-    public Diccionario diccionario;
-
+    public static Tablero getInstance() throws IOException{
+        if(instancia==null){
+            instancia= new Tablero();
+        }
+        return instancia;
+    }
+    
     //private boolean isFirstMove;
-    public Tablero() throws IOException {
+    private Tablero() throws IOException {
         casilleros = new Casillero[TAMANIO][TAMANIO];
   
         //setFirstMove(true);
@@ -62,7 +68,6 @@ public class Tablero implements Itablero,Serializable{
             }
         }
 
-        this.diccionario= new Diccionario();
 
 
     }
@@ -83,6 +88,8 @@ public class Tablero implements Itablero,Serializable{
 
     public  boolean posicionValida(int fila, int columna) {
         boolean esValida=true;
+ 
+
 
         //Es valido si
         //Esta dentro del tablero
@@ -94,7 +101,14 @@ public class Tablero implements Itablero,Serializable{
         //Si tiene algun casillero al costado que este ocupado o es el del medio
         if(!existeFichaAdyacente(fila,columna)) esValida=false;
 
+        //Si es el ultimo casillero jugado es valido de todas maneras para que se pueda sacar la ficha
+        if( this.ultimosCasilleroJugados.size()>0 &&
+            fila==this.ultimosCasilleroJugados.get(this.ultimosCasilleroJugados.size()-1).getFila() && 
+            columna==this.ultimosCasilleroJugados.get(this.ultimosCasilleroJugados.size()-1).getColumna()) 
+        esValida=true;
+        
         if(esValida) this.casilleros[fila][columna].setDisponible(true);
+
 
         return esValida;
     }
@@ -154,7 +168,21 @@ public class Tablero implements Itablero,Serializable{
     public void ponerFicha(int fila, int columna, IFicha fichaElegida) {
         if(fila<TAMANIO && fila>=0 && columna<TAMANIO && columna>=0){
             this.casilleros[fila][columna].ponerFicha(fichaElegida);
+            this.ultimosCasilleroJugados.add(new Casillero(fila, columna));
         }
+        
+    }
+
+    @Override
+    public IFicha quitarFicha(int fila,int columna) {
+        IFicha ficha=this.casilleros[fila][columna].quitarFicha();
+        if(ficha!=null) this.ultimosCasilleroJugados.remove(this.ultimosCasilleroJugados.size()-1);
+        return ficha;
+    }
+
+    @Override
+    public void reiniciarCasillerosJugados() {
+        this.ultimosCasilleroJugados=new ArrayList<ICasillero>();
         
     }
 

@@ -23,20 +23,20 @@ public class AppTest {
 
     @Test
     public void sacarFichaMeDevuelveUnaFicha(){
-        BolsaFichas bolsa = new BolsaFichas();
+        BolsaFichas bolsa = BolsaFichas.getInstance();
         assert(bolsa.sacarFicha() instanceof Ficha);
     }
 
     @Test
     public void sacarFichaMeDevuelveUnaFichaValida(){
-        BolsaFichas bolsa = new BolsaFichas();
+        BolsaFichas bolsa = BolsaFichas.getInstance();
         assert(bolsa.sacarFicha() instanceof Ficha);
         assert(bolsa.sacarFicha()!= null);
     }
 
     @Test
     public void sacarUnaFichaBajaLaCantidadDeFichasDeLaBolsa(){
-        BolsaFichas bolsa = new BolsaFichas();
+        BolsaFichas bolsa = BolsaFichas.getInstance();
         Integer cantidadAnterior = bolsa.getFichas().size();
         bolsa.sacarFicha();
         assert( bolsa.getFichas().size() < cantidadAnterior);
@@ -46,7 +46,7 @@ public class AppTest {
 
     @Test
     public void CambiarFichaMeDevuelveOtraFicha(){
-        BolsaFichas bolsa = new BolsaFichas();
+        BolsaFichas bolsa = BolsaFichas.getInstance();
         IFicha fichaAnterior = bolsa.sacarFicha() ;
 
         IFicha fichanueva= bolsa.cambiarFicha(fichaAnterior);
@@ -57,7 +57,7 @@ public class AppTest {
 
     @Test
     public void cuandoInicializoTableroNoHayFichas() throws IOException{
-        Tablero tablero= new Tablero();
+        Tablero tablero= Tablero.getInstance();
         
         ICasillero[][] casilleros = tablero.getCasilleros();
 
@@ -81,7 +81,7 @@ public class AppTest {
     @Test
     public void ponerFichaEnUnCasilleroMeDevuelveEsaFicha(){
         Casillero casillero =  new Casillero(0,0);
-        BolsaFichas bolsaFichas = new BolsaFichas();
+        BolsaFichas bolsaFichas = BolsaFichas.getInstance();
 
         IFicha ficha = bolsaFichas.sacarFicha();
 

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
+import Modelo.Partida;
 import Modelo.Interfaces.ICasillero;
 import Modelo.Interfaces.IFicha;
 import Modelo.Interfaces.IPartida;
@@ -85,9 +86,16 @@ public class ScrabbleController implements  ActionListener,IControladorRemoto{
     }
 
     public Ijugador getJugadorVista() {
-        Ijugador jugador=null;
-        jugador= this.jugador;
-        return jugador;
+        Ijugador jugadorVista=null;
+        try {
+            for (Ijugador j : this.modelo.getJugadores()) {
+                if(this.jugador.getNombre().equals(j.getNombre()))jugadorVista=j;
+            }
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return jugadorVista;
     }
 
     public void finalizarTurno() throws IOException {
@@ -188,11 +196,17 @@ public class ScrabbleController implements  ActionListener,IControladorRemoto{
                 this.vista.actualizarVista();
             break;
             case POSICIONO_FICHA:
-                this.jugador=this.modelo.getJugador();
+                
+                this.vista.actualizarVista();
+                this.vista.setCambiarFichas(false);  
+                break;
+            case QUITO_FICHA_CASILLERO:
+                
                 this.vista.actualizarVista();
                 this.vista.setCambiarFichas(false);  
                 break;
             case FINALIZO_TURNO:
+                
                 this.vista.mostrarFinDeturno();
                 break;
             case COMIENZA_TURNO:
@@ -212,6 +226,16 @@ public class ScrabbleController implements  ActionListener,IControladorRemoto{
     public ArrayList<Ijugador> getJugadores() throws RemoteException {
         return this.modelo.getJugadores();
     }
+
+    public void sacarFichaDeCasillero(ICasillero casillero) {
+        try {
+            this.modelo.sacarFichaDeCasillero(casillero);
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
 
 
     

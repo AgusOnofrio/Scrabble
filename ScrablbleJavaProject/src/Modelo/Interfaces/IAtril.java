@@ -8,4 +8,5 @@ public interface IAtril {
     public IFicha sacarFichaDeAtril(int posicion);
     public IFicha sacarFichaDeAtril(IFicha fichaElegida);
     public void intercambiarFichas();
+    public void ponerFicha(IFicha ficha);
 }

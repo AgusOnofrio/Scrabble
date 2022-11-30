@@ -78,4 +78,11 @@ Casillero implements ICasillero,Serializable{
         return this.disponible;
     }
 
+    @Override
+    public IFicha quitarFicha() {
+        IFicha fichaQuitada= this.ficha;
+        this.ficha=null;
+        return fichaQuitada;
+    }
+
 }

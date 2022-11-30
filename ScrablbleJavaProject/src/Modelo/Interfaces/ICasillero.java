@@ -19,4 +19,6 @@ public interface ICasillero {
     public void setDisponible(boolean condicion);
 
     public boolean getDisponible();
+
+    public IFicha quitarFicha();
 }

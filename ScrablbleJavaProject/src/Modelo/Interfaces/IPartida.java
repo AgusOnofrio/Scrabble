@@ -43,4 +43,10 @@ public interface IPartida extends IObservableRemoto{
 
     ArrayList<Ijugador> getJugadores() throws RemoteException;
 
+    void sacarFichaDeCasillero(ICasillero casillero) throws RemoteException;
+
+  
+
+    
+
 }

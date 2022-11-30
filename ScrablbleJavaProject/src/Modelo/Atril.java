@@ -71,5 +71,13 @@ public class Atril implements IAtril,Serializable {
         }
     }
 
+    @Override
+    public void ponerFicha(IFicha ficha) {
+        if(this.fichas.size()<cantidadDeFichas){
+            this.fichas.add(ficha);
+        }
+        
+    }
+
 
 }
