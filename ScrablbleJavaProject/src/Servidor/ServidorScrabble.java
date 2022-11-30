@@ -1,3 +1,4 @@
+package Servidor;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -11,7 +12,8 @@ import ar.edu.unlu.rmimvc.Util;
 import ar.edu.unlu.rmimvc.servidor.Servidor;
 
 public class ServidorScrabble {
-    public static void main(String[] args) {
+    // public static void main(String[] args) {
+		public ServidorScrabble(){
 		ArrayList<String> ips = Util.getIpDisponibles();
 		String ip = (String) JOptionPane.showInputDialog(
 				null, 
