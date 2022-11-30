@@ -41,4 +41,6 @@ public interface IPartida extends IObservableRemoto{
 	// Observable Remoto
 	void notificarObservadores(Object obj) throws RemoteException;
 
+    ArrayList<Ijugador> getJugadores() throws RemoteException;
+
 }

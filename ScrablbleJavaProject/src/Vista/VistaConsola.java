@@ -115,7 +115,8 @@ public class VistaConsola implements IVista {
         System.out.printf("");
     }
 
-    public void mostrarTablero(Itablero tablero){
+    public void mostrarTablero(){
+        Itablero tablero= this.controlador.getTablero();
         ICasillero[][] casilleros = tablero.getCasilleros();
         System.out.printf("      0   1   2   3   4   5   6   7   8   9  10  11  12  13  14");
         System.out.println();
@@ -206,8 +207,8 @@ public class VistaConsola implements IVista {
     }
 
 
-    public void mostrarAtrilJugador(Ijugador jugador){
-
+    public void mostrarAtrilJugador(){
+        Ijugador jugador= this.controlador.getJugadorActual();
         ArrayList<IFicha> fichas = jugador.getAtril().getFichasAtril();
         String indices = "";
         Integer i =0;
@@ -230,7 +231,7 @@ public class VistaConsola implements IVista {
 
         
         casillero = this.elegirCasilleroDisponible(controlador.getTablero());
-        ficha= this.elegirfichaJugador(controlador.getJugador());
+        ficha= this.elegirfichaJugador(controlador.getJugadorActual());
 
         casillero.ponerFicha(ficha);
         controlador.agregarCasilleroJugado(casillero);
@@ -246,17 +247,17 @@ public class VistaConsola implements IVista {
         Scanner sc = new Scanner(System.in);
         int opcion=1;
         controlador.clearCasillerosJugadosEnElTurno();
-        System.out.println("Turno "+controlador.getJugador().getNombre());
-        mostrarTablero(this.controlador.getTablero());
+        System.out.println("Turno "+controlador.getJugadorActual().getNombre());
+        mostrarTablero();
         mostrarCasillerosDisponibles(this.controlador.getTablero());
-        mostrarAtrilJugador(this.controlador.getJugador());
+        mostrarAtrilJugador();
         System.out.println("Elegir: 1-jugar 0-Finalizar turno");
         opcion = sc.nextInt();
 
-        while (this.controlador.getJugador().getAtril().getFichasAtril().size()>0 && opcion!=0){
-            mostrarTablero(this.controlador.getTablero());
+        while (this.controlador.getJugadorActual().getAtril().getFichasAtril().size()>0 && opcion!=0){
+            mostrarTablero();
             mostrarCasillerosDisponibles(this.controlador.getTablero());
-            mostrarAtrilJugador(this.controlador.getJugador());
+            mostrarAtrilJugador();
             elegirFichaYCasillero(this.controlador);
             System.out.println("Elegir: 1-jugar 0-Finalizar turno");
             opcion = sc.nextInt();
@@ -275,7 +276,7 @@ public class VistaConsola implements IVista {
 
 
     public void mostrarPuntos(){
-       System.out.println("Jugador "+this.controlador.getJugador().getNombre()+" : "+this.controlador.mostraPuntaje()+" puntos");
+       System.out.println("Jugador "+this.controlador.getJugadorActual().getNombre()+" : "+this.controlador.mostraPuntaje()+" puntos");
     }
 
     @Override
@@ -291,7 +292,7 @@ public class VistaConsola implements IVista {
     }
 
     @Override
-    public void mostrarFinDeturno(String string) {
+    public void mostrarFinDeturno() {
         // TODO Auto-generated method stub
         
     }
@@ -299,6 +300,18 @@ public class VistaConsola implements IVista {
     @Override
     public void setControlador(IControladorRemoto controlador) {
         this.controlador=(ScrabbleController)controlador;
+        
+    }
+
+    @Override
+    public void mostrarResultadoFinal() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void actualizarJugadores() {
+        // TODO Auto-generated method stub
         
     }
 

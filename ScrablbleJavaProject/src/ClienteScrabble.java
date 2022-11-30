@@ -53,16 +53,16 @@ public class ClienteScrabble {
 		try {
 			
 			c.iniciar((IControladorRemoto) controlador);
-			String nombreJugador= (String) JOptionPane.showInputDialog(
-				null, 
-				"Ingrese su nombre", "Nombre del jugador", 
-				JOptionPane.QUESTION_MESSAGE,
-				null,
-				null,
-				null
-		);
-			controlador.agregarJugador(nombreJugador);
-			vista.iniciar();
+		// 	String nombreJugador= (String) JOptionPane.showInputDialog(
+		// 		null, 
+		// 		"Ingrese su nombre", "Nombre del jugador", 
+		// 		JOptionPane.QUESTION_MESSAGE,
+		// 		null,
+		// 		null,
+		// 		null
+		// );
+		// controlador.agregarJugador(nombreJugador);
+		vista.iniciar();
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

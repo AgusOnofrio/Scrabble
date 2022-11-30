@@ -73,7 +73,7 @@ public class ScrabbleController implements  ActionListener,IControladorRemoto{
         }
     }
 
-    public Ijugador getJugador() {
+    public Ijugador getJugadorActual() {
         Ijugador jugador=null;
         try {
             jugador= this.modelo.getJugador();
@@ -81,6 +81,12 @@ public class ScrabbleController implements  ActionListener,IControladorRemoto{
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        return jugador;
+    }
+
+    public Ijugador getJugadorVista() {
+        Ijugador jugador=null;
+        jugador= this.jugador;
         return jugador;
     }
 
@@ -96,6 +102,8 @@ public class ScrabbleController implements  ActionListener,IControladorRemoto{
         try {
             
             this.jugador=this.modelo.agregarJugador(nombre);
+
+            this.vista.actualizarVista();
         } catch (RemoteException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -167,44 +175,6 @@ public class ScrabbleController implements  ActionListener,IControladorRemoto{
         }
     }
 
-    
-    // @Override
-    // public void actualizar(IObservableRemoto arg0, Object cambio) throws RemoteException {
-    //     System.out.println("Entra al actualizar del controller");
-    //     switch ((Eventos)cambio) {
-    //         case POSICIONO_FICHA:
-    //             this.vista.actualizarVista();
-    //             this.vista.setCambiarFichas(false);
-                
-    //             System.out.println("LLego al update de la vista");   
-    //             break;
-    //         case FINALIZO_TURNO:
-    //             ArrayList<String> palabrasValidasDelTurno = this.getPalabrasValidasDelTurno();
-    //             String mensajePalabras="";
-    //             for (String palabra : palabrasValidasDelTurno) {
-    //                 mensajePalabras+= palabra+"\t";
-    //             }
-
-    //             try {
-    //                 this.vista.mostrarFinDeturno(mensajePalabras+"\n"+"Puntos de "+this.getJugador().getNombre()+": "+ this.calcularPuntajeTurno());
-    //             } catch (IOException e) {
-    //                 // TODO Auto-generated catch block
-    //                 e.printStackTrace();
-    //             }
-    //             break;
-    //         case COMIENZA_TURNO:
-    //             this.vista.actualizarVista();
-    //             this.vista.setCambiarFichas(true);
-    //             break;
-    //         case FINALIZAR_PARTIDA:
-    //             this.vista.actualizarVista();
-    //             this.vista.mostrarFinDeturno(this.getJugador().getPuntaje().toString());
-    //             break;
-    //         default:
-    //             break;
-    //     }
-    // }
-
     @Override
     public <T extends IObservableRemoto> void setModeloRemoto(T arg0) throws RemoteException {
         this.modelo = (IPartida) arg0;
@@ -213,40 +183,34 @@ public class ScrabbleController implements  ActionListener,IControladorRemoto{
 
     @Override
     public void actualizar(IObservableRemoto arg0, Object arg1) throws RemoteException {
-        System.out.println("Entra al actualizar del controller");
         switch ((Eventos)arg1) {
-            case POSICIONO_FICHA:
+            case AGREGAR_JUGADOR:
                 this.vista.actualizarVista();
-                this.vista.setCambiarFichas(false);
-                
-                System.out.println("LLego al update de la vista");   
+            break;
+            case POSICIONO_FICHA:
+                this.jugador=this.modelo.getJugador();
+                this.vista.actualizarVista();
+                this.vista.setCambiarFichas(false);  
                 break;
             case FINALIZO_TURNO:
-                ArrayList<String> palabrasValidasDelTurno = this.getPalabrasValidasDelTurno();
-                String mensajePalabras="";
-                for (String palabra : palabrasValidasDelTurno) {
-                    mensajePalabras+= palabra+"\t";
-                }
-
-                try {
-                    this.vista.mostrarFinDeturno(mensajePalabras+"\n"+"Puntos de "+this.getJugador().getNombre()+": "+ this.calcularPuntajeTurno());
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+                this.vista.mostrarFinDeturno();
                 break;
             case COMIENZA_TURNO:
                 this.vista.actualizarVista();
                 this.vista.setCambiarFichas(true);
                 break;
             case FINALIZAR_PARTIDA:
-                this.vista.actualizarVista();
-                this.vista.mostrarFinDeturno(this.getJugador().getPuntaje().toString());
+                this.vista.mostrarFinDeturno();
+                this.vista.mostrarResultadoFinal();
                 break;
             default:
                 break;
         }
         
+    }
+
+    public ArrayList<Ijugador> getJugadores() throws RemoteException {
+        return this.modelo.getJugadores();
     }
 
 

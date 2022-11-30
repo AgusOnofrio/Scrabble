@@ -8,9 +8,9 @@ import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
 public interface IVista {
     public void mostrarCasillero(ICasillero casillero);
 
-    public void mostrarTablero(Itablero tablero);
+    public void mostrarTablero();
 
-    public void mostrarAtrilJugador(Ijugador jugador);
+    public void mostrarAtrilJugador();
 
     public void iniciar();
 
@@ -18,8 +18,12 @@ public interface IVista {
 
     public void setCambiarFichas(boolean b);
 
-    public void mostrarFinDeturno(String string);
+    public void mostrarFinDeturno();
 
     public void setControlador(IControladorRemoto controlador);
+
+    public void mostrarResultadoFinal();
+
+    public void actualizarJugadores();
 
 }

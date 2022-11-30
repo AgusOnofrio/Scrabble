@@ -15,6 +15,7 @@ public class Jugador implements Ijugador,Serializable{
     private BolsaFichas bolsa;
     
     public Jugador(String nombre,IBolsaFichas bolsaConLetras){
+        if(nombre.trim()=="")nombre="Jugador "+(++numeroDeJugador).toString();
         this.nombre=nombre;
         numeroDeJugador++;
         this.atril= new Atril(bolsaConLetras);
@@ -22,7 +23,7 @@ public class Jugador implements Ijugador,Serializable{
     }
     
     public Jugador(){
-        this.nombre="Jugador "+numeroDeJugador.toString();
+        this.nombre="Jugador "+(++numeroDeJugador).toString();
         numeroDeJugador++;
         this.atril= new Atril(bolsa);
         puntaje=0;

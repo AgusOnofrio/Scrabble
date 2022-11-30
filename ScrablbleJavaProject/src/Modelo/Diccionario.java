@@ -5,16 +5,23 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Diccionario implements Serializable {
 
+    private static final String[] abecedario ={"a","b","c","ch","d","e","f","g","h","i","j","k","l","ll","m","ñ","o","p","q","r","rr","x","y","z"};
+   
     public static boolean validarPalabra(String palabra) throws IOException{
 
-        if(palabra.length()<2) return false;
+        palabra=palabra.toLowerCase();
 
+        if(palabra.length()<2) return false;
+        
+        for (String letra : abecedario) {
+            if(letra.equals(palabra)) return false;
+        }
 
         boolean valida=false;
-        palabra=palabra.toLowerCase();
         String path="src/diccionario";
          
         char inicial= palabra.toLowerCase().toCharArray()[0];

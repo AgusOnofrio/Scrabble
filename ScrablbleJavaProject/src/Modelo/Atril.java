@@ -48,10 +48,17 @@ public class Atril implements IAtril,Serializable {
 
     public IFicha sacarFichaDeAtril(IFicha fichaElegida){
         IFicha ficha=null;
-        int posicion=fichas.indexOf(fichaElegida);
-        if(posicion>-1){
+        int posicion=-1;
+        for (int i = 0; i < this.fichas.size(); i++) {
+            System.out.printf("Ficha %s - %s",fichas.get(i).getLabel(),fichaElegida.getLabel());
+            
+            if(fichas.get(i).getLabel().equals(fichaElegida.getLabel())) posicion=i;
+        }
+
+        if(posicion>=0 && posicion<fichas.size()){
+            System.out.println(("La ficha esta en el atril"));
             ficha= fichas.get(posicion);
-            fichas.remove(posicion);
+            this.fichas.remove(posicion);
         }
         return ficha;
     }

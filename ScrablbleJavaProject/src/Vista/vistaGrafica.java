@@ -2,20 +2,33 @@ package Vista;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.LayoutManager;
+import java.awt.Paint;
+import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JTextArea;
+import javax.swing.JTextPane;
+
 import Controlador.ScrabbleController;
 import Modelo.Interfaces.ICasillero;
 import Modelo.Interfaces.IFicha;
@@ -43,21 +56,31 @@ public class vistaGrafica implements IVista{
 
     public void iniciar(){
         frame = new JFrame("Titulo de la ventana");
-        frame.setSize(900,900);
+        frame.setSize(1000,900);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         panelPrincipal= (JPanel) frame.getContentPane();
         panelPrincipal.setLayout(new BorderLayout());
+    	this.agregarJugador();
         this.mostrarJuego();
         frame.setVisible(true);
     }
 
     
-
+    public void agregarJugador(){
+        String nombreJugador= (String) JOptionPane.showInputDialog(
+            null, 
+            "Ingrese su nombre", "Nombre del jugador", 
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            null,
+            null);
+        this.controlador.agregarJugador(nombreJugador);
+    }
 
 
     private void mostrarJuego(){
         
-
+        boolean esLaVistaDelJugador=this.controlador.getJugadorVista().getNombre().equals(this.controlador.getJugadorActual().getNombre());
 
         //Muestro panel con valores
         JTextArea valoresLetras= new JTextArea(utils.valoreLetrasAString());
@@ -66,6 +89,25 @@ public class vistaGrafica implements IVista{
         valoresLetras.setAlignmentY(Font.CENTER_BASELINE);
         valoresLetras.setFont(new Font(Font.SANS_SERIF, 0, 15)); ;
         panelPrincipal.add(valoresLetras,BorderLayout.EAST);
+
+
+        //Muestro panel con marcador
+        String s="";
+        try {
+            for (Ijugador j : this.controlador.getJugadores() ) {
+                s+=j.getNombre()+" : "+j.getPuntaje()+"\n";
+            }
+        } catch (RemoteException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        JTextArea marcador= new JTextArea(s);
+        marcador.setEditable(false);
+        marcador.setAlignmentX(Font.CENTER_BASELINE);
+        marcador.setAlignmentY(Font.CENTER_BASELINE);
+        marcador.setFont(new Font(Font.SANS_SERIF, 0, 15)); ;
+        panelPrincipal.add(marcador,BorderLayout.WEST);
+
 
 
         //inicio tablero
@@ -109,14 +151,24 @@ public class vistaGrafica implements IVista{
 
 
         //Etiqueta jugador 
-        JLabel nombreJugador= new JLabel("Jugador: "+this.controlador.getJugador().getNombre()+" |");
-        JLabel puntaje= new JLabel("Puntaje: "+this.controlador.getJugador().getPuntaje()+" puntos");
+        JLabel nombreJugador= new JLabel("Turno: "+this.controlador.getJugadorActual().getNombre()+" |");
+        JLabel puntaje= new JLabel("Puntaje: "+this.controlador.getJugadorActual().getPuntaje()+" puntos");
         atril.add(nombreJugador);
         atril.add(puntaje);
 
-        mostrarTablero(controlador.getTablero());
-        mostrarAtrilJugador(controlador.getJugador());
+        mostrarTablero();
+        mostrarAtrilJugador();
         panelPrincipal.setVisible(true);
+        
+        
+        
+        for (Component component : panelPrincipal.getComponents()) {
+                component.setEnabled(esLaVistaDelJugador); 
+        };
+
+        botonCambiarFichas.setEnabled(esLaVistaDelJugador);
+        botonFinalizarTurno.setEnabled(esLaVistaDelJugador);
+        
         
     }
 
@@ -127,7 +179,9 @@ public class vistaGrafica implements IVista{
       
 
     @Override
-    public void mostrarTablero(Itablero tablero) {
+    public void mostrarTablero() {
+        boolean esElturno=this.controlador.getJugadorVista().getNombre().equals(this.controlador.getJugadorActual().getNombre());
+        Itablero tablero = this.controlador.getTablero();
         ICasillero[][] casilleros = tablero.getCasilleros();
         ArrayList<ICasillero> casillerosDisponibles =tablero.casillerosDisponibles();
         int numeroFila=0;
@@ -170,8 +224,7 @@ public class vistaGrafica implements IVista{
                             break;
                     }
                 }
-                System.out.printf("El casillero %d-%d tiene una ficha: "+casillero.estaOcupado(),casillero.getFila(),casillero.getColumna());
-                botonCasillero.setEnabled(casillero.getDisponible());
+                botonCasillero.setEnabled(casillero.getDisponible() && esElturno);
                 botonCasillero.putClientProperty("fila", numeroFila);
                 botonCasillero.putClientProperty("columna", numeroColumna);
                 botonCasillero.addActionListener(new ActionListener(){
@@ -189,7 +242,10 @@ public class vistaGrafica implements IVista{
     
 
     @Override
-    public void mostrarAtrilJugador(Ijugador jugador) {
+    public void mostrarAtrilJugador() {
+        boolean esElturno=this.controlador.getJugadorVista().getNombre().equals(this.controlador.getJugadorActual().getNombre());
+        Ijugador jugador = this.controlador.getJugadorVista();
+        
         ArrayList<IFicha> fichas = jugador.getAtril().getFichasAtril();
 
         for (IFicha ficha : fichas) {
@@ -197,13 +253,14 @@ public class vistaGrafica implements IVista{
             botonFicha.setSize(250,250);
             botonFicha.addActionListener(new ActionListener() {
                 @Override
-			public void actionPerformed(ActionEvent arg0) {
-				controlador.elegirFichaAtril(ficha);
-				System.out.println("Ingresa aca??");
-			}
+            public void actionPerformed(ActionEvent arg0) {
+                controlador.elegirFichaAtril(ficha);
+            }
             });;
+            botonFicha.setEnabled(esElturno);
             atril.add(botonFicha);
         }
+        
 
         
     }
@@ -214,7 +271,6 @@ public class vistaGrafica implements IVista{
     public void actualizarVista() {
 
         this.panelPrincipal.removeAll();
-        System.out.println("Se actualizo la vista");
         this.mostrarJuego();
         frame.setVisible(true);
         
@@ -227,8 +283,98 @@ public class vistaGrafica implements IVista{
     }
 
     @Override
-    public void mostrarFinDeturno(String string) {
-        JOptionPane.showMessageDialog(frame,string );
+    public void mostrarFinDeturno() {
+        Integer puntaje=0;
+        try {
+            puntaje = this.controlador.calcularPuntajeTurno();
+
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        String jugador= this.controlador.getJugadorActual().getNombre();
+        String mensaje = "Jugador: "+jugador+"\n"+this.controlador.getPalabrasValidasDelTurno().toString()+"\n"+"Puntaje:"+puntaje;
+        
+         JButton botonContinuar= new JButton("Continuar");
+        botonContinuar.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent ae){
+                actualizarVista();
+        }});
+
+        
+        
+        JLabel textoMensaje = new JLabel(mensaje);
+        textoMensaje.setSize(300,300);
+        
+        JPanel panelResultado= new JPanel();
+        panelResultado.add(textoMensaje);
+        panelResultado.add(botonContinuar);
+        panelResultado.setVisible(true);
+
+        
+        for (Component c : panelPrincipal.getComponents()) {
+            c.setVisible(false);
+        }
+        panelPrincipal.add(panelResultado,BorderLayout.CENTER);
+        panelPrincipal.updateUI();
+        
+    }
+    @Override
+    public void mostrarResultadoFinal() {
+
+        
+        String resultados="";
+        Integer ganador=0;
+        ArrayList<Ijugador> jugadores;
+        try {
+            jugadores = this.controlador.getJugadores();
+
+            Collections.sort(jugadores, (Comparator.<Ijugador>
+                        comparingInt(jugador1 -> jugador1.getPuntaje())
+            .thenComparingInt(jugador2 -> jugador2.getPuntaje())));
+
+            JPanel panelResultado= new JPanel();
+            panelResultado.setLayout(new BoxLayout(panelResultado, BoxLayout.PAGE_AXIS));
+
+            for (Ijugador j :  jugadores ) {
+                panelResultado.add( new JLabel("Jugador: "+j.getNombre()+"      "+"Puntaje:"+j.getPuntaje().toString()));
+                
+            }
+
+            
+            JButton botonContinuar= new JButton("Finalizar");
+            botonContinuar.addActionListener(new ActionListener(){
+                public void actionPerformed(ActionEvent ae){
+                    
+                    //SAlir del juego;
+            }});
+    
+            
+            JLabel textoMensaje = new JLabel(resultados);
+            textoMensaje.setSize(300,300);
+            
+            
+            
+            panelResultado.add(botonContinuar);
+            panelResultado.setVisible(true);
+  
+            for (Component c : panelPrincipal.getComponents()) {
+                c.setVisible(false);
+            }
+            panelPrincipal.add(panelResultado,BorderLayout.CENTER);
+            panelPrincipal.updateUI();
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+       
+
+        
+        
+    }
+    @Override
+    public void actualizarJugadores() {
+        // TODO Auto-generated method stub
         
     }
 

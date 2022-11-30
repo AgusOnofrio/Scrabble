@@ -9,6 +9,13 @@
             "name": "Launch ClienteConsola",
             "request": "launch",
             "mainClass": "ClienteConsola",
+            "projectName": "ScrablbleJavaProject_ba5149b7"
+        },
+        {
+            "type": "java",
+            "name": "Launch ClienteConsola",
+            "request": "launch",
+            "mainClass": "ClienteConsola",
             "projectName": "ScrablbleJavaProject"
         },
         {
