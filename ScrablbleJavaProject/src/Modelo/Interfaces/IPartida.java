@@ -18,7 +18,7 @@ public interface IPartida extends IObservableRemoto{
 
 	void finalizarTurno() throws IOException;
 
-	void cambiarFichas()throws RemoteException;
+	void cambiarFichas(ArrayList<IFicha> fichasACambiar)throws RemoteException;
 
 	boolean estaEnArrayPalabra(ArrayList<IPalabra> array, IPalabra palabra)throws RemoteException;
 

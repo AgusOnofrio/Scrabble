@@ -142,7 +142,7 @@ public class vistaGrafica implements IVista{
         botonCambiarFichas=new JButton("Cambiar fichas");
         botonCambiarFichas.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae){
-                    controlador.cambiarFichas();
+                    opcionesParaCambiarFichas();
             }});
         
         
@@ -174,7 +174,45 @@ public class vistaGrafica implements IVista{
         panelPrincipal.updateUI();
     }
 
+    public void opcionesParaCambiarFichas(){
+        Ijugador jugador = this.controlador.getJugadorVista();
+        JPanel panelCambio = new JPanel();
+        ArrayList<IFicha> fichasElegidas = new ArrayList<IFicha>();
 
+        ArrayList<IFicha> fichas = jugador.getAtril().getFichasAtril();
+
+        for (IFicha ficha : fichas) {
+            JButton botonFicha = new JButton(ficha.getLabel());
+            botonFicha.setSize(250,250);
+            botonFicha.addActionListener(new ActionListener() {
+                @Override
+            public void actionPerformed(ActionEvent arg0) {
+                if(botonFicha.isEnabled()){
+                    fichasElegidas.add(ficha);
+                    botonFicha.setEnabled(false);
+                }else{
+                    fichasElegidas.remove(ficha);
+                    botonFicha.setEnabled(true);
+                }
+            }
+            });
+            panelCambio.add(botonFicha);
+        }
+        JButton botonCambio = new JButton("Cambiar");
+        botonCambio.addActionListener(new ActionListener() {
+            @Override
+        public void actionPerformed(ActionEvent arg0) {
+            controlador.cambiarFichas(fichasElegidas);
+
+        }
+        });
+        panelCambio.add(botonCambio);
+        panelCambio.setVisible(true);
+        this.panelPrincipal.removeAll();
+        this.panelPrincipal.add(panelCambio);
+        this.panelPrincipal.updateUI();
+        
+    }
 
     @Override
     public void mostrarCasillero(ICasillero casillero) {}

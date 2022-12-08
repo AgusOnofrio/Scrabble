@@ -233,8 +233,8 @@ public class Partida extends ObservableRemoto implements IPartida{
     }
 
     @Override
-	public void cambiarFichas()throws RemoteException{
-        this.getJugador().getAtril().intercambiarFichas();
+	public void cambiarFichas(ArrayList<IFicha> fichasACambiar)throws RemoteException{
+        this.getJugador().getAtril().intercambiarFichas(fichasACambiar);
         try {
             this.finalizarTurno();
         } catch (IOException e) {

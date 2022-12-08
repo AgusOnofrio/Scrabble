@@ -180,9 +180,9 @@ public class ScrabbleController implements  ActionListener,IControladorRemoto{
         return palabras;
     }
 
-    public void cambiarFichas() {
+    public void cambiarFichas(ArrayList<IFicha> fichas) {
         try {
-            this.modelo.cambiarFichas();
+            this.modelo.cambiarFichas(fichas);
         } catch (RemoteException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

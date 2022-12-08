@@ -65,9 +65,14 @@ public class Atril implements IAtril,Serializable {
 
     //El atril debe intercambiar sus fichas
     @Override
-    public void intercambiarFichas() {
+    public void intercambiarFichas(ArrayList<IFicha> listaDeFichas) {
         for (int i = 0; i < fichas.size(); i++) {
-            fichas.set(i, bolsa.cambiarFicha(fichas.get(i)));
+            for (IFicha iFicha : listaDeFichas) {
+                if(fichas.get(i).getLabel().equals(iFicha.getLabel())){
+                    fichas.set(i, bolsa.cambiarFicha(fichas.get(i)));
+                    
+                }
+            }
         }
     }
 

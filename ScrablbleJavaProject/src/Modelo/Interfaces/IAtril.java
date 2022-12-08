@@ -7,7 +7,7 @@ public interface IAtril {
     public String getFichasAtrilString();    
     public IFicha sacarFichaDeAtril(int posicion);
     public IFicha sacarFichaDeAtril(IFicha fichaElegida);
-    public void intercambiarFichas();
+    public void intercambiarFichas(ArrayList<IFicha> fichasElegidas);
     public void ponerFicha(IFicha ficha);
     public boolean estaVacio();
 }
