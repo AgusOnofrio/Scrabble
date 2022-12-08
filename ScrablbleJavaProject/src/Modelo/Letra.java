@@ -17,7 +17,7 @@ public enum Letra {
     LL("LL",8,1),
     M("M",3,2),
     N("N",1,5),
-    Ñ ("�",8,1),
+    Ñ ("Ñ",8,1),
     O("O",1,9),
     P("P",3,2),
     Q("Q",5,1),
@@ -31,7 +31,7 @@ public enum Letra {
     X("X",8,1),
     Y("Y",4,1),
     Z("Z",10,1),
-    ESPECIAL("#",0,2);
+    ESPECIAL(".",0,2);
 
     private final String label;
     private final Integer value;

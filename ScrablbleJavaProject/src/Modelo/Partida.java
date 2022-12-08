@@ -142,21 +142,32 @@ public class Partida extends ObservableRemoto implements IPartida{
             for (IPalabra palabra : chequearSiLaFichaFormaPalabra(casillero)) {
                 System.out.println("Validando si ya se encontro palabra: "+palabra.convertirString());
                 
-                if(!estaEnArrayPalabra(palabrasFormadasEnElTurno, palabra) && (palabra.convertirString().length()>1)){
+                if(!estaEnArrayPalabra(palabrasFormadasEnElTurno, palabra) && !(Diccionario.estaEnAbecedario(palabra.convertirString()))){
                         palabrasFormadasEnElTurno.add(palabra);
                         
-                } 
-
-                if(!palabra.esValida() && (palabra.convertirString().length()>1) ){
+                }
+                
+                if(!palabra.esValida() && !(Diccionario.estaEnAbecedario(palabra.convertirString())) ){
                     //DevolverFichas
                     casillerosConFichaQueNoFormanNada.add(casillero);
                 }
             } 
         }
 
+        boolean todosSusCasillerosSonValidos;
+
         for (IPalabra palabra : palabrasFormadasEnElTurno) {
+            todosSusCasillerosSonValidos= true;
             System.out.printf("Validando %s ...\n",palabra.convertirString());
-            if(palabra.esValida()){
+            for (ICasillero c : casillerosConFichaQueNoFormanNada) {
+                System.out.println("Casillero: "+c.getFicha().getLabel()+" No forma NADa");
+                for (ICasillero casiPalabra : palabra.getPosiciones()) {
+                    if((casiPalabra.getColumna() == c.getColumna())&&(casiPalabra.getFila()==c.getFila())) todosSusCasillerosSonValidos=false;
+                }
+            }
+
+
+            if(palabra.esValida() && todosSusCasillerosSonValidos){
                 System.out.printf("La palabra %s es valida: %d\n",palabra.convertirString(),palabra.obtenerPuntaje());
                 puntaje+=palabra.obtenerPuntaje();
             }else{
@@ -187,7 +198,11 @@ public class Partida extends ObservableRemoto implements IPartida{
         this.notificarObservadores(Eventos.FINALIZO_TURNO);
         
 
-        if(this.casillerosJugadosEnElTurno.size() <1)paso++;
+        if(this.casillerosJugadosEnElTurno.size() <1){
+            paso++;
+        }else{
+            paso=0;
+        }
         
         if(paso>(this.jugadores.size()*2-1) || bolsaConLetras.esVacia()){
             System.out.println("Paso 6");
@@ -288,6 +303,7 @@ public class Partida extends ObservableRemoto implements IPartida{
         this.fichaElegida=ficha;
         if(this.casilleroElegido !=null && this.fichaElegida!=null)
         {
+            if(fichaElegida instanceof FichaEspecial) this.notificarObservadores(Eventos.ELEGIR_LETRA);
             this.casilleroElegido.ponerFicha(fichaElegida);
             this.tablero.ponerFicha(casilleroElegido.getFila(),casilleroElegido.getColumna(),fichaElegida);
 
@@ -329,6 +345,12 @@ public class Partida extends ObservableRemoto implements IPartida{
 
         this.notificarObservadores(Eventos.QUITO_FICHA_CASILLERO);
        
+        
+    }
+
+    @Override
+    public void elegirLetraParaFichaEspecial(String letra) {
+        ((FichaEspecial) this.fichaElegida).setLabel(letra);
         
     }
 

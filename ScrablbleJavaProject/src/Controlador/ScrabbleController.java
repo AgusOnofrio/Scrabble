@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
+import Modelo.Jugador;
 import Modelo.Partida;
 import Modelo.Interfaces.ICasillero;
 import Modelo.Interfaces.IFicha;
@@ -118,6 +119,10 @@ public class ScrabbleController implements  ActionListener,IControladorRemoto{
         }
     }
 
+    public Integer getNumeroJugadorAAgregar(){
+        return Jugador.getNumeroDeJugador();
+    }
+
     public void siguienteTurno() {
         try {
             this.modelo.siguienteTurno();
@@ -195,6 +200,9 @@ public class ScrabbleController implements  ActionListener,IControladorRemoto{
             case AGREGAR_JUGADOR:
                 this.vista.actualizarVista();
             break;
+            case ELEGIR_LETRA:
+                this.vista.elegirLetraParaFichaEspecial();
+            break;
             case POSICIONO_FICHA:
                 
                 this.vista.actualizarVista();
@@ -235,6 +243,15 @@ public class ScrabbleController implements  ActionListener,IControladorRemoto{
             e.printStackTrace();
         }
     }
+
+	public void elegirLabelDeFicha(String letra) {
+        try {
+            this.modelo.elegirLetraParaFichaEspecial(letra);
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+	}
 
 
 

@@ -93,6 +93,9 @@ public class Palabra implements IPalabra{
         return p.equals(this.convertirString());
     }
 
+    public ArrayList<ICasillero> getPosiciones(){
+        return this.posiciones;
+    }
 
 
 }

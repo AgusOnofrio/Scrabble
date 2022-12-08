@@ -1,5 +1,7 @@
 package Modelo.Interfaces;
 
+import java.util.ArrayList;
+
 public interface IPalabra {
     public String convertirString();
 
@@ -8,5 +10,7 @@ public interface IPalabra {
     public boolean esValida();
 
     public boolean equals(IPalabra palabra);
+
+    public ArrayList<ICasillero> getPosiciones();
 
 }

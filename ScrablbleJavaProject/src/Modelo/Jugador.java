@@ -15,9 +15,9 @@ public class Jugador implements Ijugador,Serializable{
     private BolsaFichas bolsa;
     
     public Jugador(String nombre,IBolsaFichas bolsaConLetras){
-        if(nombre.trim()=="")nombre="Jugador "+(++numeroDeJugador).toString();
+        numeroDeJugador=numeroDeJugador+1;
+        if(nombre.trim()=="")nombre="Jugador "+numeroDeJugador.toString();
         this.nombre=nombre;
-        numeroDeJugador++;
         this.atril= new Atril(bolsaConLetras);
         puntaje=0;
     }
@@ -51,6 +51,10 @@ public class Jugador implements Ijugador,Serializable{
             }
         }
         return valida;
+    }
+
+    public static Integer getNumeroDeJugador(){
+        return numeroDeJugador;
     }
 
     public IAtril getAtril() {

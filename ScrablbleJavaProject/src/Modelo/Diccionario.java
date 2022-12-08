@@ -6,10 +6,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
+
+import org.hamcrest.Matcher;
 
 public class Diccionario implements Serializable {
 
-    private static final String[] abecedario ={"a","b","c","ch","d","e","f","g","h","i","j","k","l","ll","m","ñ","o","p","q","r","rr","x","y","z"};
+    private static final String[] abecedario ={".","a","b","c","ch","d","e","f","g","h","i","j","k","l","ll","m","n",
+    "ñ","o","p","q","r","rr","s","t","u","v","w","x","y","z"};
    
     public static boolean validarPalabra(String palabra) throws IOException{
 
@@ -25,10 +29,20 @@ public class Diccionario implements Serializable {
         String path="src/diccionario";
          
         char inicial= palabra.toLowerCase().toCharArray()[0];
+        
+        
         if(palabra.length()>9){
-            path= path+"/"+inicial+"/"+palabra.length()+".txt";
+            if(inicial=='.'){
+                path= path+"/especial/"+palabra.length()+".txt";
+            }else{
+                path= path+"/"+inicial+"/"+palabra.length()+".txt";
+            }
         }else{
+            if(inicial=='.'){
+                path= path+"/especial/0"+palabra.length()+".txt";
+            }else{
             path= path+"/"+inicial+"/0"+palabra.length()+".txt";
+            }
         }
 
         File archivo = new File(path);
@@ -38,14 +52,20 @@ public class Diccionario implements Serializable {
         String[] palabras;
         linea = brLinea.readLine(); // <- inicio la variable br
         
-        while (linea != null){
+        Pattern pat = Pattern.compile(palabra);
+    
+
+
+        while (linea != null && !valida){
      
             palabras = linea.split("\\s");
             
             //Datos del registro:
             System.out.println(palabras[0]);
+
+            java.util.regex.Matcher mat = pat.matcher(palabras[0]);
             
-            if(palabras[0].equals(palabra)) valida=true;
+            if(palabras[0].equals(palabra) || mat.find()) valida=true;
 
 
             //leo la siguiente linea:
@@ -57,6 +77,18 @@ public class Diccionario implements Serializable {
         archivoFileReader.close();
         
         return valida; 
+    }
+
+    public static boolean estaEnAbecedario(String s){
+        boolean esta= false;
+        int i=0;
+        s=s.toLowerCase();
+        while(i<abecedario.length && !esta){
+            if(abecedario[i].equals(s) )esta=true;
+            i++;
+
+        }
+        return esta;
     }
 
     }    

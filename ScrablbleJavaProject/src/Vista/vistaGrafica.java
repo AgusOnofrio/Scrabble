@@ -30,6 +30,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 
 import Controlador.ScrabbleController;
+import Modelo.Jugador;
 import Modelo.Interfaces.ICasillero;
 import Modelo.Interfaces.IFicha;
 import Modelo.Interfaces.Ijugador;
@@ -69,7 +70,7 @@ public class vistaGrafica implements IVista{
     public void agregarJugador(){
         String nombreJugador= (String) JOptionPane.showInputDialog(
             null, 
-            "Ingrese su nombre", "Nombre del jugador", 
+            "Ingrese su nombre", "Nombre del jugador "+(this.controlador.getNumeroJugadorAAgregar()+1), 
             JOptionPane.QUESTION_MESSAGE,
             null,
             null,
@@ -379,6 +380,18 @@ public class vistaGrafica implements IVista{
     @Override
     public void actualizarJugadores() {
         // TODO Auto-generated method stub
+        
+    }
+    @Override
+    public void elegirLetraParaFichaEspecial() {
+        String letra= (String) JOptionPane.showInputDialog(
+            null, 
+            "Ingrese letra", "Letra ", 
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            null,
+            null);
+        this.controlador.elegirLabelDeFicha(letra);
         
     }
 
