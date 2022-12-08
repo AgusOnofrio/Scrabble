@@ -9,4 +9,5 @@ public interface IAtril {
     public IFicha sacarFichaDeAtril(IFicha fichaElegida);
     public void intercambiarFichas();
     public void ponerFicha(IFicha ficha);
+    public boolean estaVacio();
 }

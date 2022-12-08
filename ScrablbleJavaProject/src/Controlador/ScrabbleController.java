@@ -241,14 +241,7 @@ public class ScrabbleController implements  ActionListener,IControladorRemoto{
         }
     }
 
-	public void elegirLabelDeFicha(String letra) {
-        try {
-            this.modelo.elegirLetraParaFichaEspecial(letra);
-        } catch (RemoteException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-	}
+
 
 
 

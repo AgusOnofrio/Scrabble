@@ -79,5 +79,11 @@ public class Atril implements IAtril,Serializable {
         
     }
 
+    @Override
+    public boolean estaVacio() {
+        
+        return this.fichas.isEmpty();
+    }
+
 
 }

@@ -29,7 +29,7 @@ public class Partida extends ObservableRemoto implements IPartida{
     private IFicha fichaElegida=null;
     private Integer paso=0;
     private ICasillero ultimoCasilleroJugado=null;
-
+    private final Integer bonus=50;
 
     public Partida()  throws IOException,RemoteException{
         //inicializo bolsa de letras
@@ -191,6 +191,12 @@ public class Partida extends ObservableRemoto implements IPartida{
 	public void finalizarTurno() throws IOException, RemoteException{
         int puntosTurno=this.calcularPuntajeTurno();
         
+        //si al finalizar le turno el jugador tiene el atril vacio Gana 50 puntos extra
+        if(this.getJugador().getAtril().estaVacio()){
+            this.getJugador().sumarPuntos(this.bonus);
+        }
+
+
         this.getJugador().getAtril().llenarAtril();
         
         this.getJugador().sumarPuntos(puntosTurno);
@@ -348,11 +354,7 @@ public class Partida extends ObservableRemoto implements IPartida{
         
     }
 
-    @Override
-    public void elegirLetraParaFichaEspecial(String letra) {
-        ((FichaEspecial) this.fichaElegida).setLabel(letra);
-        
-    }
+
 
 // // // Observable Remoto
 //     @Override

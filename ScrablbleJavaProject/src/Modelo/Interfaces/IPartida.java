@@ -45,7 +45,7 @@ public interface IPartida extends IObservableRemoto{
 
     void sacarFichaDeCasillero(ICasillero casillero) throws RemoteException;
 
-    void elegirLetraParaFichaEspecial(String letra)throws RemoteException;
+    
 
   
 
