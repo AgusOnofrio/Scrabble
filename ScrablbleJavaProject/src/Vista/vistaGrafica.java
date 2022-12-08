@@ -382,18 +382,7 @@ public class vistaGrafica implements IVista{
         // TODO Auto-generated method stub
         
     }
-    @Override
-    public void elegirLetraParaFichaEspecial() {
-        String letra= (String) JOptionPane.showInputDialog(
-            null, 
-            "Ingrese letra", "Letra ", 
-            JOptionPane.QUESTION_MESSAGE,
-            null,
-            null,
-            null);
-        this.controlador.elegirLabelDeFicha(letra);
-        
-    }
+
 
 
 

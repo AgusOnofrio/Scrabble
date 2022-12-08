@@ -200,9 +200,6 @@ public class ScrabbleController implements  ActionListener,IControladorRemoto{
             case AGREGAR_JUGADOR:
                 this.vista.actualizarVista();
             break;
-            case ELEGIR_LETRA:
-                this.vista.elegirLetraParaFichaEspecial();
-            break;
             case POSICIONO_FICHA:
                 
                 this.vista.actualizarVista();

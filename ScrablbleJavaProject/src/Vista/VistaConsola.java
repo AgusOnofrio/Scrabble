@@ -315,11 +315,7 @@ public class VistaConsola implements IVista {
         
     }
 
-    @Override
-    public void elegirLetraParaFichaEspecial() {
-        // TODO Auto-generated method stub
-        
-    }
+
 
 
 
