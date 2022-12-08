@@ -36,7 +36,7 @@ public interface IPartida extends IObservableRemoto{
 
 	void elegirFichaAtril(IFicha ficha)throws RemoteException;
 
-	ArrayList<String> getPalabrasValidasDelTurno()throws RemoteException;
+	ArrayList<IPalabra> getPalabrasValidasDelTurno()throws RemoteException;
 
 	// Observable Remoto
 	void notificarObservadores(Object obj) throws RemoteException;

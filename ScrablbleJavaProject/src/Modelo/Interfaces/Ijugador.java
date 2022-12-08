@@ -1,4 +1,7 @@
 package Modelo.Interfaces;
+
+import java.util.ArrayList;
+
 public interface Ijugador {
     //Sabers si la palabra esta en s atril
     public String getNombre();
@@ -14,4 +17,7 @@ public interface Ijugador {
 
     public Integer getPuntaje();
 
+    public void agregarPalabraCreadaPorJugador(IPalabra palabra);
+
+    public ArrayList<IPalabra> obtenerPalabrasDePartida();
 }

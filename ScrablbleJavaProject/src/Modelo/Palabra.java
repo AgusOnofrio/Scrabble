@@ -1,13 +1,14 @@
 package Modelo;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import Modelo.Interfaces.ICasillero;
 import Modelo.Interfaces.IFicha;
 import Modelo.Interfaces.IPalabra;
 
-public class Palabra implements IPalabra{
+public class Palabra implements IPalabra,Serializable{
     private  ArrayList<ICasillero> posiciones;
     private  ArrayList<IFicha> letras;
     private final String palabra;

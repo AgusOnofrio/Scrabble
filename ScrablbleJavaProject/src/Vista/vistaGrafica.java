@@ -33,6 +33,7 @@ import Controlador.ScrabbleController;
 import Modelo.Jugador;
 import Modelo.Interfaces.ICasillero;
 import Modelo.Interfaces.IFicha;
+import Modelo.Interfaces.IPalabra;
 import Modelo.Interfaces.Ijugador;
 import Modelo.Interfaces.Itablero;
 import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
@@ -289,18 +290,20 @@ public class vistaGrafica implements IVista{
 
     @Override
     public void mostrarFinDeturno() {
-        Integer puntaje=0;
-        try {
-            puntaje = this.controlador.calcularPuntajeTurno();
+        JPanel panelResultado= new JPanel();
+        panelResultado.setLayout(new BoxLayout(panelResultado,BoxLayout.Y_AXIS));
+        Integer puntajeTurno=0;
 
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
         String jugador= this.controlador.getJugadorActual().getNombre();
-        String mensaje = "Jugador: "+jugador+"\n"+this.controlador.getPalabrasValidasDelTurno().toString()+"\n"+"Puntaje:"+puntaje;
-        
-         JButton botonContinuar= new JButton("Continuar");
+        panelResultado.add(new JLabel("Jugador: "+jugador)) ;//+"\n"+this.controlador.getPalabrasValidasDelTurno().toString()+"\n"+"Puntaje:"+puntaje;
+        for (IPalabra palabra : this.controlador.getPalabrasValidasDelTurno()) {
+            panelResultado.add(new JLabel(palabra.convertirString()+" - "+palabra.obtenerPuntaje()));
+            puntajeTurno+=palabra.obtenerPuntaje();
+        }
+        panelResultado.add(new JLabel("Puntaje turno: "+puntajeTurno));
+
+
+        JButton botonContinuar= new JButton("Continuar");
         botonContinuar.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae){
                 actualizarVista();
@@ -308,11 +311,7 @@ public class vistaGrafica implements IVista{
 
         
         
-        JLabel textoMensaje = new JLabel(mensaje);
-        textoMensaje.setSize(300,300);
-        
-        JPanel panelResultado= new JPanel();
-        panelResultado.add(textoMensaje);
+
         panelResultado.add(botonContinuar);
         panelResultado.setVisible(true);
 
@@ -343,7 +342,11 @@ public class vistaGrafica implements IVista{
 
             for (Ijugador j :  jugadores ) {
                 panelResultado.add( new JLabel(j.getNombre()+"      "+"Puntaje:"+j.getPuntaje().toString()));
-                
+                for (IPalabra palabra : j.obtenerPalabrasDePartida()) {
+                    panelResultado.add(new JLabel(palabra.convertirString()+" - "+palabra.obtenerPuntaje()));
+                }
+                panelResultado.add(new JLabel());
+
             }
 
             
@@ -377,6 +380,8 @@ public class vistaGrafica implements IVista{
         
         
     }
+    
+    
     @Override
     public void actualizarJugadores() {
         // TODO Auto-generated method stub

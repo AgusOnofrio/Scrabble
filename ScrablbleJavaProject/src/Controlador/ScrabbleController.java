@@ -10,6 +10,7 @@ import Modelo.Jugador;
 import Modelo.Partida;
 import Modelo.Interfaces.ICasillero;
 import Modelo.Interfaces.IFicha;
+import Modelo.Interfaces.IPalabra;
 import Modelo.Interfaces.IPartida;
 import Modelo.Interfaces.Ijugador;
 import Modelo.Interfaces.Itablero;
@@ -168,8 +169,8 @@ public class ScrabbleController implements  ActionListener,IControladorRemoto{
         
     }
 
-    public ArrayList<String> getPalabrasValidasDelTurno() {
-        ArrayList<String> palabras=null;
+    public ArrayList<IPalabra> getPalabrasValidasDelTurno() {
+        ArrayList<IPalabra> palabras=null;
         try {
             palabras= modelo.getPalabrasValidasDelTurno();
         } catch (RemoteException e) {

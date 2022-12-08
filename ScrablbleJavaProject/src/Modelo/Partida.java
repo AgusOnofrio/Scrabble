@@ -170,6 +170,7 @@ public class Partida extends ObservableRemoto implements IPartida{
             if(palabra.esValida() && todosSusCasillerosSonValidos){
                 System.out.printf("La palabra %s es valida: %d\n",palabra.convertirString(),palabra.obtenerPuntaje());
                 puntaje+=palabra.obtenerPuntaje();
+                this.getJugador().agregarPalabraCreadaPorJugador(palabra);
             }else{
                 System.out.printf("La palabra %s no es valida\n",palabra.convertirString());
 
@@ -326,12 +327,9 @@ public class Partida extends ObservableRemoto implements IPartida{
     }
 
     @Override
-	public ArrayList<String> getPalabrasValidasDelTurno()throws RemoteException {
-        ArrayList<String> palabras = new ArrayList<String>();
-        for (IPalabra palabra : this.palabrasFormadasEnElTurno) {
-            palabras.add(palabra.convertirString());
-        }
-        return palabras;
+	public ArrayList<IPalabra> getPalabrasValidasDelTurno()throws RemoteException {
+
+        return this.palabrasFormadasEnElTurno;
     }
 
     @Override
