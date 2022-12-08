@@ -334,14 +334,14 @@ public class vistaGrafica implements IVista{
             jugadores = this.controlador.getJugadores();
 
             Collections.sort(jugadores, (Comparator.<Ijugador>
-                        comparingInt(jugador1 -> jugador1.getPuntaje())
+                        comparingInt(jugador1 -> -jugador1.getPuntaje())
             .thenComparingInt(jugador2 -> jugador2.getPuntaje())));
 
             JPanel panelResultado= new JPanel();
             panelResultado.setLayout(new BoxLayout(panelResultado, BoxLayout.PAGE_AXIS));
 
             for (Ijugador j :  jugadores ) {
-                panelResultado.add( new JLabel("Jugador: "+j.getNombre()+"      "+"Puntaje:"+j.getPuntaje().toString()));
+                panelResultado.add( new JLabel(j.getNombre()+"      "+"Puntaje:"+j.getPuntaje().toString()));
                 
             }
 

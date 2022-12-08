@@ -136,16 +136,24 @@ public class Partida extends ObservableRemoto implements IPartida{
     @Override
 	public int calcularPuntajeTurno() throws IOException, RemoteException{ //TODO controlador
         this.palabrasFormadasEnElTurno = new ArrayList<IPalabra>();  
+        ArrayList<ICasillero> casillerosConFichaQueNoFormanNada= new ArrayList<ICasillero>();
+        int puntaje=0;
         for (ICasillero casillero : casillerosJugadosEnElTurno) {
             for (IPalabra palabra : chequearSiLaFichaFormaPalabra(casillero)) {
                 System.out.println("Validando si ya se encontro palabra: "+palabra.convertirString());
+                
                 if(!estaEnArrayPalabra(palabrasFormadasEnElTurno, palabra) && (palabra.convertirString().length()>1)){
-                    palabrasFormadasEnElTurno.add(palabra);
+                        palabrasFormadasEnElTurno.add(palabra);
+                        
                 } 
+
+                if(!palabra.esValida() && (palabra.convertirString().length()>1) ){
+                    //DevolverFichas
+                    casillerosConFichaQueNoFormanNada.add(casillero);
+                }
             } 
         }
 
-        int puntaje=0;
         for (IPalabra palabra : palabrasFormadasEnElTurno) {
             System.out.printf("Validando %s ...\n",palabra.convertirString());
             if(palabra.esValida()){
@@ -155,6 +163,12 @@ public class Partida extends ObservableRemoto implements IPartida{
                 System.out.printf("La palabra %s no es valida\n",palabra.convertirString());
 
             }
+        }
+
+        for (ICasillero casillero : casillerosConFichaQueNoFormanNada) {
+            IFicha ficha= this.tablero.quitarFicha(casillero.getFila(), casillero.getColumna());
+            if(ficha!=null) this.casillerosJugadosEnElTurno.remove(casillero);
+            this.getJugador().getAtril().ponerFicha(ficha);
         }
         
         
