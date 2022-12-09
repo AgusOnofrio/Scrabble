@@ -1,5 +1,7 @@
 package Modelo;
+import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
@@ -11,12 +13,13 @@ import Modelo.Interfaces.IPalabra;
 import Modelo.Interfaces.IPartida;
 import Modelo.Interfaces.Ijugador;
 import Modelo.Interfaces.Itablero;
+import Serializacion.Serializador;
 import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 import ar.edu.unlu.rmimvc.observer.IObservadorRemoto;
 import ar.edu.unlu.rmimvc.observer.ObservableRemoto;
 
 
-public class Partida extends ObservableRemoto implements IPartida{
+public class Partida extends ObservableRemoto implements IPartida,Serializable{
     private ArrayList<IObservadorRemoto> observadoresRemotos= new ArrayList<IObservadorRemoto>();
     private ArrayList<Ijugador> jugadores;
     private Itablero tablero;
@@ -227,6 +230,10 @@ public class Partida extends ObservableRemoto implements IPartida{
 
     }
 
+    public void guardarPartida(){
+        Serializador serializador = new Serializador("partida.dat");
+        serializador.writeOneObject(this);
+    }
 
     private void finalizarPartida() {
 
@@ -350,6 +357,13 @@ public class Partida extends ObservableRemoto implements IPartida{
         this.notificarObservadores(Eventos.QUITO_FICHA_CASILLERO);
        
         
+    }
+
+    @Override
+    public void borrarPartida() {
+        File archivo = new File("partida.dat");
+        archivo.delete();
+
     }
 
 

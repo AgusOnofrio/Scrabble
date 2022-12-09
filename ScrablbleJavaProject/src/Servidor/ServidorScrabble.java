@@ -1,5 +1,6 @@
 package Servidor;
 import java.io.IOException;
+import java.io.ObjectStreamClass;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
@@ -7,13 +8,14 @@ import javax.swing.JOptionPane;
 
 import Modelo.Partida;
 import Modelo.Interfaces.IPartida;
+import Serializacion.Serializador;
 import ar.edu.unlu.rmimvc.RMIMVCException;
 import ar.edu.unlu.rmimvc.Util;
 import ar.edu.unlu.rmimvc.servidor.Servidor;
 
 public class ServidorScrabble {
     // public static void main(String[] args) {
-		public ServidorScrabble(){
+		public ServidorScrabble(Object partidaRecuperada){
 		ArrayList<String> ips = Util.getIpDisponibles();
 		String ip = (String) JOptionPane.showInputDialog(
 				null, 
@@ -32,7 +34,13 @@ public class ServidorScrabble {
 				8888
 		);
 		try {
-            IPartida modelo = new Partida();
+			
+			IPartida modelo;
+			if(partidaRecuperada!=null){
+				modelo= (IPartida)partidaRecuperada;
+			}else{
+				modelo = new Partida();
+			}
             Servidor servidor = new Servidor(ip, Integer.parseInt(port));
 			servidor.iniciar(modelo);
 		} catch (RemoteException e) {

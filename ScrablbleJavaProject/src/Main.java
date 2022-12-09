@@ -17,6 +17,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import Cliente.ClienteScrabble;
+import Modelo.Interfaces.IPartida;
+import Modelo.Interfaces.Ijugador;
+import Serializacion.Serializador;
 import Servidor.ServidorScrabble;
 
 
@@ -35,22 +38,35 @@ public class Main {
         // frame.add(picLabel);
         // frame.setVisible(true);
         
+
+        //Recupero si hay alguna partida
+        Serializador serializador = new Serializador("partida.dat");
+		Object partidaRecuperada = serializador.readFirstObject();
+
         
         //inicializo juego local
-        ServidorScrabble servidor = new ServidorScrabble();
+        ServidorScrabble servidor = new ServidorScrabble(partidaRecuperada);
 
-        Integer[] jugadoresPosibles= {2,3,4};
-        Integer jugadores = (Integer) JOptionPane.showInputDialog(
-            null, 
-            "Seleccione la cantidad de jugadores", "Jugadores", 
-            JOptionPane.QUESTION_MESSAGE, 
-            null,
-            jugadoresPosibles,
-            2
-        );
-
-        for (int i = 0; i < jugadores; i++) {
-            ClienteScrabble cliente = new ClienteScrabble();
+        if(partidaRecuperada!=null){
+            IPartida partida = (IPartida) partidaRecuperada;
+            for (Ijugador jugador : partida.getJugadores()) {
+                ClienteScrabble cliente = new ClienteScrabble(jugador);
+            }
+            System.out.println();
+        }else{
+            Integer[] jugadoresPosibles= {2,3,4};
+            Integer jugadores = (Integer) JOptionPane.showInputDialog(
+                null, 
+                "Seleccione la cantidad de jugadores", "Jugadores", 
+                JOptionPane.QUESTION_MESSAGE, 
+                null,
+                jugadoresPosibles,
+                2
+            );
+    
+            for (int i = 0; i < jugadores; i++) {
+                ClienteScrabble cliente = new ClienteScrabble(null);
+            }
         }
 
 

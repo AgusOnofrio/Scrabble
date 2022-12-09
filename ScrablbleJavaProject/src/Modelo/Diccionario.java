@@ -61,7 +61,7 @@ public class Diccionario implements Serializable {
             palabras = linea.split("\\s");
             
             //Datos del registro:
-            System.out.println(palabras[0]);
+            // System.out.println(palabras[0]);
 
             java.util.regex.Matcher mat = pat.matcher(palabras[0]);
             

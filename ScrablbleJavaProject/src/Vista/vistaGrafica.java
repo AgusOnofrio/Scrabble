@@ -13,6 +13,9 @@ import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -59,15 +62,39 @@ public class vistaGrafica implements IVista{
     public void iniciar(){
         frame = new JFrame("Titulo de la ventana");
         frame.setSize(1000,900);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.addWindowListener( new WindowAdapter(){
+            public void windowClosing(WindowEvent e){
+                int i = guardarPartida();
+                if(i==0) System.exit(0);
+            }
+        });
         panelPrincipal= (JPanel) frame.getContentPane();
         panelPrincipal.setLayout(new BorderLayout());
-    	this.agregarJugador();
+    	// this.agregarJugador();
         this.mostrarJuego();
         frame.setVisible(true);
     }
 
     
+    private int guardarPartida() {
+        
+        String [] opciones = {"Guardar partida","Salir"};
+        String opcionElegida= (String) JOptionPane.showInputDialog(
+            null, 
+            "Desea guardar antes de salir? ","Guardar partida",  
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            opciones,
+            null);
+        
+        if(opcionElegida=="Guardar partida"){
+            this.controlador.guardarPartida();
+        }else{
+            this.controlador.borrarPartida();
+        }
+        
+        return 0;
+    }
     public void agregarJugador(){
         String nombreJugador= (String) JOptionPane.showInputDialog(
             null, 
@@ -391,7 +418,7 @@ public class vistaGrafica implements IVista{
             JButton botonContinuar= new JButton("Finalizar");
             botonContinuar.addActionListener(new ActionListener(){
                 public void actionPerformed(ActionEvent ae){
-                    
+                    guardarPartida();
                     //SAlir del juego;
             }});
     

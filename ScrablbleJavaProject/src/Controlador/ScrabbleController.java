@@ -113,7 +113,7 @@ public class ScrabbleController implements  ActionListener,IControladorRemoto{
             
             this.jugador=this.modelo.agregarJugador(nombre);
 
-            this.vista.actualizarVista();
+            // this.vista.actualizarVista();
         } catch (RemoteException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -236,6 +236,28 @@ public class ScrabbleController implements  ActionListener,IControladorRemoto{
     public void sacarFichaDeCasillero(ICasillero casillero) {
         try {
             this.modelo.sacarFichaDeCasillero(casillero);
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public void guardarPartida() {
+        try {
+            this.modelo.guardarPartida();
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public void setJugador(Ijugador jugador2) {
+        this.jugador=jugador2;
+    }
+
+    public void borrarPartida() {
+        try {
+            this.modelo.borrarPartida();
         } catch (RemoteException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

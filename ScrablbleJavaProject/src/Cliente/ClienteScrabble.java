@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 import Controlador.ScrabbleController;
+import Modelo.Interfaces.Ijugador;
 import Vista.IVista;
 import Vista.vistaGrafica;
 import ar.edu.unlu.rmimvc.RMIMVCException;
@@ -14,7 +15,7 @@ import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
 
 public class ClienteScrabble {
     // public static void main(String[] args) {
-		public ClienteScrabble(){
+		public ClienteScrabble(Object jugador){
 		ArrayList<String> ips = Util.getIpDisponibles();
 		String ip = (String) JOptionPane.showInputDialog(
 				null, 
@@ -55,15 +56,19 @@ public class ClienteScrabble {
 		try {
 			
 			c.iniciar((IControladorRemoto) controlador);
-		// 	String nombreJugador= (String) JOptionPane.showInputDialog(
-		// 		null, 
-		// 		"Ingrese su nombre", "Nombre del jugador", 
-		// 		JOptionPane.QUESTION_MESSAGE,
-		// 		null,
-		// 		null,
-		// 		null
-		// );
-		// controlador.agregarJugador(nombreJugador);
+			if(jugador!=null){
+				controlador.setJugador((Ijugador)jugador);
+			}else{
+					String nombreJugador= (String) JOptionPane.showInputDialog(
+						null, 
+						"Ingrese su nombre", "Nombre del jugador", 
+						JOptionPane.QUESTION_MESSAGE,
+						null,
+						null,
+						null
+				);
+				controlador.agregarJugador(nombreJugador);
+			}
 		vista.iniciar();
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block

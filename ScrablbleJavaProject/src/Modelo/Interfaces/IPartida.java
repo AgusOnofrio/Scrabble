@@ -45,6 +45,10 @@ public interface IPartida extends IObservableRemoto{
 
     void sacarFichaDeCasillero(ICasillero casillero) throws RemoteException;
 
+	void guardarPartida() throws RemoteException;
+
+    void borrarPartida() throws RemoteException;
+
     
 
   
