@@ -1,9 +1,14 @@
 package Modelo;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import Controlador.Eventos;
 import Modelo.Interfaces.IBolsaFichas;
@@ -52,7 +57,7 @@ public class Partida extends ObservableRemoto implements IPartida,Serializable{
         Ijugador jugador=null;
 
         if(valido){
-            jugador = new Jugador(nombre, bolsaConLetras); // TODO ¿Hace falta la bolas de fichas?¿No se podria manejar todo desde las variables del controlador?
+            jugador = new Jugador(nombre); // TODO ¿Hace falta la bolas de fichas?¿No se podria manejar todo desde las variables del controlador?
             jugadores.add(jugador);
         }
         
@@ -138,28 +143,33 @@ public class Partida extends ObservableRemoto implements IPartida,Serializable{
 
     @Override
 	public int calcularPuntajeTurno() throws IOException, RemoteException{ //TODO controlador
-        this.palabrasFormadasEnElTurno = new ArrayList<IPalabra>();  
+        ArrayList<IPalabra> palabrasTurno = new ArrayList<IPalabra>(); 
+        this.palabrasFormadasEnElTurno =  new ArrayList<IPalabra>(); 
         ArrayList<ICasillero> casillerosConFichaQueNoFormanNada= new ArrayList<ICasillero>();
         int puntaje=0;
+        boolean formaAlgo;
         for (ICasillero casillero : casillerosJugadosEnElTurno) {
+            formaAlgo=false;
             for (IPalabra palabra : chequearSiLaFichaFormaPalabra(casillero)) {
                 System.out.println("Validando si ya se encontro palabra: "+palabra.convertirString());
                 
-                if(!estaEnArrayPalabra(palabrasFormadasEnElTurno, palabra) && !(Diccionario.estaEnAbecedario(palabra.convertirString()))){
-                        palabrasFormadasEnElTurno.add(palabra);
-                        
+                if(!(Diccionario.estaEnAbecedario(palabra.convertirString())) && palabra.esValida()){
+                    if(!estaEnArrayPalabra(palabrasTurno, palabra))  palabrasTurno.add(palabra);
+                    formaAlgo=true;
                 }
                 
-                if(!palabra.esValida() && !(Diccionario.estaEnAbecedario(palabra.convertirString())) ){
-                    //DevolverFichas
-                    casillerosConFichaQueNoFormanNada.add(casillero);
-                }
+                // if(!palabra.esValida() && !(Diccionario.estaEnAbecedario(palabra.convertirString())) ){
+                //     //DevolverFichas
+                //     casillerosConFichaQueNoFormanNada.add(casillero);
+                // }
             } 
+
+            if(!formaAlgo) casillerosConFichaQueNoFormanNada.add(casillero);
         }
 
         boolean todosSusCasillerosSonValidos;
 
-        for (IPalabra palabra : palabrasFormadasEnElTurno) {
+        for (IPalabra palabra : palabrasTurno) {
             todosSusCasillerosSonValidos= true;
             System.out.printf("Validando %s ...\n",palabra.convertirString());
             for (ICasillero c : casillerosConFichaQueNoFormanNada) {
@@ -174,6 +184,7 @@ public class Partida extends ObservableRemoto implements IPartida,Serializable{
                 System.out.printf("La palabra %s es valida: %d\n",palabra.convertirString(),palabra.obtenerPuntaje());
                 puntaje+=palabra.obtenerPuntaje();
                 this.getJugador().agregarPalabraCreadaPorJugador(palabra);
+                this.palabrasFormadasEnElTurno.add(palabra);
             }else{
                 System.out.printf("La palabra %s no es valida\n",palabra.convertirString());
 
@@ -216,7 +227,7 @@ public class Partida extends ObservableRemoto implements IPartida,Serializable{
         
         if(paso>(this.jugadores.size()*2-1) || bolsaConLetras.esVacia()){
             System.out.println("Paso 6");
-            this.finalizarPartida();
+            //finalizar partida???
             this.notificarObservadores(Eventos.FINALIZAR_PARTIDA);
          }
         else{
@@ -364,6 +375,12 @@ public class Partida extends ObservableRemoto implements IPartida,Serializable{
         File archivo = new File("partida.dat");
         archivo.delete();
 
+    }
+
+    @Override
+    public void guardarPuntajes() throws RemoteException {
+        // TODO Auto-generated method stub
+        
     }
 
 

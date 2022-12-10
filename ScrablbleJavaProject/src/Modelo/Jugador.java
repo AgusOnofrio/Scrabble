@@ -17,11 +17,11 @@ public class Jugador implements Ijugador,Serializable{
     private static Integer numeroDeJugador=0;
     private BolsaFichas bolsa;
     
-    public Jugador(String nombre,IBolsaFichas bolsaConLetras){
+    public Jugador(String nombre){
         numeroDeJugador=numeroDeJugador+1;
         if(nombre.trim()=="")nombre="Jugador "+numeroDeJugador.toString();
         this.nombre=nombre;
-        this.atril= new Atril(bolsaConLetras);
+        this.atril= new Atril();
         this.palabrasDePartida= new ArrayList<IPalabra>();
         puntaje=0;
     }
@@ -29,7 +29,7 @@ public class Jugador implements Ijugador,Serializable{
     public Jugador(){
         this.nombre="Jugador "+(++numeroDeJugador).toString();
         numeroDeJugador++;
-        this.atril= new Atril(bolsa);
+        this.atril= new Atril();
         this.palabrasDePartida= new ArrayList<IPalabra>();
         puntaje=0;
     }

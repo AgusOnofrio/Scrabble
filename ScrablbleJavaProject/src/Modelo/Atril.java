@@ -12,9 +12,9 @@ public class Atril implements IAtril,Serializable {
     private Integer cantidadDeFichas=7;
     private IBolsaFichas bolsa;
 
-    public Atril(IBolsaFichas bolsaConLetras){
+    public Atril(){
         this.fichas = new ArrayList<IFicha>(cantidadDeFichas);
-        this.bolsa=bolsaConLetras;
+        this.bolsa=BolsaFichas.getInstance();
         this.llenarAtril();
     }
 
