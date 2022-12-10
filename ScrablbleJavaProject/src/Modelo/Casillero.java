@@ -5,14 +5,12 @@ import java.io.Serializable;
 import Modelo.Interfaces.ICasillero;
 import Modelo.Interfaces.IFicha;
 
-public class // A class that represents a square in a board game.
-Casillero implements ICasillero,Serializable{
+public class Casillero implements ICasillero,Serializable{
     private final TipoEspecial tipo;
     private IFicha ficha=null;
     private boolean disponible;
     private final int fila;
     private final int columna;
-//TODO ver si necesito guardar la fila y la columna
   
 
 

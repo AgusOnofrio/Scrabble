@@ -49,6 +49,8 @@ public interface IPartida extends IObservableRemoto{
 
     void borrarPartida() throws RemoteException;
 
+	void guardarPuntajes() throws RemoteException;;
+
     
 
   

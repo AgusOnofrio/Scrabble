@@ -7,7 +7,6 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import Modelo.Jugador;
-import Modelo.Partida;
 import Modelo.Interfaces.ICasillero;
 import Modelo.Interfaces.IFicha;
 import Modelo.Interfaces.IPalabra;
@@ -258,6 +257,15 @@ public class ScrabbleController implements  ActionListener,IControladorRemoto{
     public void borrarPartida() {
         try {
             this.modelo.borrarPartida();
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public void guardarPuntajes() {
+        try {
+            this.modelo.guardarPuntajes();
         } catch (RemoteException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

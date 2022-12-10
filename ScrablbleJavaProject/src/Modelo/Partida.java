@@ -18,6 +18,7 @@ import Modelo.Interfaces.IPalabra;
 import Modelo.Interfaces.IPartida;
 import Modelo.Interfaces.Ijugador;
 import Modelo.Interfaces.Itablero;
+import Serializacion.Ranking;
 import Serializacion.Serializador;
 import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 import ar.edu.unlu.rmimvc.observer.IObservadorRemoto;
@@ -187,6 +188,7 @@ public class Partida extends ObservableRemoto implements IPartida,Serializable{
                 this.palabrasFormadasEnElTurno.add(palabra);
             }else{
                 System.out.printf("La palabra %s no es valida\n",palabra.convertirString());
+                
 
             }
         }
@@ -246,9 +248,7 @@ public class Partida extends ObservableRemoto implements IPartida,Serializable{
         serializador.writeOneObject(this);
     }
 
-    private void finalizarPartida() {
 
-    }
 
     @Override
 	public void cambiarFichas(ArrayList<IFicha> fichasACambiar)throws RemoteException{
@@ -379,8 +379,46 @@ public class Partida extends ObservableRemoto implements IPartida,Serializable{
 
     @Override
     public void guardarPuntajes() throws RemoteException {
-        // TODO Auto-generated method stub
-        
+
+        // try {
+        //     ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("historial.dat"));
+        //     SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
+        //     for (Ijugador j : this.jugadores) {
+        //         Date fecha = new Date(System.currentTimeMillis());
+        //         oos.writeChars(j.getNombre()+" - "+j.getPuntaje()+" "+formatter.format(fecha));
+        //     }
+        //     oos.close();
+        // } catch (IOException e) {
+        //     // TODO Auto-generated catch block
+        //     e.printStackTrace();
+        // }
+        Serializador serializador = new Serializador("historial.dat");
+        Object r = serializador.readFirstObject();
+        if(r==null) r=Ranking.getInstance();
+        Ranking ranking = (Ranking) r;
+        for (Ijugador j : this.jugadores) { 
+            ranking.agregarJugador(j);
+        }
+        serializador.writeOneObject(ranking);
+
+
+         
+        // SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
+        // Date date = new Date(System.currentTimeMillis());
+        // System.out.println(formatter.format(date));
+        //     for (Ijugador j : this.jugadores) { 
+        //         if(!tieneCabecera){
+        //             JugadorHistorial jugadorHistorial = new JugadorHistorial(j.getNombre(), j.getPuntaje(),date );
+        //             serializador.writeOneObject(jugadorHistorial);
+        //             tieneCabecera=true;
+        //         }else{
+        //             JugadorHistorial jugadorHistorial = new JugadorHistorial(j.getNombre(), j.getPuntaje(),date );
+        //             serializador.addOneObject(jugadorHistorial);
+        //         }
+		// 	}
+		
+
+
     }
 
 

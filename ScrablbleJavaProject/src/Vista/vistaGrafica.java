@@ -415,10 +415,12 @@ public class vistaGrafica implements IVista{
             }
 
             
-            JButton botonContinuar= new JButton("Finalizar");
-            botonContinuar.addActionListener(new ActionListener(){
+            JButton botonFinalizarPartida= new JButton("Finalizar");
+            botonFinalizarPartida.addActionListener(new ActionListener(){
                 public void actionPerformed(ActionEvent ae){
-                    guardarPartida();
+                    // guardarPartida();
+                    guardarPuntajes();
+                    System.exit(0);
                     //SAlir del juego;
             }});
     
@@ -428,7 +430,7 @@ public class vistaGrafica implements IVista{
             
             
             
-            panelResultado.add(botonContinuar);
+            panelResultado.add(botonFinalizarPartida);
             panelResultado.setVisible(true);
   
             for (Component c : panelPrincipal.getComponents()) {
@@ -453,6 +455,10 @@ public class vistaGrafica implements IVista{
         
     }
 
+
+    public void guardarPuntajes(){
+        this.controlador.guardarPuntajes();
+    }
 
 
 
