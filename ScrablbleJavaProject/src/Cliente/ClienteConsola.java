@@ -14,7 +14,6 @@ import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
 
 public class ClienteConsola {
     public static void main(String[] args) {
-		// public ClienteConsola(){
 		ArrayList<String> ips = Util.getIpDisponibles();
 		String ip = (String) JOptionPane.showInputDialog(
 				null, 
