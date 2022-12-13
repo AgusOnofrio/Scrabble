@@ -20,7 +20,7 @@ import Servidor.ServidorScrabble;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-
+        //CAMBIO DE BRANCH
         // JFrame frame = new JFrame(); //JFrame Creation       
         // frame.setTitle("Scrabble"); //Add the title to frame
         // frame.setLayout(null); //Terminates default flow layout
