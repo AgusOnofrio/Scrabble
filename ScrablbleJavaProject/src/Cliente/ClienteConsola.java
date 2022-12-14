@@ -6,6 +6,7 @@ import javax.swing.JOptionPane;
 
 import Controlador.ScrabbleController;
 import Vista.IVista;
+import Vista.PseudoConsola;
 import Vista.VistaConsola;
 import ar.edu.unlu.rmimvc.RMIMVCException;
 import ar.edu.unlu.rmimvc.Util;
@@ -47,7 +48,8 @@ public class ClienteConsola {
 				null,
 				8888
 		);
-		IVista vista = new VistaConsola();
+		
+		IVista vista = new PseudoConsola();
 		ScrabbleController controlador = new ScrabbleController(vista);
 		vista.setControlador(controlador);
 		Cliente c = new Cliente(ip, Integer.parseInt(port), ipServidor, Integer.parseInt(portServidor));

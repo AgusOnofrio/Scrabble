@@ -14,6 +14,10 @@ public class Tablero implements Itablero,Serializable{
 
     private ArrayList<ICasillero> ultimosCasilleroJugados=new ArrayList<ICasillero>();
 
+    public ArrayList<ICasillero> getUltimosCasilleroJugados() {
+        return ultimosCasilleroJugados;
+    }
+
     private static final String[] diseñoTablero = {
         "TRIPLE_PALABRA,SIMPLE,SIMPLE,DOBLE_LETRA,SIMPLE,SIMPLE,SIMPLE,TRIPLE_PALABRA,SIMPLE,SIMPLE,SIMPLE,DOBLE_LETRA,SIMPLE,SIMPLE,TRIPLE_PALABRA",
         "SIMPLE,DOBLE_PALABRA,SIMPLE,SIMPLE,SIMPLE,TRIPLE_LETRA,SIMPLE,SIMPLE,SIMPLE,TRIPLE_LETRA,SIMPLE,SIMPLE,SIMPLE,DOBLE_PALABRA,SIMPLE",
@@ -101,13 +105,7 @@ public class Tablero implements Itablero,Serializable{
         //Si tiene algun casillero al costado que este ocupado o es el del medio
         if(!existeFichaAdyacente(fila,columna)) esValida=false;
 
-        //Si es el ultimo casillero jugado es valido de todas maneras para que se pueda sacar la ficha
-        if( this.ultimosCasilleroJugados.size()>0 &&
-            fila==this.ultimosCasilleroJugados.get(this.ultimosCasilleroJugados.size()-1).getFila() && 
-            columna==this.ultimosCasilleroJugados.get(this.ultimosCasilleroJugados.size()-1).getColumna()) 
-        esValida=true;
-        
-        if(esValida) this.casilleros[fila][columna].setDisponible(true);
+       
 
 
         return esValida;

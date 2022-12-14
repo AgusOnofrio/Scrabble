@@ -1,5 +1,6 @@
 package Modelo.Interfaces;
 
+import java.awt.Component;
 import java.util.ArrayList;
 
 
@@ -14,6 +15,7 @@ public interface Itablero{
     public void ponerFicha(int fila, int columna, IFicha fichaElegida);
     public IFicha quitarFicha(int fila,int columna);
     public void reiniciarCasillerosJugados();
+    public ArrayList<ICasillero> getUltimosCasilleroJugados();
     
     
     //devolder todas las posiciones validas

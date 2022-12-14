@@ -253,6 +253,13 @@ public class vistaGrafica implements IVista{
         ArrayList<ICasillero> casillerosDisponibles =tablero.casillerosDisponibles();
         int numeroFila=0;
         int numeroColumna=0;
+         //Si es el ultimo casillero jugado es valido de todas maneras para que se pueda sacar la ficha
+         if(tablero.getUltimosCasilleroJugados().size()>0){
+            casillerosDisponibles.add(
+                casilleros[tablero.getUltimosCasilleroJugados().get(tablero.getUltimosCasilleroJugados().size()-1).getFila()]
+                [tablero.getUltimosCasilleroJugados().get(tablero.getUltimosCasilleroJugados().size()-1).getColumna()]
+            );
+         }
         for (ICasillero[] fila : casilleros) {
             for (ICasillero casillero : fila) {
                 casillero.setDisponible(casillerosDisponibles.contains(casillero));
