@@ -15,12 +15,9 @@ import Modelo.Interfaces.Ijugador;
 import Modelo.Interfaces.Itablero;
 import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
 public class VistaConsola implements IVista {
-    
-    private IFicha fichaElegida;
-    private ICasillero casilleroElegido;
-
     private ScrabbleController controlador;
     private String jugadorActual;
+
     public VistaConsola(){}
 
     public void setControlador(ScrabbleController controlador){
@@ -124,7 +121,7 @@ public class VistaConsola implements IVista {
         }
     }
 
-    public ICasillero elegirCasilleroDisponible(Itablero tablero){ // TODO Desacoplar vista de controlador
+    public ICasillero elegirCasilleroDisponible(Itablero tablero){ 
         Scanner sc = new Scanner(System.in);
         int opcion;
         System.out.println("Estos son los casilleros donde podes ubicar una ficha");
@@ -175,7 +172,7 @@ public class VistaConsola implements IVista {
 
 
 
-    public IFicha elegirfichaJugador(){   // TODO Desacoplar vista de controlador
+    public IFicha elegirfichaJugador(){   
         ArrayList<IFicha> fichas = this.controlador.getJugadorVista().getAtril().getFichasAtril();
         int opcion;
         do {

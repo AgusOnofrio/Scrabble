@@ -1,15 +1,9 @@
 package Modelo;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.io.Serializable;
 import java.rmi.RemoteException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-
 import Controlador.Eventos;
 import Modelo.Interfaces.IBolsaFichas;
 import Modelo.Interfaces.ICasillero;
@@ -20,7 +14,6 @@ import Modelo.Interfaces.Ijugador;
 import Modelo.Interfaces.Itablero;
 import Serializacion.Ranking;
 import Serializacion.Serializador;
-import ar.edu.unlu.rmimvc.observer.IObservableRemoto;
 import ar.edu.unlu.rmimvc.observer.IObservadorRemoto;
 import ar.edu.unlu.rmimvc.observer.ObservableRemoto;
 
@@ -58,7 +51,7 @@ public class Partida extends ObservableRemoto implements IPartida,Serializable{
         Ijugador jugador=null;
 
         if(valido){
-            jugador = new Jugador(nombre); // TODO ¿Hace falta la bolas de fichas?¿No se podria manejar todo desde las variables del controlador?
+            jugador = new Jugador(nombre); 
             jugadores.add(jugador);
         }
         
@@ -77,7 +70,7 @@ public class Partida extends ObservableRemoto implements IPartida,Serializable{
 
 
     
-	public ArrayList<ICasillero> palabraHorizontal(ICasillero casillero){ //TODO ¿Son necesario los parametros?¿Se podria hacer con this?
+	public ArrayList<ICasillero> palabraHorizontal(ICasillero casillero){ 
         //miro hacia la izquierda
         ICasillero casilleroActual= casillero;
         boolean casilleroValido=true;
@@ -102,7 +95,7 @@ public class Partida extends ObservableRemoto implements IPartida,Serializable{
 
 
     
-	public ArrayList<ICasillero> palabraVertical(ICasillero casillero){ //TODO ¿Son necesario los parametros?¿Se podria hacer con this?
+	public ArrayList<ICasillero> palabraVertical(ICasillero casillero){ 
         //miro hacia la izquierda
         ICasillero casilleroActual= casillero;
         boolean casilleroValido=true;
@@ -330,7 +323,7 @@ public class Partida extends ObservableRemoto implements IPartida,Serializable{
         this.fichaElegida=ficha;
         if(this.casilleroElegido !=null && this.fichaElegida!=null)
         {
-            if(fichaElegida instanceof FichaEspecial) this.notificarObservadores(Eventos.ELEGIR_LETRA);
+            
             this.casilleroElegido.ponerFicha(fichaElegida);
             this.tablero.ponerFicha(casilleroElegido.getFila(),casilleroElegido.getColumna(),fichaElegida);
 
@@ -381,19 +374,6 @@ public class Partida extends ObservableRemoto implements IPartida,Serializable{
 
     @Override
     public void guardarPuntajes() throws RemoteException {
-
-        // try {
-        //     ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("historial.dat"));
-        //     SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
-        //     for (Ijugador j : this.jugadores) {
-        //         Date fecha = new Date(System.currentTimeMillis());
-        //         oos.writeChars(j.getNombre()+" - "+j.getPuntaje()+" "+formatter.format(fecha));
-        //     }
-        //     oos.close();
-        // } catch (IOException e) {
-        //     // TODO Auto-generated catch block
-        //     e.printStackTrace();
-        // }
         Serializador serializador = new Serializador("historial.dat");
         Object r = serializador.readFirstObject();
         if(r==null) r=Ranking.getInstance();
@@ -403,46 +383,11 @@ public class Partida extends ObservableRemoto implements IPartida,Serializable{
         }
         serializador.writeOneObject(ranking);
 
-
-         
-        // SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
-        // Date date = new Date(System.currentTimeMillis());
-        // System.out.println(formatter.format(date));
-        //     for (Ijugador j : this.jugadores) { 
-        //         if(!tieneCabecera){
-        //             JugadorHistorial jugadorHistorial = new JugadorHistorial(j.getNombre(), j.getPuntaje(),date );
-        //             serializador.writeOneObject(jugadorHistorial);
-        //             tieneCabecera=true;
-        //         }else{
-        //             JugadorHistorial jugadorHistorial = new JugadorHistorial(j.getNombre(), j.getPuntaje(),date );
-        //             serializador.addOneObject(jugadorHistorial);
-        //         }
-		// 	}
-		
-
-
     }
 
 
 
-// // // Observable Remoto
-//     @Override
-//     public void notificarObservadores(Object obj ) throws RemoteException {
-//         for (IObservadorRemoto o: this.observadoresRemotos) {
-//             o.actualizar((IObservableRemoto) this, obj);
-//             // new Thread(new Runnable() {
-//             //     @Override
-//             //     public void run() {
-//             //         try {
-//             //             o.actualizar((IObservableRemoto) this, obj);
-//             //         } catch (RemoteException e) {
-//             //             System.out.println("ERROR: notificando al observador.");
-//             //             e.printStackTrace();
-//             //         }
-//             //     }
-//             // }).start();
-//         }
-//     }
+
 
 
 

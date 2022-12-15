@@ -5,10 +5,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
+
 import java.util.regex.Pattern;
 
-import org.hamcrest.Matcher;
+
 
 public class Diccionario implements Serializable {
 

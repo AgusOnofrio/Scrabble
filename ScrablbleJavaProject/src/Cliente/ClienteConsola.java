@@ -6,7 +6,6 @@ import javax.swing.JOptionPane;
 
 import Controlador.ScrabbleController;
 import Vista.IVista;
-import Vista.PseudoConsola;
 import Vista.VistaConsola;
 import ar.edu.unlu.rmimvc.RMIMVCException;
 import ar.edu.unlu.rmimvc.Util;
