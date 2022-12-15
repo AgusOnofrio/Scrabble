@@ -19,10 +19,14 @@ import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
 
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.awt.event.ActionEvent;
 import java.awt.GridLayout;
 import javax.swing.JSlider;
@@ -46,13 +50,11 @@ public class PseudoConsola extends JFrame implements IVista{
 	private JButton botonFinalizar;
 	private JButton CambiarFichas;
 
-	private String stringTablero="";
-	private String stringResultado="";
+	
 	private String stringAtril="";
 	private String stringCasillerosDisponibles="";
 	private String fichaSeleccionada;
-	private String filaSeleccionada;
-	private String columnaSeleccionada;
+	private String jugadorActual;
 
 	/**
 	 * Create the frame.
@@ -124,7 +126,11 @@ public class PseudoConsola extends JFrame implements IVista{
 		botonFinalizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-                    controlador.finalizarTurno();
+					if(esTuTurno()){
+						controlador.finalizarTurno();
+					}else{
+						actualizarVista();
+					}
                 } catch (IOException error) {
                     error.printStackTrace();
                 }
@@ -135,10 +141,17 @@ public class PseudoConsola extends JFrame implements IVista{
 		
 		this.CambiarFichas = new JButton("Cambiar fichas");
 		CambiarFichas.setBounds(630, 445, 112, 23);
+		CambiarFichas.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//cambio todas las fichas
+				controlador.cambiarFichas(controlador.getJugadorVista().getAtril().getFichasAtril());
+			}
+		});
 		contentPane.add(CambiarFichas);
 		this.setVisible(true);
 		
 	}
+	
 	
 	
 	
@@ -149,8 +162,8 @@ public class PseudoConsola extends JFrame implements IVista{
 	public void mostrarCasillero(ICasillero casillero) {
 		IFicha ficha = casillero.getFicha();
         if(ficha!=null){
-			if(ficha.getLabel()=="."){
-				this.panelTablero.add(new JLabel("*"));
+			if(ficha.getLabel().equals(".")){
+				this.panelTablero.add(new JLabel("#"));
 			}else{
 				this.panelTablero.add(new JLabel(ficha.getLabel()));
 			}
@@ -178,7 +191,7 @@ public class PseudoConsola extends JFrame implements IVista{
 				
                 break;
                 default:
-                this.stringTablero+=(" . ");
+                
 				
                     break;
             }
@@ -206,7 +219,7 @@ public class PseudoConsola extends JFrame implements IVista{
                 this.mostrarCasillero(casilleros[i][j]);
                 
             }
-            this.stringTablero+="\n";
+            
         }
 		// this.tableroArea.setText(stringTablero);
 		this.panelTablero.updateUI();
@@ -252,6 +265,7 @@ public class PseudoConsola extends JFrame implements IVista{
 		botonFicha.setEnabled(this.esTuTurno());
 		botonFinalizar.setEnabled(this.esTuTurno());
 		CambiarFichas.setEnabled(this.esTuTurno());
+		contentPane.updateUI();
 	}
 
 
@@ -279,6 +293,7 @@ public class PseudoConsola extends JFrame implements IVista{
 		}else{
 			resultadosArea.setText("Casillero Invalido");
 		}
+		
 	}
 
 	@Override
@@ -290,6 +305,7 @@ public class PseudoConsola extends JFrame implements IVista{
 		botonFicha.setEnabled(this.esTuTurno());
 		botonFinalizar.setEnabled(this.esTuTurno());
 		CambiarFichas.setEnabled(this.esTuTurno());
+		jugadorActual= this.controlador.getJugadorActual().getNombre();
 	}
 
 	private boolean esTuTurno() {
@@ -308,16 +324,24 @@ public class PseudoConsola extends JFrame implements IVista{
 	public void mostrarFinDeturno() {
         Integer puntajeTurno=0;
 		String textoResultado="";
-        String jugador= this.controlador.getJugadorActual().getNombre();
-        textoResultado+="Jugador: "+jugador+"\n" ;
+        String jugador= jugadorActual;
+		this.panelTablero.removeAll();
+        this.panelTablero.add(new JLabel("Jugador: "+jugador)) ;
         for (IPalabra palabra : this.controlador.getPalabrasValidasDelTurno()) {
-            textoResultado+=palabra.convertirString()+" - "+palabra.obtenerPuntaje()+"\n";
+			this.panelTablero.add(new JLabel(palabra.convertirString()+" - "+palabra.obtenerPuntaje()));
             puntajeTurno+=palabra.obtenerPuntaje();
         }
-        textoResultado+="Puntaje turno: "+puntajeTurno;
+		this.panelTablero.add(new JLabel("Puntaje turno: "+puntajeTurno));
 		resultadosArea.setText(textoResultado);
-		this.actualizarVista();
 		
+		
+		JButton botonOk= new JButton("ok");
+		botonOk.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ae){
+				actualizarVista();;
+		}});
+		this.panelTablero.add(botonOk);
+		contentPane.updateUI();
 	}
 
 	@Override
@@ -328,7 +352,53 @@ public class PseudoConsola extends JFrame implements IVista{
 
 	@Override
 	public void mostrarResultadoFinal() {
-		// TODO Auto-generated method stub
+		this.mostrarFinDeturno();
+		String resultados="";
+        Integer ganador=0;
+        ArrayList<Ijugador> jugadores;
+        try {
+            jugadores = this.controlador.getJugadores();
+
+            Collections.sort(jugadores, (Comparator.<Ijugador>
+                        comparingInt(jugador1 -> -jugador1.getPuntaje())
+            .thenComparingInt(jugador2 -> jugador2.getPuntaje())));
+
+			this.panelTablero.removeAll();
+            
+
+
+            for (Ijugador j :  jugadores ) {
+                this.panelTablero.add( new JLabel(j.getNombre()+"      "+"Puntaje:"+j.getPuntaje().toString()));
+                for (IPalabra palabra : j.obtenerPalabrasDePartida()) {
+                    this.panelTablero.add(new JLabel(palabra.convertirString()+" - "+palabra.obtenerPuntaje()));
+                }
+                this.panelTablero.add(new JLabel());
+
+            }
+
+            
+            JButton botonFinalizarPartida= new JButton("Finalizar");
+            botonFinalizarPartida.addActionListener(new ActionListener(){
+                public void actionPerformed(ActionEvent ae){
+                    // guardarPartida();
+                    controlador.guardarPuntajes();
+                    System.exit(0);
+                    //SAlir del juego;
+            }});        
+            
+            this.panelTablero.add(botonFinalizarPartida);
+            this.panelTablero.setVisible(true);
+			this.panelTablero.updateUI();
+
+            
+            contentPane.updateUI();
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+       
+
+        
 		
 	}
 

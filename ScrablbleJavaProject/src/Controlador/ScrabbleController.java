@@ -219,7 +219,7 @@ public class ScrabbleController implements  ActionListener,IControladorRemoto{
                 this.vista.setCambiarFichas(true);
                 break;
             case FINALIZAR_PARTIDA:
-                this.vista.mostrarFinDeturno();
+                // this.vista.mostrarFinDeturno();
                 this.vista.mostrarResultadoFinal();
                 break;
             default:

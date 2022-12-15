@@ -13,7 +13,7 @@ import ar.edu.unlu.rmimvc.Util;
 import ar.edu.unlu.rmimvc.cliente.Cliente;
 import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
 
-public class ClienteConsola {
+public class ClientePseudoConsola {
     public static void main(String[] args) {
 		ArrayList<String> ips = Util.getIpDisponibles();
 		String ip = (String) JOptionPane.showInputDialog(
@@ -49,7 +49,7 @@ public class ClienteConsola {
 				8888
 		);
 		
-		IVista vista = new VistaConsola();
+		IVista vista = new PseudoConsola();
 		ScrabbleController controlador = new ScrabbleController(vista);
 		vista.setControlador(controlador);
 		Cliente c = new Cliente(ip, Integer.parseInt(port), ipServidor, Integer.parseInt(portServidor));

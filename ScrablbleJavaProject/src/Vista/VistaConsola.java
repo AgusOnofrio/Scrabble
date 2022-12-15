@@ -1,7 +1,10 @@
 package Vista;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Scanner;
 import Controlador.ScrabbleController;
 import Modelo.Tablero;
@@ -17,7 +20,7 @@ public class VistaConsola implements IVista {
     private ICasillero casilleroElegido;
 
     private ScrabbleController controlador;
-
+    private String jugadorActual;
     public VistaConsola(){}
 
     public void setControlador(ScrabbleController controlador){
@@ -37,7 +40,7 @@ public class VistaConsola implements IVista {
         this.mostrarAtrilJugador();
 
         
-
+        this.jugadorActual=this.controlador.getJugadorActual().getNombre();
 
         if(this.controlador.getJugadorActual().getNombre().equals(this.controlador.getJugadorVista().getNombre())){
             System.out.println("1-Posicionar ficha");
@@ -53,7 +56,7 @@ public class VistaConsola implements IVista {
                     this.controlador.elegirCasillero(this.elegirCasilleroDisponible(this.controlador.getTablero())); 
                     break;
                 case 2:
-                    //CAMBIAR fichas
+                    this.controlador.cambiarFichas(this.controlador.getJugadorVista().getAtril().getFichasAtril());
                 break;
                 case 0:
                     try {
@@ -74,7 +77,12 @@ public class VistaConsola implements IVista {
     public void mostrarCasillero(ICasillero casillero){
         IFicha ficha = casillero.getFicha();
         if(ficha!=null){
-            System.out.printf("%3s",ficha.getLabel());
+            if(ficha.getLabel().equals(".")){
+				System.out.printf("%3s","#");
+			}else{
+				System.out.printf("%3s",ficha.getLabel());
+			}
+            
         }else{
             switch (casillero.getTipoEspecial()) {
                 case SIMPLE:
@@ -233,9 +241,9 @@ public class VistaConsola implements IVista {
 
     @Override
     public void mostrarFinDeturno() {
- 
-        String jugador= this.controlador.getJugadorActual().getNombre();
-        System.out.println("Jugador: "+jugador);
+        
+        System.out.println();
+        System.out.println("Jugador: "+this.jugadorActual);
         Integer puntajeTurno=0;
         for (IPalabra palabra : this.controlador.getPalabrasValidasDelTurno()) {
             System.out.println(palabra.convertirString()+" - "+palabra.obtenerPuntaje());
@@ -246,7 +254,8 @@ public class VistaConsola implements IVista {
         Scanner sc= new Scanner(System.in);
         sc.nextLine();
         // sc.close();
-        this.controlador.siguienteTurno();
+        
+        this.mostrarTurno();
         
     }
 
@@ -258,7 +267,38 @@ public class VistaConsola implements IVista {
 
     @Override
     public void mostrarResultadoFinal() {
-        // TODO Auto-generated method stub
+        System.out.println("FIN DEL JUEGO");
+        System.out.println();
+        String resultados="";
+        Integer ganador=0;
+        ArrayList<Ijugador> jugadores;
+       
+            try {
+                jugadores = this.controlador.getJugadores();
+                Collections.sort(jugadores, (Comparator.<Ijugador>
+                            comparingInt(jugador1 -> -jugador1.getPuntaje())
+                .thenComparingInt(jugador2 -> jugador2.getPuntaje())));
+    
+                
+                
+    
+    
+                for (Ijugador j :  jugadores ) {
+                    System.out.println(j.getNombre()+"      "+"Puntaje:"+j.getPuntaje().toString());
+                    for (IPalabra palabra : j.obtenerPalabrasDePartida()) {
+                        System.out.println(palabra.convertirString()+" - "+palabra.obtenerPuntaje());
+                    }
+                    System.out.println();
+    
+                }
+
+                controlador.guardarPuntajes();
+                System.exit(0);
+            } catch (RemoteException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
         
     }
 

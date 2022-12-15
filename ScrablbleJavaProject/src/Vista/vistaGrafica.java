@@ -51,6 +51,7 @@ public class vistaGrafica implements IVista{
     private final Color NARANJA = new Color(244,184,74,200);
     private final Color ROJO = new Color(233,33,23);
     
+    private String jugadorActual;
     private ScrabbleController controlador;
 
     public vistaGrafica(){}
@@ -95,6 +96,7 @@ public class vistaGrafica implements IVista{
         
         return 0;
     }
+    
     public void agregarJugador(){
         String nombreJugador= (String) JOptionPane.showInputDialog(
             null, 
@@ -180,6 +182,7 @@ public class vistaGrafica implements IVista{
 
 
         //Etiqueta jugador 
+        jugadorActual=this.controlador.getJugadorActual().getNombre();
         JLabel nombreJugador= new JLabel("Turno: "+this.controlador.getJugadorActual().getNombre()+" |");
         JLabel puntaje= new JLabel("Puntaje: "+this.controlador.getJugadorActual().getPuntaje()+" puntos");
         atril.add(nombreJugador);
@@ -366,8 +369,8 @@ public class vistaGrafica implements IVista{
         panelResultado.setLayout(new BoxLayout(panelResultado,BoxLayout.Y_AXIS));
         Integer puntajeTurno=0;
 
-        String jugador= this.controlador.getJugadorActual().getNombre();
-        panelResultado.add(new JLabel("Jugador: "+jugador)) ;//+"\n"+this.controlador.getPalabrasValidasDelTurno().toString()+"\n"+"Puntaje:"+puntaje;
+        
+        panelResultado.add(new JLabel("Jugador: "+jugadorActual)) ;//+"\n"+this.controlador.getPalabrasValidasDelTurno().toString()+"\n"+"Puntaje:"+puntaje;
         for (IPalabra palabra : this.controlador.getPalabrasValidasDelTurno()) {
             panelResultado.add(new JLabel(palabra.convertirString()+" - "+palabra.obtenerPuntaje()));
             puntajeTurno+=palabra.obtenerPuntaje();
@@ -398,7 +401,7 @@ public class vistaGrafica implements IVista{
     @Override
     public void mostrarResultadoFinal() {
 
-        
+        this.mostrarFinDeturno();
         String resultados="";
         Integer ganador=0;
         ArrayList<Ijugador> jugadores;

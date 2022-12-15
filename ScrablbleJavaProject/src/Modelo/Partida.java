@@ -218,9 +218,8 @@ public class Partida extends ObservableRemoto implements IPartida,Serializable{
         
         this.getJugador().sumarPuntos(puntosTurno);
         
-        this.notificarObservadores(Eventos.FINALIZO_TURNO);
         
-
+        
         if(this.casillerosJugadosEnElTurno.size() <1){
             paso++;
         }else{
@@ -231,15 +230,17 @@ public class Partida extends ObservableRemoto implements IPartida,Serializable{
             System.out.println("Paso 6");
             //finalizar partida???
             this.notificarObservadores(Eventos.FINALIZAR_PARTIDA);
-         }
+            return;
+        }
         else{
             System.out.println("Paso 7");
             this.casillerosJugadosEnElTurno= new ArrayList<ICasillero>() ;
             this.getJugador().getAtril().llenarAtril();
             siguienteTurno();
-
+            
         }
-
+        
+        this.notificarObservadores(Eventos.FINALIZO_TURNO);
 
     }
 
@@ -280,6 +281,7 @@ public class Partida extends ObservableRemoto implements IPartida,Serializable{
 	public Ijugador getJugador()throws RemoteException {
         return this.jugadores.get(turno);
     }
+
 
     @Override
 	public IFicha elegirfichaJugador(int indice)throws RemoteException{   // TODO Desacoplar vista de controlador
