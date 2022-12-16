@@ -26,7 +26,7 @@ public class Partida extends ObservableRemoto implements IPartida,Serializable{
     // private ArrayList<ICasillero> casillerosJugadosEnElTurno=new ArrayList<ICasillero>();
     // private ArrayList<IPalabra> palabrasFormadasEnElTurno;
     
-    private static Integer turno=0;
+    private Integer turno=0;
     // private ICasillero casilleroElegido=null;
     // private IFicha fichaElegida=null;
     private Integer paso=0;
@@ -40,6 +40,7 @@ public class Partida extends ObservableRemoto implements IPartida,Serializable{
         this.jugadores= new ArrayList<Ijugador>();
         //inicializo Tablero
         this.tablero = Tablero.getInstance();
+        this.turno=0;
     }
 
     @Override
