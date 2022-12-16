@@ -5,6 +5,8 @@
 
 Juego de Scrabble implementado en Java.
 
+![A](https://user-images.githubusercontent.com/94473852/208161197-446b1c8a-d7c3-47e1-9729-652a4c10a6ca.png)
+
 
 EL juego tiene la posibilidad de jugar de 2 a 4 jugadores. 
 
