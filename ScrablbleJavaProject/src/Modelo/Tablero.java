@@ -13,6 +13,11 @@ public class Tablero implements Itablero,Serializable{
     private final ICasillero[][] casilleros;
 
     private ArrayList<ICasillero> ultimosCasilleroJugados=new ArrayList<ICasillero>();
+    private ArrayList<ICasillero> casillerosJugadosEnElTurno=new ArrayList<ICasillero>();
+    private ICasillero casilleroElegido=null;
+    public ArrayList<ICasillero> getUltimosCasilleroJugados() {
+        return ultimosCasilleroJugados;
+    }
 
     private static final String[] diseñoTablero = {
         "TRIPLE_PALABRA,SIMPLE,SIMPLE,DOBLE_LETRA,SIMPLE,SIMPLE,SIMPLE,TRIPLE_PALABRA,SIMPLE,SIMPLE,SIMPLE,DOBLE_LETRA,SIMPLE,SIMPLE,TRIPLE_PALABRA",
@@ -101,13 +106,7 @@ public class Tablero implements Itablero,Serializable{
         //Si tiene algun casillero al costado que este ocupado o es el del medio
         if(!existeFichaAdyacente(fila,columna)) esValida=false;
 
-        //Si es el ultimo casillero jugado es valido de todas maneras para que se pueda sacar la ficha
-        if( this.ultimosCasilleroJugados.size()>0 &&
-            fila==this.ultimosCasilleroJugados.get(this.ultimosCasilleroJugados.size()-1).getFila() && 
-            columna==this.ultimosCasilleroJugados.get(this.ultimosCasilleroJugados.size()-1).getColumna()) 
-        esValida=true;
-        
-        if(esValida) this.casilleros[fila][columna].setDisponible(true);
+       
 
 
         return esValida;
@@ -186,9 +185,31 @@ public class Tablero implements Itablero,Serializable{
         
     }
 
+    public void clearCasillerosJugadosEnElTurno(){
+        this.casillerosJugadosEnElTurno.clear();
+    }
     
-  
+    public void agregarCasilleroJugado(ICasillero casillero){ 
+        this.casillerosJugadosEnElTurno.add(casillero);
+    }
 
+    public ArrayList<ICasillero> getCasillerosJugadosEnElTurno(){ 
+        return this.casillerosJugadosEnElTurno;
+    }
+  
+    public ICasillero getCasilleroElegido(){
+        return this.casilleroElegido;
+    }
+
+    public void clearCasilleroElegido(){
+        this.casilleroElegido=null;
+    }
+
+    @Override
+    public void setCasilleroElegido(ICasillero casillero) {
+        this.casilleroElegido=casillero;
+        
+    }
 
 
 

@@ -14,7 +14,10 @@ import ar.edu.unlu.rmimvc.Util;
 import ar.edu.unlu.rmimvc.servidor.Servidor;
 
 public class ServidorScrabble {
-    // public static void main(String[] args) {
+		public static void main(String[] args) {
+			ServidorScrabble servi= new ServidorScrabble(null);
+			
+		}
 		public ServidorScrabble(Object partidaRecuperada){
 		ArrayList<String> ips = Util.getIpDisponibles();
 		String ip = (String) JOptionPane.showInputDialog(

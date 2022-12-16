@@ -47,6 +47,7 @@ public class ClienteConsola {
 				null,
 				8888
 		);
+		
 		IVista vista = new VistaConsola();
 		ScrabbleController controlador = new ScrabbleController(vista);
 		vista.setControlador(controlador);

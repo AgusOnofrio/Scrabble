@@ -14,4 +14,15 @@ public class utils {
         }
         return texto;
     }
+    public static boolean esNumerico(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            double d = Double.parseDouble(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
+    }
 }

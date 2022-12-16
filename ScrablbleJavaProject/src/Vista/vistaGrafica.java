@@ -5,17 +5,11 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.GridLayout;
-import java.awt.LayoutManager;
-import java.awt.Paint;
-import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -28,12 +22,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JTextArea;
-import javax.swing.JTextPane;
-
 import Controlador.ScrabbleController;
-import Modelo.Jugador;
 import Modelo.Interfaces.ICasillero;
 import Modelo.Interfaces.IFicha;
 import Modelo.Interfaces.IPalabra;
@@ -46,11 +36,13 @@ public class vistaGrafica implements IVista{
     private JPanel tablero;
     private JPanel atril;
     private JPanel panelPrincipal;
+    private JPanel panelResultado;
     private JButton botonCambiarFichas;
     private final Color VERDE = new Color(25,135, 73);
     private final Color NARANJA = new Color(244,184,74,200);
     private final Color ROJO = new Color(233,33,23);
     
+    private String jugadorActual;
     private ScrabbleController controlador;
 
     public vistaGrafica(){}
@@ -95,6 +87,7 @@ public class vistaGrafica implements IVista{
         
         return 0;
     }
+    
     public void agregarJugador(){
         String nombreJugador= (String) JOptionPane.showInputDialog(
             null, 
@@ -180,6 +173,7 @@ public class vistaGrafica implements IVista{
 
 
         //Etiqueta jugador 
+        jugadorActual=this.controlador.getJugadorActual().getNombre();
         JLabel nombreJugador= new JLabel("Turno: "+this.controlador.getJugadorActual().getNombre()+" |");
         JLabel puntaje= new JLabel("Puntaje: "+this.controlador.getJugadorActual().getPuntaje()+" puntos");
         atril.add(nombreJugador);
@@ -253,6 +247,13 @@ public class vistaGrafica implements IVista{
         ArrayList<ICasillero> casillerosDisponibles =tablero.casillerosDisponibles();
         int numeroFila=0;
         int numeroColumna=0;
+         //Si es el ultimo casillero jugado es valido de todas maneras para que se pueda sacar la ficha
+         if(tablero.getUltimosCasilleroJugados().size()>0){
+            casillerosDisponibles.add(
+                casilleros[tablero.getUltimosCasilleroJugados().get(tablero.getUltimosCasilleroJugados().size()-1).getFila()]
+                [tablero.getUltimosCasilleroJugados().get(tablero.getUltimosCasilleroJugados().size()-1).getColumna()]
+            );
+         }
         for (ICasillero[] fila : casilleros) {
             for (ICasillero casillero : fila) {
                 casillero.setDisponible(casillerosDisponibles.contains(casillero));
@@ -355,13 +356,13 @@ public class vistaGrafica implements IVista{
 
     @Override
     public void mostrarFinDeturno() {
-        JPanel panelResultado= new JPanel();
+        panelResultado= new JPanel();
         panelResultado.setLayout(new BoxLayout(panelResultado,BoxLayout.Y_AXIS));
         Integer puntajeTurno=0;
 
-        String jugador= this.controlador.getJugadorActual().getNombre();
-        panelResultado.add(new JLabel("Jugador: "+jugador)) ;//+"\n"+this.controlador.getPalabrasValidasDelTurno().toString()+"\n"+"Puntaje:"+puntaje;
-        for (IPalabra palabra : this.controlador.getPalabrasValidasDelTurno()) {
+        
+        panelResultado.add(new JLabel("Jugador: "+this.controlador.getJugadorActual().getNombre())) ;//+"\n"+this.controlador.getPalabrasValidasDelTurno().toString()+"\n"+"Puntaje:"+puntaje;
+        for (IPalabra palabra : this.controlador.getJugadorActual().getPalabrasValidasDelTurno()) {
             panelResultado.add(new JLabel(palabra.convertirString()+" - "+palabra.obtenerPuntaje()));
             puntajeTurno+=palabra.obtenerPuntaje();
         }
@@ -391,7 +392,7 @@ public class vistaGrafica implements IVista{
     @Override
     public void mostrarResultadoFinal() {
 
-        
+        this.mostrarFinDeturno();
         String resultados="";
         Integer ganador=0;
         ArrayList<Ijugador> jugadores;
@@ -458,6 +459,19 @@ public class vistaGrafica implements IVista{
 
     public void guardarPuntajes(){
         this.controlador.guardarPuntajes();
+    }
+    @Override
+    public void comenzarTurno() {
+        // JButton botonContinuar= new JButton("Continuar");
+        // botonContinuar.addActionListener(new ActionListener(){
+        //     public void actionPerformed(ActionEvent ae){
+        //         actualizarVista();
+        // }});
+        
+        // panelPrincipal.add(botonContinuar,BorderLayout.SOUTH);
+        // panelPrincipal.updateUI();
+
+        
     }
 
 
