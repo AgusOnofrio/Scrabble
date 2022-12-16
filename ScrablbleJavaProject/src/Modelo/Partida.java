@@ -23,14 +23,14 @@ public class Partida extends ObservableRemoto implements IPartida,Serializable{
     private ArrayList<Ijugador> jugadores;
     private Itablero tablero;
     private IBolsaFichas bolsaConLetras;
-    private ArrayList<ICasillero> casillerosJugadosEnElTurno=new ArrayList<ICasillero>();
-    private ArrayList<IPalabra> palabrasFormadasEnElTurno;
+    // private ArrayList<ICasillero> casillerosJugadosEnElTurno=new ArrayList<ICasillero>();
+    // private ArrayList<IPalabra> palabrasFormadasEnElTurno;
     
     private static Integer turno=0;
-    private ICasillero casilleroElegido=null;
-    private IFicha fichaElegida=null;
+    // private ICasillero casilleroElegido=null;
+    // private IFicha fichaElegida=null;
     private Integer paso=0;
-    private ICasillero ultimoCasilleroJugado=null;
+   
     private final Integer bonus=50;
 
     public Partida()  throws IOException,RemoteException{
@@ -60,12 +60,12 @@ public class Partida extends ObservableRemoto implements IPartida,Serializable{
 
     @Override
 	public void clearCasillerosJugadosEnElTurno()throws RemoteException{
-        this.casillerosJugadosEnElTurno.clear();
+        this.tablero.clearCasillerosJugadosEnElTurno();
     }
 
     @Override
 	public void agregarCasilleroJugado(ICasillero casillero)throws RemoteException{ 
-        this.casillerosJugadosEnElTurno.add(casillero);
+        this.tablero.agregarCasilleroJugado(casillero);
     }
 
 
@@ -138,11 +138,11 @@ public class Partida extends ObservableRemoto implements IPartida,Serializable{
     @Override
 	public int calcularPuntajeTurno() throws IOException, RemoteException{ //TODO controlador
         ArrayList<IPalabra> palabrasTurno = new ArrayList<IPalabra>(); 
-        this.palabrasFormadasEnElTurno =  new ArrayList<IPalabra>(); 
+        this.getJugador().clearPalabrasFormadasEnElturno();
         ArrayList<ICasillero> casillerosConFichaQueNoFormanNada= new ArrayList<ICasillero>();
         int puntaje=0;
         boolean formaAlgo;
-        for (ICasillero casillero : casillerosJugadosEnElTurno) {
+        for (ICasillero casillero : this.tablero.getCasillerosJugadosEnElTurno()) {
             formaAlgo=false;
             for (IPalabra palabra : chequearSiLaFichaFormaPalabra(casillero)) {
                 System.out.println("Validando si ya se encontro palabra: "+palabra.convertirString());
@@ -178,7 +178,7 @@ public class Partida extends ObservableRemoto implements IPartida,Serializable{
                 System.out.printf("La palabra %s es valida: %d\n",palabra.convertirString(),palabra.obtenerPuntaje());
                 puntaje+=palabra.obtenerPuntaje();
                 this.getJugador().agregarPalabraCreadaPorJugador(palabra);
-                this.palabrasFormadasEnElTurno.add(palabra);
+                this.getJugador().agregarPalabraFormadaEnElturno(palabra);
             }else{
                 System.out.printf("La palabra %s no es valida\n",palabra.convertirString());
                 
@@ -188,7 +188,7 @@ public class Partida extends ObservableRemoto implements IPartida,Serializable{
 
         for (ICasillero casillero : casillerosConFichaQueNoFormanNada) {
             IFicha ficha= this.tablero.quitarFicha(casillero.getFila(), casillero.getColumna());
-            if(ficha!=null) this.casillerosJugadosEnElTurno.remove(casillero);
+            if(ficha!=null) this.tablero.getCasillerosJugadosEnElTurno().remove(casillero);
             this.getJugador().getAtril().ponerFicha(ficha);
         }
         
@@ -213,7 +213,7 @@ public class Partida extends ObservableRemoto implements IPartida,Serializable{
         
         
         
-        if(this.casillerosJugadosEnElTurno.size() <1){
+        if(this.tablero.getCasillerosJugadosEnElTurno().size() <1){
             paso++;
         }else{
             paso=0;
@@ -222,18 +222,19 @@ public class Partida extends ObservableRemoto implements IPartida,Serializable{
         if(paso>(this.jugadores.size()*2-1) || bolsaConLetras.esVacia()){
             System.out.println("Paso 6");
             //finalizar partida???
-            this.notificarObservadores(Eventos.FINALIZAR_PARTIDA);
+            this.// Calling the method notifica() on the object obj.
+            notificarObservadores(Eventos.FINALIZAR_PARTIDA);
             return;
         }
         else{
             System.out.println("Paso 7");
-            this.casillerosJugadosEnElTurno= new ArrayList<ICasillero>() ;
+            this.tablero.clearCasillerosJugadosEnElTurno();
             this.getJugador().getAtril().llenarAtril();
+            this.notificarObservadores(Eventos.FINALIZO_TURNO);
             siguienteTurno();
-            
+            this.notificarObservadores(Eventos.COMIENZA_TURNO);
         }
         
-        this.notificarObservadores(Eventos.FINALIZO_TURNO);
 
     }
 
@@ -298,21 +299,22 @@ public class Partida extends ObservableRemoto implements IPartida,Serializable{
 
     @Override
 	public void elegirCasillero(ICasillero casillero) throws RemoteException{
-        this.casilleroElegido=casillero;
-        System.out.println("Entro a elegir casillero del modelo");
-        if(this.casilleroElegido !=null && this.fichaElegida!=null)
+        this.tablero.setCasilleroElegido(casillero);
+        ICasillero casilleroElegido= this.tablero.getCasilleroElegido();
+        IFicha fichaElegida= this.getJugador().getFichaElegida();
+        if(casilleroElegido !=null && fichaElegida!=null)
         {
-            this.casilleroElegido.ponerFicha(fichaElegida);
+            casilleroElegido.ponerFicha(fichaElegida);
             this.tablero.ponerFicha(casilleroElegido.getFila(), casilleroElegido.getColumna(), fichaElegida);
             
 
             this.agregarCasilleroJugado(casilleroElegido);
-            this.ultimoCasilleroJugado=casilleroElegido;
-            this.casilleroElegido=null;
+           
+            this.tablero.clearCasilleroElegido();
             
             IFicha fichaSacada =this.getJugador().getAtril().sacarFichaDeAtril(fichaElegida);
             System.out.println(fichaSacada.getLabel());
-            this.fichaElegida=null;
+            this.getJugador().clearFichaElegida();
             
             this.notificarObservadores(Eventos.POSICIONO_FICHA);
         }
@@ -320,20 +322,22 @@ public class Partida extends ObservableRemoto implements IPartida,Serializable{
 
     @Override
 	public void elegirFichaAtril(IFicha ficha)throws RemoteException{
-        this.fichaElegida=ficha;
-        if(this.casilleroElegido !=null && this.fichaElegida!=null)
+        this.getJugador().setFichaElegida(ficha);
+        IFicha fichaElegida= this.getJugador().getFichaElegida();
+        ICasillero casilleroElegido= this.tablero.getCasilleroElegido();
+        if(casilleroElegido !=null && fichaElegida!=null)
         {
+            casilleroElegido.ponerFicha(fichaElegida);
+            this.tablero.ponerFicha(casilleroElegido.getFila(), casilleroElegido.getColumna(), fichaElegida);
             
-            this.casilleroElegido.ponerFicha(fichaElegida);
-            this.tablero.ponerFicha(casilleroElegido.getFila(),casilleroElegido.getColumna(),fichaElegida);
 
             this.agregarCasilleroJugado(casilleroElegido);
-            this.ultimoCasilleroJugado=casilleroElegido;
-            this.casilleroElegido=null;
+            
+            this.tablero.clearCasilleroElegido();
             
             IFicha fichaSacada =this.getJugador().getAtril().sacarFichaDeAtril(fichaElegida);
             System.out.println(fichaSacada.getLabel());
-            this.fichaElegida=null;
+            this.getJugador().clearFichaElegida();
             
             this.notificarObservadores(Eventos.POSICIONO_FICHA);
         }
@@ -342,7 +346,7 @@ public class Partida extends ObservableRemoto implements IPartida,Serializable{
     @Override
 	public ArrayList<IPalabra> getPalabrasValidasDelTurno()throws RemoteException {
 
-        return this.palabrasFormadasEnElTurno;
+        return this.getJugador().getPalabrasValidasDelTurno();
     }
 
     @Override
@@ -355,7 +359,7 @@ public class Partida extends ObservableRemoto implements IPartida,Serializable{
     public void sacarFichaDeCasillero(ICasillero casillero) throws RemoteException {
         
         IFicha ficha= this.tablero.quitarFicha(casillero.getFila(), casillero.getColumna());
-        if(ficha!=null) this.casillerosJugadosEnElTurno.remove(this.casillerosJugadosEnElTurno.size()-1);
+        if(ficha!=null) this.tablero.getCasillerosJugadosEnElTurno().remove(this.tablero.getCasillerosJugadosEnElTurno().size()-1);
         
  
         this.getJugador().getAtril().ponerFicha(ficha);
@@ -384,6 +388,8 @@ public class Partida extends ObservableRemoto implements IPartida,Serializable{
         serializador.writeOneObject(ranking);
 
     }
+
+
 
 
 

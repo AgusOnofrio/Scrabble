@@ -407,4 +407,16 @@ public class PseudoConsola extends JFrame implements IVista{
 		// TODO Auto-generated method stub
 		
 	}
+
+
+
+
+
+
+
+	@Override
+	public void comenzarTurno() {
+		// TODO Auto-generated method stub
+		
+	}
 }

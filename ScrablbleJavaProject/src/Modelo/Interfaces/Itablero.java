@@ -16,6 +16,12 @@ public interface Itablero{
     public IFicha quitarFicha(int fila,int columna);
     public void reiniciarCasillerosJugados();
     public ArrayList<ICasillero> getUltimosCasilleroJugados();
+    public ArrayList<ICasillero> getCasillerosJugadosEnElTurno();
+    public void clearCasillerosJugadosEnElTurno();
+    public void agregarCasilleroJugado(ICasillero casilleroElegido);
+    public ICasillero getCasilleroElegido();
+    public void clearCasilleroElegido();
+    public void setCasilleroElegido(ICasillero casillero);
     
     
     //devolder todas las posiciones validas

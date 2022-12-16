@@ -26,6 +26,8 @@ public interface IVista {
 
     public void actualizarJugadores();
 
+    public void comenzarTurno();
+
 
 
 }

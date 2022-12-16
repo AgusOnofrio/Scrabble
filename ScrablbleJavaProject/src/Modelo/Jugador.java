@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import Modelo.Interfaces.IAtril;
-import Modelo.Interfaces.IBolsaFichas;
+import Modelo.Interfaces.IFicha;
 import Modelo.Interfaces.IPalabra;
 import Modelo.Interfaces.Ijugador;
 
@@ -12,10 +12,11 @@ public class Jugador implements Ijugador,Serializable{
     private IAtril atril;
     private Integer puntaje;
     private String nombre;
-    private ArrayList<IPalabra> palabrasDePartida;
-    
+    private ArrayList<IPalabra> palabrasDePartida= new ArrayList<IPalabra>();
+    private ArrayList<IPalabra> palabrasFormadasEnElTurno=new ArrayList<IPalabra>();
     private static Integer numeroDeJugador=0;
-    private BolsaFichas bolsa;
+    private IFicha fichaElegida=null;
+    
     
     public Jugador(String nombre){
         numeroDeJugador=numeroDeJugador+1;
@@ -87,6 +88,34 @@ public class Jugador implements Ijugador,Serializable{
         return this.palabrasDePartida;
     }
 
+    public void agregarPalabraFormadaEnElturno(IPalabra palabra){
+        this.palabrasFormadasEnElTurno.add(palabra);
+    }
+
+    public void clearPalabrasFormadasEnElturno(){
+        this.palabrasFormadasEnElTurno.clear();
+    }
+
+    public ArrayList<IPalabra> getPalabrasValidasDelTurno(){
+        return this.palabrasFormadasEnElTurno;
+    }
+
+    public IFicha getFichaElegida(){
+        return this.fichaElegida;
+    }
+
+    @Override
+    public void clearFichaElegida() {
+        this.fichaElegida=null;
+        
+    }
+
+    @Override
+    public void setFichaElegida(IFicha ficha) {
+        this.fichaElegida=ficha;
+        
+    }
+
     
-    //Un jugador puede cambiar las fichas de su atril
+    
 }

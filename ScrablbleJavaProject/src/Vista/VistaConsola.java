@@ -38,8 +38,8 @@ public class VistaConsola implements IVista {
 
         
         this.jugadorActual=this.controlador.getJugadorActual().getNombre();
-
-        if(this.controlador.getJugadorActual().getNombre().equals(this.controlador.getJugadorVista().getNombre())){
+        System.out.println("Es mi turno?");
+        if(this.jugadorActual.equals(this.controlador.getJugadorVista().getNombre())){
             System.out.println("1-Posicionar ficha");
             System.out.println("2-Cambiar fichas");
             System.out.println("0-Finalizar turno");
@@ -201,7 +201,7 @@ public class VistaConsola implements IVista {
 
 
     public void mostrarAtrilJugador(){
-        Ijugador jugador= this.controlador.getJugadorActual();
+        Ijugador jugador= this.controlador.getJugadorVista();
         ArrayList<IFicha> fichas = jugador.getAtril().getFichasAtril();
         String indices = "";
         Integer i =0;
@@ -252,7 +252,7 @@ public class VistaConsola implements IVista {
         sc.nextLine();
         // sc.close();
         
-        this.mostrarTurno();
+        
         
     }
 
@@ -302,6 +302,12 @@ public class VistaConsola implements IVista {
     @Override
     public void actualizarJugadores() {
         // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void comenzarTurno() {
+        this.mostrarTurno();
         
     }
 

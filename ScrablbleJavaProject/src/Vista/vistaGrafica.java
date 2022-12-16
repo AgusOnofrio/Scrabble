@@ -36,6 +36,7 @@ public class vistaGrafica implements IVista{
     private JPanel tablero;
     private JPanel atril;
     private JPanel panelPrincipal;
+    private JPanel panelResultado;
     private JButton botonCambiarFichas;
     private final Color VERDE = new Color(25,135, 73);
     private final Color NARANJA = new Color(244,184,74,200);
@@ -355,13 +356,13 @@ public class vistaGrafica implements IVista{
 
     @Override
     public void mostrarFinDeturno() {
-        JPanel panelResultado= new JPanel();
+        panelResultado= new JPanel();
         panelResultado.setLayout(new BoxLayout(panelResultado,BoxLayout.Y_AXIS));
         Integer puntajeTurno=0;
 
         
-        panelResultado.add(new JLabel("Jugador: "+jugadorActual)) ;//+"\n"+this.controlador.getPalabrasValidasDelTurno().toString()+"\n"+"Puntaje:"+puntaje;
-        for (IPalabra palabra : this.controlador.getPalabrasValidasDelTurno()) {
+        panelResultado.add(new JLabel("Jugador: "+this.controlador.getJugadorActual().getNombre())) ;//+"\n"+this.controlador.getPalabrasValidasDelTurno().toString()+"\n"+"Puntaje:"+puntaje;
+        for (IPalabra palabra : this.controlador.getJugadorActual().getPalabrasValidasDelTurno()) {
             panelResultado.add(new JLabel(palabra.convertirString()+" - "+palabra.obtenerPuntaje()));
             puntajeTurno+=palabra.obtenerPuntaje();
         }
@@ -458,6 +459,19 @@ public class vistaGrafica implements IVista{
 
     public void guardarPuntajes(){
         this.controlador.guardarPuntajes();
+    }
+    @Override
+    public void comenzarTurno() {
+        // JButton botonContinuar= new JButton("Continuar");
+        // botonContinuar.addActionListener(new ActionListener(){
+        //     public void actionPerformed(ActionEvent ae){
+        //         actualizarVista();
+        // }});
+        
+        // panelPrincipal.add(botonContinuar,BorderLayout.SOUTH);
+        // panelPrincipal.updateUI();
+
+        
     }
 
 

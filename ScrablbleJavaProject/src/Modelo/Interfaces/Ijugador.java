@@ -20,4 +20,16 @@ public interface Ijugador {
     public void agregarPalabraCreadaPorJugador(IPalabra palabra);
 
     public ArrayList<IPalabra> obtenerPalabrasDePartida();
+
+    public void clearPalabrasFormadasEnElturno();
+
+    public void agregarPalabraFormadaEnElturno(IPalabra palabra);
+
+    public ArrayList<IPalabra> getPalabrasValidasDelTurno();
+
+    public IFicha getFichaElegida();
+
+    public void clearFichaElegida();
+
+    public void setFichaElegida(IFicha ficha);
 }

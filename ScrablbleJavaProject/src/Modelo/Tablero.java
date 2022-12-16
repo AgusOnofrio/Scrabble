@@ -13,7 +13,8 @@ public class Tablero implements Itablero,Serializable{
     private final ICasillero[][] casilleros;
 
     private ArrayList<ICasillero> ultimosCasilleroJugados=new ArrayList<ICasillero>();
-
+    private ArrayList<ICasillero> casillerosJugadosEnElTurno=new ArrayList<ICasillero>();
+    private ICasillero casilleroElegido=null;
     public ArrayList<ICasillero> getUltimosCasilleroJugados() {
         return ultimosCasilleroJugados;
     }
@@ -184,9 +185,31 @@ public class Tablero implements Itablero,Serializable{
         
     }
 
+    public void clearCasillerosJugadosEnElTurno(){
+        this.casillerosJugadosEnElTurno.clear();
+    }
     
-  
+    public void agregarCasilleroJugado(ICasillero casillero){ 
+        this.casillerosJugadosEnElTurno.add(casillero);
+    }
 
+    public ArrayList<ICasillero> getCasillerosJugadosEnElTurno(){ 
+        return this.casillerosJugadosEnElTurno;
+    }
+  
+    public ICasillero getCasilleroElegido(){
+        return this.casilleroElegido;
+    }
+
+    public void clearCasilleroElegido(){
+        this.casilleroElegido=null;
+    }
+
+    @Override
+    public void setCasilleroElegido(ICasillero casillero) {
+        this.casilleroElegido=casillero;
+        
+    }
 
 
 

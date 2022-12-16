@@ -210,13 +210,11 @@ public class ScrabbleController implements  ActionListener,IControladorRemoto{
                 this.vista.actualizarVista();
                 this.vista.setCambiarFichas(false);  
                 break;
-            case FINALIZO_TURNO:
-                
+            case FINALIZO_TURNO:  
                 this.vista.mostrarFinDeturno();
                 break;
             case COMIENZA_TURNO:
-                this.vista.actualizarVista();
-                this.vista.setCambiarFichas(true);
+                this.vista.comenzarTurno();
                 break;
             case FINALIZAR_PARTIDA:
                 // this.vista.mostrarFinDeturno();
@@ -271,6 +269,8 @@ public class ScrabbleController implements  ActionListener,IControladorRemoto{
             e.printStackTrace();
         }
     }
+
+
 
 
 
