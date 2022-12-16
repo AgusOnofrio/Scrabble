@@ -1,7 +1,5 @@
 # Scrabble
 
-![A (1)](https://user-images.githubusercontent.com/94473852/208021734-8eb91e95-a6a9-4434-85de-548d862ad361.png)
-
 
 Juego de Scrabble implementado en Java.
 
