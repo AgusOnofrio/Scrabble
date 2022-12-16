@@ -52,7 +52,7 @@ public class vistaGrafica implements IVista{
 
 
     public void iniciar(){
-        frame = new JFrame("Titulo de la ventana");
+        frame = new JFrame("Scrabble");
         frame.setSize(1000,900);
         frame.addWindowListener( new WindowAdapter(){
             public void windowClosing(WindowEvent e){
