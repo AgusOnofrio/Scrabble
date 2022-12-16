@@ -14,7 +14,9 @@ import ar.edu.unlu.rmimvc.cliente.Cliente;
 import ar.edu.unlu.rmimvc.cliente.IControladorRemoto;
 
 public class ClienteScrabble {
-    // public static void main(String[] args) {
+    public static void main(String[] args) {
+		ClienteScrabble cliente = new ClienteScrabble(null);
+	}
 		public ClienteScrabble(Object jugador){
 		ArrayList<String> ips = Util.getIpDisponibles();
 		String ip = (String) JOptionPane.showInputDialog(
