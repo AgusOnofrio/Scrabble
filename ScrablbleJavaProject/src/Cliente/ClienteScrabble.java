@@ -40,7 +40,7 @@ public class ClienteScrabble {
 				"Seleccione la IP en la corre el servidor", "IP del servidor", 
 				JOptionPane.QUESTION_MESSAGE, 
 				null,
-				ips.toArray(),
+				null,
 				null
 		);
 		String portServidor = (String) JOptionPane.showInputDialog(
