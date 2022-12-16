@@ -64,6 +64,27 @@ Esta basado en las reglas del juego original de Ruibal que son las siguientes:
 
 
 ------------------------------------
+Diagrama de clases
+
+![UMLFinal](https://user-images.githubusercontent.com/94473852/208013221-6860ef02-59ed-4fda-a6b4-5a360e0bd95a.png)
+
+
+
+Modelo
+
+![UMLModelo](https://user-images.githubusercontent.com/94473852/208013527-bf99c756-6e02-4bfe-a45e-e45e65993089.png)
+
+
+
+
+Controlador y vista
+
+![UMLVistaControlador](https://user-images.githubusercontent.com/94473852/208013545-be8c815a-61df-451c-93de-426cc31fea88.png)
+
+
+
+
+
 
 
 Diferencias actuales a considerar:
@@ -73,5 +94,5 @@ Diferencias actuales a considerar:
 -No se considero el caso de que ya no hay fichas en la bolsa y uno de los jugadores usó todas las fichas de su atril.En este caso deberia poder
  sumarse al puntaje ganador, todas las letras que hayan quedado en los atriles no ganadores.
  
- -No se implemento persistencia
+ 
 
